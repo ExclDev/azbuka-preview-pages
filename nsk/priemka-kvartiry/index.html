@@ -129,7 +129,7 @@
 <link rel="preload" as="font" type="font/woff2" href="../fonts/inter-latin-400.woff2" crossorigin />
 <link rel="stylesheet" href="../base.css?v=a7836a52ec" />
 <link rel="stylesheet" href="../service.css?v=991ddeeb5b" />
-<link rel="stylesheet" href="../priemka.css?v=3ec37443c3" />
+<link rel="stylesheet" href="../priemka.css?v=a8e5d9add2" />
 </head>
 <body class="city-bar-visible">
 <div class="city-bar" id="cityBar" role="navigation" aria-label="Выбор города">
@@ -227,7 +227,8 @@
   </div>
 </section>
 
-<section class="sv-dark sv-sec pv-sec pk-sec" id="video" aria-labelledby="video-title">
+<div class="pk-stack">
+<section class="sv-dark sv-sec pv-sec" id="video" aria-labelledby="video-title">
   <div class="wrapper pv-grid">
     <div class="pv-player">
       <video class="pv-v" id="pvVideo" src="../images/samples/pk-video-nsk.mp4" poster="../images/samples/pk-video-nsk-poster.webp" preload="none" playsinline controlslist="nodownload noplaybackrate noremoteplayback" disablepictureinpicture disableremoteplayback width="720" height="1280" aria-label="Видео: специалист «Азбуки Ремонта» в Новосибирске показывает, что проверяем на приёмке квартиры">
@@ -253,7 +254,7 @@
 </section>
 
 
-<section class="sv-light sv-sec pk-sec" id="check" aria-labelledby="check-title">
+<section class="sv-light sv-sec" id="check" aria-labelledby="check-title">
   <div class="wrapper">
     <div class="sv-head">
       <div><p class="section-tag">Что проверяем</p>
@@ -343,6 +344,7 @@
     </figure>
   </div>
 </section>
+</div>
 <section class="sv-light sv-sec sv-steps-sec" id="steps" aria-labelledby="steps-title">
   <div class="sv-pin"><div class="wrapper">
     <p class="section-tag">Как проходит приёмка</p>
@@ -752,7 +754,7 @@
 /* Город этого сайта: объект нужен base.js (заявки, сообщение об ошибке) и home.js (заголовок первого экрана) */
 window.AZ_CITY = {"key":"novosibirsk","name":"Новосибирск","phone":"8 (923) 141-01-54","phoneHref":"tel:+79231410154","heroLine2":"ремонт в Новосибирске"};
 </script>
-<script src="../base.js?v=11a24483f4"></script>
+<script src="../base.js?v=8311248132"></script>
 <script src="../vendor/gsap.min.js?v=2d26f4c060"></script>
 <script src="../vendor/ScrollTrigger.min.js?v=489bcf6d9c"></script>
 <script src="../vendor/lenis.min.js?v=44dcd10f2a"></script>
