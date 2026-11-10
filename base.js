@@ -83,11 +83,45 @@ window.addEventListener('scroll', () => {
 }, { passive: true });
 window.addEventListener('resize', updateFloatPosition, { passive: true });
 const overlay = document.getElementById('overlay');
-function openPopup(trigger) {
+/* Фокус после закрытия окна возвращается на кнопку, которая его открыла.
+   Кнопку запоминаем при открытии; если её уже нет на странице, фокус просто остаётся где был. */
+function restoreFocus(el) {
+  if (el && el.focus && document.contains(el)) el.focus({ preventScroll: true });
+}
+let popupOpener = null;
+
+/* Форма записи: тот же попап и та же форма popupFormInner, меняются заголовок, подпись и набор полей.
+   booking = { title, note, date, complex } приходит со страницы (window.AZ_PAGE.booking, front matter).
+   Без booking попап обычный: «Оставить заявку», площадь и вид ремонта. */
+function setPopupMode(booking) {
+  const form = document.getElementById('popupFormInner');
+  const on = !!booking;
+  form.dataset.mode = on ? 'booking' : '';
+  form.dataset.title = on ? (booking.title || 'Запись') : '';
+  document.getElementById('popup-heading').textContent = on ? (booking.title || 'Запись') : 'Оставить заявку';
+  const note = document.getElementById('popupNote');
+  note.textContent = on ? (booking.note || '') : '';
+  note.hidden = !on || !booking.note;
+  document.getElementById('popupSubmit').textContent = on ? 'Записаться' : 'Отправить заявку';
+  const show = { 'full': !on, 'booking-date': on && !!booking.date, 'booking-complex': on && !!booking.complex };
+  form.querySelectorAll('[data-lead]').forEach(el => {
+    el.hidden = !show[el.dataset.lead];
+    if (el.hidden) el.querySelectorAll('input, select').forEach(i => { i.value = ''; });
+  });
+  const dateEl = document.getElementById('p-date');
+  if (dateEl) {
+    const d = new Date();
+    dateEl.min = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+}
+function openPopup(trigger, booking) {
+  popupOpener = document.activeElement;
+  setPopupMode(booking);
   overlay.classList.add('open');
   document.documentElement.classList.add('scroll-locked');
   document.getElementById('popupFormBox').style.display = '';
   document.getElementById('popupSuccess').style.display  = 'none';
+  document.getElementById('popupFormBox').focus({ preventScroll: true });
   // Попап открывают шесть разных кнопок, и менеджеру важно, какая именно:
   // «Заказать по акции» и «Обратный звонок» — разные сценарии разговора.
   window.AZ_LEAD.trigger = trigger || 'Всплывающее окно';
@@ -95,9 +129,13 @@ function openPopup(trigger) {
   window.AZ_LEAD.clearError(document.getElementById('popupFormInner'));
 }
 function closePopup() {
+  const was = overlay.classList.contains('open');
   overlay.classList.remove('open');
   document.documentElement.classList.remove('scroll-locked');
+  if (was) restoreFocus(popupOpener);
 }
+/* Кнопки «Записаться…» на страницах услуг. Источник тот же, что у openPopup. */
+function openBooking(trigger, booking) { openPopup(trigger, booking || { title: 'Запись', note: 'Перезвоним и договоримся о времени' }); }
 overlay.addEventListener('click', e => { if (e.target === overlay) closePopup(); });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { closePopup(); closeDevPopup(); closeQuizModal(); } });
 function openDevPopup() {
@@ -170,7 +208,31 @@ window.AZ_LEAD = (function () {
   function clearError(formEl) {
     const box = formEl && errorBox(formEl);
     if (box) { box.hidden = true; box.textContent = ''; }
+    clearConsent(formEl);
   }
+
+  /* Согласие на обработку ПДн. Галочка по умолчанию снята, без неё заявка не уходит.
+     Ошибка стоит у самой галочки и пропадает, как только её отметили. */
+  function clearConsent(formEl) {
+    const el = formEl && formEl.querySelector('.consent-input');
+    if (!el) return;
+    el.removeAttribute('aria-invalid');
+    const err = formEl.querySelector('.consent-error');
+    if (err) err.hidden = true;
+  }
+  function consentOk(formEl) {
+    const el = formEl.querySelector('.consent-input');
+    if (!el) return true;
+    if (el.checked) { clearConsent(formEl); return true; }
+    el.setAttribute('aria-invalid', 'true');
+    const err = formEl.querySelector('.consent-error');
+    if (err) err.hidden = false;
+    el.focus();
+    return false;
+  }
+  document.addEventListener('change', e => {
+    if (e.target.classList && e.target.classList.contains('consent-input') && e.target.checked) clearConsent(e.target.form);
+  });
   function showError(formEl, text) {
     const box = errorBox(formEl);
     const phone = (window.AZ_CITY && window.AZ_CITY.phone) || '';
@@ -219,7 +281,9 @@ window.AZ_LEAD = (function () {
       elapsed: elapsed(formEl),
       page: location.pathname,
       url: location.href,
-      button: state.trigger || ''
+      button: state.trigger || '',
+      // Отметка о согласии: сюда доходит только отправка с отмеченной галочкой
+      consent: !!(formEl.querySelector('.consent-input') || {}).checked
     }, cityPayload(), readUtm(), payload);
 
     try {
@@ -250,7 +314,7 @@ window.AZ_LEAD = (function () {
     }
   }
 
-  return { state, send, phoneValid, highlight, markOpened, clearError, showError,
+  return { state, send, phoneValid, consentOk, highlight, markOpened, clearError, showError,
            get trigger() { return state.trigger; },
            set trigger(v) { state.trigger = v; } };
 })();
@@ -261,17 +325,24 @@ function handleFormSubmit(e, formEl) {
   const phoneEl = formEl.querySelector('[type="tel"]');
   if (!nameEl || !nameEl.value.trim()) { AZ_LEAD.highlight(nameEl); return; }
   if (!phoneEl || !AZ_LEAD.phoneValid(phoneEl.value)) { AZ_LEAD.highlight(phoneEl); return; }
+  if (!AZ_LEAD.consentOk(formEl)) return;
 
   const typeEl = formEl.querySelector('[name="repair_type"]');
-  AZ_LEAD.send(formEl, {
-    form: formEl.id === 'mainForm' ? 'Консультация' : 'Всплывающее окно',
-    name: nameEl.value.trim(),
-    phone: phoneEl.value.trim(),
-    area: (formEl.querySelector('[name="area"]') || {}).value || '',
-    // Пустое значение — человек не открывал список. Так и передаём,
-    // иначе в CRM у всех был бы «Косметический» по умолчанию.
-    repair: (typeEl && typeEl.value) ? typeEl.value : 'Не выбрано'
-  }, function () {
+  const val = n => ((formEl.querySelector('[name="' + n + '"]') || {}).value || '').trim();
+  const payload = formEl.dataset.mode === 'booking'
+    // Запись: без площади и вида ремонта. Дата осмотра и ЖК идут отдельными полями, lead.php кладёт их в комментарий лида.
+    ? { form: formEl.dataset.title || 'Запись', name: nameEl.value.trim(), phone: phoneEl.value.trim(),
+        inspection_date: val('inspection_date'), complex: val('complex') }
+    : {
+        form: formEl.id === 'mainForm' ? 'Консультация' : 'Всплывающее окно',
+        name: nameEl.value.trim(),
+        phone: phoneEl.value.trim(),
+        area: (formEl.querySelector('[name="area"]') || {}).value || '',
+        // Пустое значение — человек не открывал список. Так и передаём,
+        // иначе в CRM у всех был бы «Косметический» по умолчанию.
+        repair: (typeEl && typeEl.value) ? typeEl.value : 'Не выбрано'
+      };
+  AZ_LEAD.send(formEl, payload, function () {
     if (!overlay.classList.contains('open')) openPopup(AZ_LEAD.trigger);
     document.getElementById('popupFormBox').style.display = 'none';
     document.getElementById('popupSuccess').style.display = '';
@@ -410,34 +481,63 @@ function openVideo(id) {
   });
 })();
 (function () {
-  var TOTAL = 5;
-  var step  = 1;
+  /* Квиз: пять экранов, последний с контактами. Страница может передать готовый ответ:
+     openQuizModal(trigger, { object: 'Новостройка' }). Ответ отмечается, экран с вопросом пропускается,
+     счётчик считает только оставшиеся вопросы. Ключи: object (экран 1), repair (2), area (3), when (4).
+     Значение должно совпадать с подписью карточки; незнакомое значение игнорируется, вопрос остаётся. */
+  var PRESET_STEP = { object: 1, repair: 2, area: 3, when: 4 };
+  var PRESET_KEY  = { object: 'type', repair: 'repair', area: 'area', when: 'when' };
+  var CONTACT = 5;
+  var seq   = [1, 2, 3, 4, CONTACT]; // показанные экраны по порядку
+  var pos   = 0;
   var ans   = {};
-  function openQuizModal(trigger) {
+  var quizOpener = null;
+  function openQuizModal(trigger, preset) {
+    quizOpener = document.activeElement;
     document.getElementById('quiz-modal').classList.add('open');
     document.documentElement.classList.add('scroll-locked');
     window.AZ_LEAD.trigger = trigger || 'Калькулятор ремонта';
-    resetQuiz();
+    resetQuiz(preset);
     window.AZ_LEAD.markOpened(document.getElementById('quizContactForm'));
     window.AZ_LEAD.clearError(document.getElementById('quizContactForm'));
+    document.querySelector('#quiz-modal .quiz-box').focus({ preventScroll: true });
   }
   window.openQuizModal = openQuizModal;
   function closeQuizModal() {
     var el = document.getElementById('quiz-modal');
+    var was = el && el.classList.contains('open');
     if (el) el.classList.remove('open');
     document.documentElement.classList.remove('scroll-locked');
+    if (was) restoreFocus(quizOpener);
   }
   window.closeQuizModal = closeQuizModal;
-  function resetQuiz() {
-    step = 1;
+  function resetQuiz(preset) {
+    pos = 0;
+    seq = [1, 2, 3, 4, CONTACT];
     for (var k in ans) delete ans[k];
     document.querySelectorAll('.quiz-card').forEach(function (c) { c.classList.remove('selected'); });
     var nameEl  = document.getElementById('quiz-name');
     var phoneEl = document.getElementById('quiz-phone');
+    var consent = document.querySelector('#quizContactForm .consent-input');
     if (nameEl)  nameEl.value  = '';
     if (phoneEl) phoneEl.value = '';
+    if (consent) consent.checked = false;
+    Object.keys(preset || {}).forEach(function (name) {
+      var n = PRESET_STEP[name];
+      if (!n) return;
+      var cards = document.querySelectorAll('#quizStep' + n + ' .quiz-card');
+      for (var i = 0; i < cards.length; i++) {
+        var label = cards[i].querySelector('.quiz-card-label');
+        if (label && label.textContent.trim() === preset[name]) {
+          cards[i].classList.add('selected');
+          ans[PRESET_KEY[name]] = preset[name];
+          seq = seq.filter(function (x) { return x !== n; });
+          break;
+        }
+      }
+    });
     showQuizPanel(true);
-    showStep(1);
+    showStep();
   }
   function showQuizPanel(visible) {
     var show   = visible ? '' : 'none';
@@ -448,25 +548,26 @@ function openVideo(id) {
     document.querySelector('#quiz-modal .quiz-nav').style.display      = show;
     document.getElementById('quizSuccess').style.display               = hide;
   }
-  function showStep(n) {
+  function showStep() {
+    var n = seq[pos];
     document.querySelectorAll('.quiz-step').forEach(function (s) { s.classList.remove('active'); });
     var el = document.getElementById('quizStep' + n);
     if (el) el.classList.add('active');
-    document.getElementById('quizProgressBar').style.width = (n / TOTAL * 100) + '%';
-    document.getElementById('quizStepLabel').textContent   = 'Вопрос ' + n + ' из ' + TOTAL;
-    document.getElementById('quizBackBtn').style.visibility = n > 1 ? 'visible' : 'hidden';
+    document.getElementById('quizProgressBar').style.width = ((pos + 1) / seq.length * 100) + '%';
+    document.getElementById('quizStepLabel').textContent   = 'Вопрос ' + (pos + 1) + ' из ' + seq.length;
+    document.getElementById('quizBackBtn').style.visibility = pos > 0 ? 'visible' : 'hidden';
   }
   window.quizSelect = function (btn, key, value) {
     btn.closest('.quiz-cards').querySelectorAll('.quiz-card').forEach(function (c) { c.classList.remove('selected'); });
     btn.classList.add('selected');
     ans[key] = value;
     setTimeout(function () {
-      step++;
-      showStep(step);
+      if (pos < seq.length - 1) pos++;
+      showStep();
     }, 400);
   };
   window.quizBack = function () {
-    if (step > 1) { step--; showStep(step); }
+    if (pos > 0) { pos--; showStep(); }
   };
   document.getElementById('quizContactForm').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -475,6 +576,7 @@ function openVideo(id) {
     var phoneEl = document.getElementById('quiz-phone');
     if (!nameEl.value.trim())                     { window.AZ_LEAD.highlight(nameEl);  return; }
     if (!window.AZ_LEAD.phoneValid(phoneEl.value)) { window.AZ_LEAD.highlight(phoneEl); return; }
+    if (!window.AZ_LEAD.consentOk(formEl))         return;
     ans.name  = nameEl.value.trim();
     ans.phone = phoneEl.value.trim();
     // Ответы на пять вопросов живут в `ans` и до этого момента никуда не

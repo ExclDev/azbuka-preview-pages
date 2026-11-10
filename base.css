@@ -1018,3 +1018,42 @@ body.city-bar-visible .mobile-menu { transform: translateY(36px); }
 }
 .mobile-menu { overflow-y: auto; overscroll-behavior: contain; }
 .mobile-menu > * { flex-shrink: 0; }
+
+/* ═══ Согласие на обработку ПДн и форма записи ═══
+   Галочка настоящая (input type=checkbox), поэтому работает с клавиатуры и по клику на текст.
+   Поле скрыто визуально, но лежит поверх рамки: фокус и нажатие остаются на нём. */
+.form-field[hidden] { display: none; }
+.popup-note { margin: -14px 0 20px; font-size: 14px; color: var(--gray); line-height: 1.5; }
+.popup-box:focus, .quiz-box:focus { outline: none; }
+.form-consent { margin-top: 4px; }
+.consent {
+  position: relative; display: flex; align-items: center; gap: 12px;
+  min-height: 44px; padding: 6px 0; cursor: pointer;
+  font-size: 13px; line-height: 1.4; color: var(--gray);
+}
+.consent-input {
+  position: absolute; left: 0; top: 50%; width: 24px; height: 24px; margin: -12px 0 0;
+  opacity: 0; cursor: pointer;
+}
+.consent-box {
+  flex: none; width: 22px; height: 22px; border-radius: 6px;
+  background: var(--bg3); border: 1px solid var(--border);
+  display: grid; place-items: center; transition: border-color .2s, background-color .2s;
+}
+.consent-box::after {
+  content: ""; width: 10px; height: 5px; margin-top: -2px;
+  border-left: 2px solid #fff; border-bottom: 2px solid #fff;
+  transform: rotate(-45deg) scale(0); transition: transform .15s;
+}
+.consent-input:checked + .consent-box { background: var(--red); border-color: var(--red); }
+.consent-input:checked + .consent-box::after { transform: rotate(-45deg) scale(1); }
+.consent-input:focus-visible + .consent-box { outline: 2px solid #fff; outline-offset: 3px; }
+.consent-input[aria-invalid="true"] + .consent-box { border-color: #ff6b66; }
+.consent-text a { color: #fff; text-decoration: underline; }
+.consent-error { margin: 2px 0 0; color: #ff6b66; font-size: 14px; line-height: 1.5; }
+@media (prefers-reduced-motion: reduce) {
+  .consent-box, .consent-box::after { transition: none; }
+}
+@media (max-width: 768px) {
+  .consent { font-size: 14px; }
+}

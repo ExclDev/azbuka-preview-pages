@@ -10,7 +10,7 @@
 <meta name="robots" content="noindex, nofollow" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23E8201A'/%3E%3Ctext x='16' y='23' font-size='20' font-family='Arial' font-weight='bold' fill='white' text-anchor='middle'%3EА%3C/text%3E%3C/svg%3E" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="../images/logo.webp" />
-<script>(function(){var d=document.documentElement;d.classList.add('sv-js');if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('sv-pre');window.__svFailsafe=setTimeout(function(){d.classList.remove('sv-pre')},4000)}})()</script>
+<script>window.AZ_PAGE={"booking":{"at":["hero","cta"],"title":"Запись на приёмку","note":"Перезвоним и договоримся о времени","date":true,"complex":true}};</script><script>(function(){var d=document.documentElement;d.classList.add('sv-js');if(!window.matchMedia('(prefers-reduced-motion: reduce)').matches){d.classList.add('sv-pre');window.__svFailsafe=setTimeout(function(){d.classList.remove('sv-pre')},4000)}})()</script>
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://nsk.azbuka-remonta.ru/priemka-kvartiry/" />
 <meta property="og:title" content="Приёмка квартиры в Новосибирске | Азбука Ремонта" />
@@ -127,7 +127,7 @@
 <link rel="preload" as="font" type="font/woff2" href="../fonts/oswald-latin.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/inter-cyrillic-400.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/inter-latin-400.woff2" crossorigin />
-<link rel="stylesheet" href="../base.css?v=1f49348629" />
+<link rel="stylesheet" href="../base.css?v=a7836a52ec" />
 <link rel="stylesheet" href="../service.css?v=991ddeeb5b" />
 <link rel="stylesheet" href="../priemka.css?v=a780080ab2" />
 </head>
@@ -215,7 +215,7 @@
     </div>
     <div class="pkB-under">
       <p class="sv-lead">Проверим квартиру от застройщика до того, как вы подпишете акт приёма-передачи. Всё, что не так, запишем в акт с фото, и застройщик исправит это за свой счёт.</p>
-      <div class="sv-ctas"><button class="btn btn-red btn-cta" type="button" onclick="openQuizModal('Приёмка квартиры — Первый экран — Записаться на приёмку')">Записаться на приёмку</button><a class="btn btn-outline" href="#check">Что проверяем</a>
+      <div class="sv-ctas"><button class="btn btn-red btn-cta" type="button" onclick="openBooking('Приёмка квартиры — Первый экран — Записаться на приёмку', AZ_PAGE.booking)">Записаться на приёмку</button><a class="btn btn-outline" href="#check">Что проверяем</a>
       </div>
     </div>
     <ul class="sv-facts pkF" aria-label="Что входит в приёмку">
@@ -407,7 +407,7 @@
   <div class="wrapper">
     <h2 id="cta-title"><span class="ln"><span>Примем квартиру</span></span><span class="ln"><span class="red">вместе с вами</span></span></h2>
     <p>Назовите дату осмотра у застройщика, и специалист приедет с инструментом.</p>
-    <div class="sv-cta-row"><button class="btn btn-red btn-cta" type="button" onclick="openQuizModal('Приёмка квартиры — Финальный призыв — Записаться на приёмку')">Записаться на приёмку</button><button class="btn btn-outline" type="button" onclick="openPopup('Приёмка квартиры — Финальный призыв — Обратный звонок')">Обратный звонок</button>
+    <div class="sv-cta-row"><button class="btn btn-red btn-cta" type="button" onclick="openBooking('Приёмка квартиры — Финальный призыв — Записаться на приёмку', AZ_PAGE.booking)">Записаться на приёмку</button><button class="btn btn-outline" type="button" onclick="openPopup('Приёмка квартиры — Финальный призыв — Обратный звонок')">Обратный звонок</button>
       <a class="sv-cta-phone" href="tel:+79231410154">8 (923) 141-01-54</a>
     </div>
   </div>
@@ -496,9 +496,10 @@
 </div>
 <div class="qw-hint" id="qwHint">Рассчитать стоимость за 2 минуты →</div>
 <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="popup-heading">
-  <div class="popup-box" id="popupFormBox">
+  <div class="popup-box" id="popupFormBox" tabindex="-1">
     <button class="popup-close" onclick="closePopup()" aria-label="Закрыть">×</button>
     <p class="popup-title" id="popup-heading">Оставить заявку</p>
+    <p class="popup-note" id="popupNote" hidden></p>
     <form id="popupFormInner" method="post" novalidate>
       <div class="form-grid">
         <div class="form-field">
@@ -511,11 +512,19 @@
           <input class="form-input" type="tel" id="p-phone" name="phone"
                  placeholder="+7 (___) ___-__-__" autocomplete="tel" required />
         </div>
-        <div class="form-field">
+        <div class="form-field" data-lead="booking-date" hidden>
+          <label class="form-label" for="p-date">Дата осмотра у застройщика</label>
+          <input class="form-input" type="date" id="p-date" name="inspection_date" />
+        </div>
+        <div class="form-field" data-lead="booking-complex" hidden>
+          <label class="form-label" for="p-complex">ЖК</label>
+          <input class="form-input" type="text" id="p-complex" name="complex" placeholder="Название жилого комплекса" autocomplete="off" maxlength="100" />
+        </div>
+        <div class="form-field" data-lead="full">
           <label class="form-label" for="p-area">Квадратура</label>
           <input class="form-input" type="number" id="p-area" name="area" placeholder="м²" min="1" />
         </div>
-        <div class="form-field">
+        <div class="form-field" data-lead="full">
           <label class="form-label" for="p-type">Вид ремонта</label>
           <select class="form-select" id="p-type" name="repair_type">
             <option value="" selected>Не выбрано</option>
@@ -530,12 +539,17 @@
       <div class="lead-hp" aria-hidden="true">
         <label>Компания<input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
       </div>
+      <div class="form-consent">
+  <label class="consent" for="p-consent">
+    <input class="consent-input" type="checkbox" id="p-consent" name="consent" value="1" required aria-describedby="p-consent-err" />
+    <span class="consent-box" aria-hidden="true"></span>
+    <span class="consent-text">Согласен на обработку <a href="../politika-konfidencialnosti/" target="_blank" rel="noopener">персональных данных</a></span>
+  </label>
+  <p class="consent-error" id="p-consent-err" role="alert" hidden>Отметьте согласие, иначе мы не сможем принять заявку.</p>
+</div>
+
       <p class="form-error" hidden></p>
-      <button type="submit" class="btn btn-red form-submit">Отправить заявку</button>
-      <p class="form-privacy">
-        Нажимая кнопку, вы соглашаетесь с
-        <a href="../politika-konfidencialnosti/">политикой конфиденциальности</a>
-      </p>
+      <button type="submit" class="btn btn-red form-submit" id="popupSubmit">Отправить заявку</button>
     </form>
   </div>
   <div class="popup-box popup-success" id="popupSuccess" style="display:none">
@@ -559,7 +573,7 @@
   </div>
 </div>
 <div class="quiz-overlay" id="quiz-modal" role="dialog" aria-modal="true" aria-labelledby="quiz-heading">
-  <div class="quiz-box">
+  <div class="quiz-box" tabindex="-1">
     <div class="quiz-progress">
       <div class="quiz-progress-bar" id="quizProgressBar"></div>
     </div>
@@ -678,12 +692,17 @@
           <div class="lead-hp" aria-hidden="true">
                 <label>Компания<input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
           </div>
+          <div class="form-consent">
+  <label class="consent" for="quiz-consent">
+    <input class="consent-input" type="checkbox" id="quiz-consent" name="consent" value="1" required aria-describedby="quiz-consent-err" />
+    <span class="consent-box" aria-hidden="true"></span>
+    <span class="consent-text">Согласен на обработку <a href="../politika-konfidencialnosti/" target="_blank" rel="noopener">персональных данных</a></span>
+  </label>
+  <p class="consent-error" id="quiz-consent-err" role="alert" hidden>Отметьте согласие, иначе мы не сможем принять заявку.</p>
+</div>
+
           <p class="form-error" hidden></p>
           <button type="submit" class="btn btn-red form-submit">Получить расчёт</button>
-          <p class="form-privacy">
-            Нажимая кнопку, вы соглашаетесь с
-            <a href="../politika-konfidencialnosti/">политикой конфиденциальности</a>
-          </p>
         </form>
       </div>
     </div>
@@ -708,7 +727,7 @@
 /* Город этого сайта: объект нужен base.js (заявки, сообщение об ошибке) и home.js (заголовок первого экрана) */
 window.AZ_CITY = {"key":"novosibirsk","name":"Новосибирск","phone":"8 (923) 141-01-54","phoneHref":"tel:+79231410154","heroLine2":"ремонт в Новосибирске"};
 </script>
-<script src="../base.js?v=73bbdcd0e6"></script>
+<script src="../base.js?v=11a24483f4"></script>
 <script src="../vendor/gsap.min.js?v=2d26f4c060"></script>
 <script src="../vendor/ScrollTrigger.min.js?v=489bcf6d9c"></script>
 <script src="../vendor/lenis.min.js?v=44dcd10f2a"></script>
