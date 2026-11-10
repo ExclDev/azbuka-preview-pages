@@ -1,0 +1,162 @@
+/* =========================================================
+   Азбука Ремонта — слой движения (motion layer)
+   Дизайн, тексты и порядок секций не меняются.
+   Всё ниже работает только когда на <html> стоит .motion-on
+   (ставится скриптом, если GSAP загрузился). Без него сайт
+   ведёт себя как оригинал.
+   ========================================================= */
+
+html.motion-on { scroll-behavior: auto !important; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* --- GSAP забирает анимации появления у оригинального CSS --- */
+.motion-on .anim,
+.motion-on .anim.visible { opacity: 1; animation: none !important; }
+.motion-on .about-photo { clip-path: none; transition: none; }
+.motion-on .about-content #about-title,
+.motion-on .about-content .about-text,
+.motion-on .about-content .about-btns { opacity: 1; transform: none; transition: none; }
+
+/* до старта скрипта прячем то, что будет проявляться, чтобы не мигало */
+.motion-pre .hero-content,
+.motion-pre .hero-bg-img { visibility: hidden; }
+
+/* --- Прелоадер --- */
+.mo-pre {
+  position: fixed; inset: 0; z-index: 99999;
+  pointer-events: none;
+}
+.mo-pre__panel {
+  position: absolute; left: 0; right: 0; height: 50.5%;
+  background: #100d0b;
+}
+.mo-pre__panel--t { top: 0; }
+.mo-pre__panel--b { bottom: 0; }
+.mo-pre__logo {
+  position: absolute; left: 50%; top: 50%;
+  width: 150px; transform: translate(-50%, -50%);
+  opacity: 0;
+}
+.mo-pre__logo img { width: 100%; height: auto; display: block; }
+.mo-pre__bar {
+  position: absolute; left: 50%; top: calc(50% + 44px);
+  width: 150px; height: 2px; margin-left: -75px;
+  background: rgba(255,255,255,0.08); overflow: hidden;
+}
+.mo-pre__bar i {
+  position: absolute; inset: 0; background: var(--red);
+  transform: scaleX(0); transform-origin: left center;
+}
+.mo-pre__num {
+  position: absolute; right: clamp(16px, 3vw, 48px); bottom: clamp(12px, 3vw, 40px);
+  font-family: var(--font-display); font-weight: 700;
+  font-size: clamp(64px, 12vw, 180px); line-height: .8;
+  color: rgba(255,255,255,0.06); letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- Полоса прогресса прокрутки --- */
+.mo-progress {
+  position: fixed; left: 0; top: 0; z-index: 1002;
+  width: 100%; height: 2px; background: var(--red);
+  transform: scaleX(0); transform-origin: left center;
+  pointer-events: none;
+}
+
+/* --- Шапка прячется при прокрутке вниз --- */
+.motion-on .header.mo-hide { transform: translateY(-110%); }
+
+/* --- Курсор (только мышь) --- */
+.mo-cursor, .mo-ring { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  .motion-on .mo-cursor, .motion-on .mo-ring {
+    display: block; position: fixed; left: 0; top: 0; z-index: 100000;
+    pointer-events: none; border-radius: 50%;
+  }
+  .motion-on .mo-cursor {
+    width: 6px; height: 6px; margin: -3px 0 0 -3px; background: var(--red);
+  }
+  .motion-on .mo-ring {
+    width: 38px; height: 38px; margin: -19px 0 0 -19px;
+    border: 1px solid rgba(255,255,255,0.45);
+    transition: width .35s cubic-bezier(.2,.8,.2,1), height .35s cubic-bezier(.2,.8,.2,1),
+                margin .35s cubic-bezier(.2,.8,.2,1), background-color .35s, border-color .35s;
+    display: grid; place-items: center;
+  }
+  .motion-on .mo-ring svg { width: 18px; height: 18px; color: #fff; opacity: 0; transform: scale(.4); transition: opacity .25s, transform .35s cubic-bezier(.2,.8,.2,1); }
+  .motion-on .mo-ring.is-link { width: 58px; height: 58px; margin: -29px 0 0 -29px; border-color: var(--red); }
+  .motion-on .mo-ring.is-media {
+    width: 84px; height: 84px; margin: -42px 0 0 -42px;
+    background: rgba(232,32,26,0.92); border-color: transparent;
+  }
+  .motion-on .mo-ring.is-media svg { opacity: 1; transform: scale(1); }
+  .motion-on .mo-ring.is-hidden, .motion-on .mo-cursor.is-hidden { opacity: 0; }
+  .motion-on .mo-ring.on-light { border-color: rgba(0,0,0,0.35); }
+}
+
+/* --- Маски заголовков --- */
+.mo-line { display: block; overflow: hidden; padding-bottom: .06em; margin-bottom: -.06em; }
+.mo-line > .mo-in { display: block; will-change: transform; }
+.mo-inline-center .mo-line { text-align: inherit; }
+
+/* --- Разделитель (две красные черты) --- */
+.motion-on .divider span { transform-origin: left center; }
+
+/* --- Рамка у фото «О компании» --- */
+.motion-on .about-img::after {
+  transform: scale(var(--fr, 1)); transform-origin: 100% 100%;
+  opacity: var(--fro, 1);
+}
+
+/* --- Картинки: обёртка для параллакса внутри маски --- */
+.motion-on .about-img, .motion-on .tech-img { overflow: visible; }
+.motion-on .tech-img { overflow: hidden; }
+.mo-clip { will-change: clip-path; }
+
+/* --- Hero: «уходящий» экран --- */
+.motion-on .hero { will-change: clip-path; }
+.motion-on .hero-bg-img { will-change: transform; transform-origin: 50% 40%; }
+.motion-on .about { position: relative; z-index: 3; background: var(--bg); }
+
+/* значки hero приходят лесенкой */
+.motion-on .hero-after .hero-badge,
+.motion-on .hero-ctas > * {
+  opacity: 0; transform: translateY(26px);
+  transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1);
+}
+.motion-on .hero-after { opacity: 1; transform: none; }
+.motion-on .hero-after.show .hero-badge,
+.motion-on .hero-ctas.show > * { opacity: 1; transform: none; }
+.motion-on .hero-after.show .hero-badge:nth-child(2) { transition-delay: .09s; }
+.motion-on .hero-after.show .hero-badge:nth-child(3) { transition-delay: .18s; }
+.motion-on .hero-ctas.show > *:nth-child(2) { transition-delay: .1s; }
+
+/* --- Таймер: цифры перекатываются --- */
+.motion-on .timer-num { overflow: hidden; position: relative; }
+.mo-roll { display: inline-block; will-change: transform; }
+
+/* --- Наклон карточек за курсором --- */
+.motion-on .remote-card, .motion-on .process-step { transform-style: preserve-3d; will-change: transform; }
+
+/* --- Линия порядка работы --- */
+.motion-on .process-steps { position: relative; }
+.mo-process-line {
+  position: absolute; left: 0; top: -22px; height: 2px; width: 100%;
+  background: rgba(0,0,0,0.08); pointer-events: none;
+}
+.mo-process-line i {
+  position: absolute; inset: 0; background: var(--red);
+  transform: scaleX(0); transform-origin: left center;
+}
+.motion-on .process-step.mo-lit { box-shadow: inset 0 3px 0 var(--red); }
+.motion-on .process-step { transition: box-shadow .5s ease; }
+
+/* --- Видео-лента: перекос от скорости --- */
+.motion-on .av-card { will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mo-pre, .mo-cursor, .mo-ring, .mo-progress { display: none !important; }
+}

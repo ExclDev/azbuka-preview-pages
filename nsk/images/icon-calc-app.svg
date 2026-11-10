@@ -1,0 +1,60 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FF3B30"/>
+      <stop offset="55%" stop-color="#E8201A"/>
+      <stop offset="100%" stop-color="#B8140F"/>
+    </linearGradient>
+    <linearGradient id="darkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#332C25"/>
+      <stop offset="100%" stop-color="#1F1B17"/>
+    </linearGradient>
+    <clipPath id="roundedSquare">
+      <rect x="4" y="4" width="192" height="192" rx="44" ry="44"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#roundedSquare)">
+    <!-- base -->
+    <rect x="4" y="4" width="192" height="192" fill="url(#redGrad)"/>
+
+    <!-- quadrants -->
+    <rect x="4" y="4" width="94" height="94" fill="url(#redGrad)"/>
+    <rect x="102" y="4" width="94" height="94" fill="url(#redGrad)"/>
+    <rect x="4" y="102" width="94" height="94" fill="url(#redGrad)"/>
+    <rect x="102" y="102" width="94" height="94" fill="url(#darkGrad)"/>
+
+    <!-- divider lines -->
+    <rect x="97" y="4" width="6" height="192" fill="rgba(0,0,0,0.18)"/>
+    <rect x="4" y="97" width="192" height="6" fill="rgba(0,0,0,0.18)"/>
+
+    <!-- subtle top sheen -->
+    <rect x="4" y="4" width="192" height="60" fill="rgba(255,255,255,0.12)"/>
+  </g>
+
+  <!-- outer border -->
+  <rect x="4" y="4" width="192" height="192" rx="44" ry="44" fill="none" stroke="rgba(0,0,0,0.25)" stroke-width="2"/>
+
+  <!-- plus (top-left) -->
+  <g stroke="#FFFFFF" stroke-width="10" stroke-linecap="round">
+    <line x1="30" y1="51" x2="72" y2="51"/>
+    <line x1="51" y1="30" x2="51" y2="72"/>
+  </g>
+
+  <!-- minus (top-right) -->
+  <g stroke="#FFFFFF" stroke-width="10" stroke-linecap="round">
+    <line x1="128" y1="51" x2="170" y2="51"/>
+  </g>
+
+  <!-- multiply (bottom-left) -->
+  <g stroke="#FFFFFF" stroke-width="10" stroke-linecap="round">
+    <line x1="32" y1="130" x2="70" y2="168"/>
+    <line x1="70" y1="130" x2="32" y2="168"/>
+  </g>
+
+  <!-- equals (bottom-right) -->
+  <g stroke="#FFFFFF" stroke-width="10" stroke-linecap="round">
+    <line x1="128" y1="139" x2="170" y2="139"/>
+    <line x1="128" y1="159" x2="170" y2="159"/>
+  </g>
+</svg>

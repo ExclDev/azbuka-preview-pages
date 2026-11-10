@@ -1,0 +1,106 @@
+/* «Порядок работы»: А — чертёжная сетка и засечки, В — результат шага, Г — финиш таймлайна.
+   Токены системы: light-bg, light-ink, red, red-a08/a18, bg, radius-md. */
+/* ---------- А. Чертёжная сетка на фоне секции ---------- */
+.process.pv-grid {
+  background-color: #f5f5f7;
+  background-image:
+    linear-gradient(rgba(26,26,26,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26,26,26,0.06) 1px, transparent 1px),
+    linear-gradient(rgba(26,26,26,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(26,26,26,0.03) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+  background-position: -1px -1px;
+}
+.pv-grid .process-step { position: relative; }
+.pv-mark { display: none; }
+.pv-grid .pv-mark {
+  display: block; position: absolute; width: 14px; height: 14px; pointer-events: none;
+  border-color: rgba(232,32,26,0.55); border-style: solid; border-width: 0;
+  opacity: 0; transition: opacity .4s ease, transform .5s cubic-bezier(.2,.7,.2,1);
+}
+.pv-grid .pv-mark.tl { top: -7px; left: -7px; border-top-width: 2px; border-left-width: 2px; transform: translate(-6px,-6px); }
+.pv-grid .pv-mark.tr { top: -7px; right: -7px; border-top-width: 2px; border-right-width: 2px; transform: translate(6px,-6px); }
+.pv-grid .pv-mark.bl { bottom: -7px; left: -7px; border-bottom-width: 2px; border-left-width: 2px; transform: translate(-6px,6px); }
+.pv-grid .pv-mark.br { bottom: -7px; right: -7px; border-bottom-width: 2px; border-right-width: 2px; transform: translate(6px,6px); }
+.pv-grid .process-step.is-on .pv-mark { opacity: 1; transform: none; }
+
+/* ---------- Г. Финиш: таймлайн заканчивается карточкой с действием ---------- */
+.pv-finish { display: none; }
+.pv-fin .pv-finish {
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 24px;
+  position: relative; margin-top: 16px; padding: 32px 36px;
+  background: var(--bg); border-radius: var(--radius-md); color: #fff;
+}
+.pv-fin .pv-finish .pv-fin-dot {
+  position: absolute; left: -76px; top: 50%; margin-top: -24px;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--red); display: grid; place-items: center; color: #fff;
+  box-shadow: 0 0 0 8px rgba(232,32,26,0.12);
+}
+.pv-fin .pv-finish .pv-fin-dot svg { width: 22px; height: 22px; }
+.pv-fin .pv-finish p {
+  margin: 0; font-family: var(--font-display); font-weight: 600; text-transform: uppercase;
+  font-size: clamp(20px, 1.8vw, 27px); line-height: 1.15;
+}
+.pv-fin .pv-finish p span { color: var(--red); }
+@media (max-width: 760px) {
+  .pv-fin .pv-finish { grid-template-columns: 1fr; padding: 24px; }
+  .pv-fin .pv-finish .pv-fin-dot { left: -52px; width: 32px; height: 32px; margin-top: -16px; }
+}
+
+.ed .process.ed-steps.pv-grid .process-step:not(.is-on) .pv-mark { opacity: 0 !important; }
+
+/* ---------- В. Результат шага: что остаётся у клиента ---------- */
+.step-result, .step-result-inline { display: none; }
+@media (min-width: 1025px) {
+  .motion-on .step-result {
+    display: block; margin-top: 28px; padding: 22px 24px; max-width: 420px;
+    background: #ffffff; border-radius: var(--radius-md); box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+  }
+}
+.step-result-label {
+  margin: 0 0 8px; font-size: 12px; font-weight: 600; letter-spacing: .5px;
+  text-transform: uppercase; color: #666666;
+}
+.step-result-value {
+  margin: 0; font-family: var(--font-display); font-size: 27px; font-weight: 600;
+  line-height: 1.15; text-transform: uppercase; color: #1a1a1a; min-height: 2.3em;
+}
+.step-result-value.is-new { animation: stepResult .5s cubic-bezier(.16,1,.3,1) both; }
+@keyframes stepResult { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+.ed .process-step .step-result-inline {
+  margin: 10px 0 0; font-size: 14px; font-weight: 600; line-height: 1.4; color: #1a1a1a;
+}
+@media (max-width: 1024px) { .ed .process-step .step-result-inline { display: block; grid-column: 2; } }
+html:not(.motion-on) .process-step .step-result-inline { display: block; grid-column: 2; }
+@media (prefers-reduced-motion: reduce) { .step-result-value.is-new { animation: none; } }
+
+/* ---------- Читаемость шагов: гасим цветом, а не прозрачностью ---------- */
+.ed .process-step-text { font-size: 15px; line-height: 1.55; }
+.ed .process.ed-steps .process-step:not(.is-on) > *:not(.ed-dot) { opacity: 1; }
+.ed .process.ed-steps .process-step:not(.is-on) .process-step-title,
+.ed .process.ed-steps .process-step:not(.is-on) .process-step-text { color: #666666; }
+.ed .process.ed-steps .process-step.is-on .process-step-text { color: #1a1a1a; }
+
+/* ---------- Линия как на чертеже: засечки, отводы, пунктир необязательных шагов ---------- */
+.ed-tl::before, .ed-tl::after {
+  content: ''; position: absolute; left: -7px; width: 16px; height: 2px; background: var(--red);
+}
+.ed-tl::before { top: 0; }
+.ed-tl::after { bottom: 0; }
+.ed .process-step .ed-dot::after {
+  content: ''; position: absolute; left: 100%; top: 50%; width: 28px; height: 2px; margin-top: -1px;
+  background: rgba(232,32,26,0.35); transition: background .4s ease;
+}
+.ed .process-step.is-on .ed-dot::after,
+.ed .process-step.is-done .ed-dot::after { background: var(--red); }
+.ed .process-step.is-optional .ed-dot { border-style: dashed; border-color: rgba(232,32,26,0.55); }
+.ed .process-step.is-optional.is-on .ed-dot { border-style: solid; border-color: var(--red); }
+.ed .process-step .line-dash {
+  position: absolute; left: -54px; top: -8px; bottom: -8px; width: 4px; z-index: 0;
+  background: repeating-linear-gradient(to bottom, #f5f5f7 0 7px, transparent 7px 14px);
+}
+@media (max-width: 760px) {
+  .ed .process-step .ed-dot::after { width: 20px; }
+  .ed .process-step .line-dash { left: -38px; }
+}

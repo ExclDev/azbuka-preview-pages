@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<script>/* ПРЕВЬЮ: заявки и определение города не уходят наружу */(function(){var f=window.fetch;function ok(b){return Promise.resolve(new Response(JSON.stringify(b),{status:200,headers:{"Content-Type":"application/json"}}))}window.fetch=function(u){var s=typeof u==="string"?u:(u&&u.url)||"";if(/api\/lead\.php/.test(s)){if(window.console)console.info("Превью: заявка не отправлена");return ok({ok:true,preview:true})}if(/ipapi\.co/.test(s))return ok({});return f.apply(this,arguments)}})();</script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Страница не найдена | Азбука Ремонта</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23E8201A'/%3E%3Ctext x='16' y='23' font-size='20' font-family='Arial' font-weight='bold' fill='white' text-anchor='middle'%3EА%3C/text%3E%3C/svg%3E" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="/azbuka-preview-pages/nsk/images/logo.webp" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --red:#E8201A; --red-dark:#C41A15;
+  --bg:#161310; --bg2:#1F1B17;
+  --white:#FFFFFF; --gray:#888888; --gray-light:#CCCCCC;
+  --border:rgba(255,255,255,0.08);
+  --font-display:'Oswald',sans-serif; --font-body:'Inter',sans-serif;
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+body { background:var(--bg); color:var(--gray-light); font-family:var(--font-body);
+  min-height:100vh; display:flex; flex-direction:column; -webkit-font-smoothing:antialiased; }
+.wrap { max-width:1100px; margin:0 auto; width:100%; padding:0 clamp(16px,4vw,28px); }
+
+.site-header { border-bottom:1px solid var(--border); }
+.site-header .wrap { display:flex; align-items:center; justify-content:space-between;
+  gap:16px; min-height:72px; }
+.logo { display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--white); }
+.logo img { width:40px; height:40px; border-radius:9px; display:block; }
+.logo b { font-family:var(--font-display); font-weight:600; font-size:15px;
+  line-height:1.05; text-transform:uppercase; letter-spacing:.04em; }
+.site-header .phone { color:var(--white); text-decoration:none; font-family:var(--font-display);
+  font-weight:600; font-size:17px; letter-spacing:.02em; white-space:nowrap; }
+.site-header .phone:hover { color:var(--red); }
+
+/* Экран ошибки: крупные цифры уходят за правый край, как акцентная плашка —
+   тот же приём, что на служебном экране автошколы, в нашей палитре. */
+.hero { position:relative; flex:1; display:flex; align-items:center; overflow:hidden;
+  padding:clamp(56px,10vw,110px) 0; }
+.digits { position:absolute; right:3vw; bottom:-5vw; font-family:var(--font-display);
+  font-weight:700; font-size:clamp(150px,26vw,380px); line-height:1;
+  color:rgba(232,32,26,.13); user-select:none; pointer-events:none; }
+@media (max-width:768px){ .digits { font-size:clamp(110px,38vw,220px); right:1vw; bottom:-8vw; } }
+.hero .wrap { position:relative; z-index:1; }
+.eyebrow { font-size:12px; letter-spacing:5px; text-transform:uppercase; color:var(--red);
+  font-weight:600; margin-bottom:18px; }
+h1 { font-family:var(--font-display); font-weight:600; text-transform:uppercase;
+  font-size:clamp(30px,5.5vw,56px); line-height:1.08; color:var(--white);
+  max-width:16ch; margin-bottom:20px; }
+.lead { font-size:clamp(15px,1.6vw,18px); line-height:1.65; max-width:48ch; margin-bottom:34px; }
+.actions { display:flex; flex-wrap:wrap; gap:12px; margin-bottom:38px; }
+.btn { display:inline-flex; align-items:center; justify-content:center; min-height:52px;
+  padding:0 30px; border-radius:999px; text-decoration:none; font-weight:600; font-size:15px;
+  font-family:var(--font-display); text-transform:uppercase; letter-spacing:.03em;
+  transition:background .2s,border-color .2s,color .2s; }
+.btn-primary { background:var(--red); color:#fff; }
+.btn-primary:hover { background:var(--red-dark); }
+.btn-outline { border:1px solid var(--border); color:var(--white); }
+.btn-outline:hover { border-color:var(--red); color:var(--red); }
+.quick { display:flex; flex-wrap:wrap; gap:10px; }
+.quick a { display:inline-flex; align-items:center; border:1px solid var(--border);
+  border-radius:999px; padding:9px 18px; font-size:14px; font-weight:500;
+  color:var(--gray-light); text-decoration:none; transition:border-color .2s,color .2s; }
+.quick a:hover { border-color:var(--red); color:var(--white); }
+
+.site-footer { border-top:1px solid var(--border); background:var(--bg2);
+  padding:28px 0; font-size:14px; color:var(--gray); }
+.site-footer .wrap { display:flex; flex-wrap:wrap; gap:10px 26px; justify-content:space-between; }
+.site-footer a { color:var(--gray-light); text-decoration:none; }
+.site-footer a:hover { color:var(--red); }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="/azbuka-preview-pages/nsk/">
+      <img src="/azbuka-preview-pages/nsk/images/logo.webp" alt="" />
+      <b>Азбука<br />Ремонта</b>
+    </a>
+    <a class="phone" href="tel:+79231410154">8 (923) 141-01-54</a>
+  </div>
+</header>
+
+<section class="hero">
+  <span class="digits" aria-hidden="true">404</span>
+  <div class="wrap">
+    <div class="eyebrow">Ошибка 404</div>
+    <h1>Такой страницы у нас нет</h1>
+    <p class="lead">Возможно, ссылка устарела или в адресе опечатка. Вернитесь на главную
+    или посмотрите наши работы — там больше сорока объектов, сданных под ключ.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="/azbuka-preview-pages/nsk/">На главную</a>
+      <a class="btn btn-outline" href="/azbuka-preview-pages/nsk/#works">Смотреть работы</a>
+    </div>
+    <div class="quick">
+      <a href="/azbuka-preview-pages/nsk/#about">О компании</a>
+      <a href="/azbuka-preview-pages/nsk/#video-reels">Смотрите в деталях</a>
+      <a href="/azbuka-preview-pages/nsk/#process">Как мы работаем</a>
+      <a href="/azbuka-preview-pages/nsk/#reviews">Отзывы</a>
+      <a href="/azbuka-preview-pages/nsk/#contacts">Контакты</a>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© Азбука Ремонта</span>
+    <span>
+      <a href="/azbuka-preview-pages/nsk/politika-konfidencialnosti">Политика конфиденциальности</a> ·
+      <a href="/azbuka-preview-pages/nsk/polzovatelskoe-soglashenie">Пользовательское соглашение</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>

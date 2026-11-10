@@ -1,0 +1,42 @@
+/* «Акция»: А — цена пересчитывается, Б — бегущая строка, Г — живая рамка карточки. Токены системы. */
+.sale { position: relative; overflow: hidden; }
+.sale > .wrapper { position: relative; z-index: 2; }
+
+/* А. Цена пересчитывается: старая зачёркивается линией, новая отсчитывается вниз */
+.sv-price .sale-price-old { text-decoration: none; position: relative; display: inline-block; }
+.sv-price .sale-price-old::after {
+  content: ''; position: absolute; left: -4px; right: -4px; top: 52%; height: 2px; background: var(--red);
+  transform: scaleX(var(--sx, 1)); transform-origin: 0 50%;
+}
+.sv-price .sale-price { font-variant-numeric: tabular-nums; display: inline-block; }
+
+/* Б. Бегущая строка вверху секции */
+.sv-band { display: none; }
+.sv-marq .sv-band {
+  display: block; position: relative; z-index: 1; overflow: hidden; white-space: nowrap;
+  border-bottom: 1px solid rgba(232,32,26,0.18); padding: 14px 0; margin-bottom: 40px;
+}
+.sv-band-in { display: inline-flex; gap: 40px; will-change: transform; }
+.sv-band-in span {
+  font-family: var(--font-display); font-weight: 700; text-transform: uppercase;
+  font-size: clamp(28px, 3.4vw, 52px); line-height: 1; color: transparent;
+  -webkit-text-stroke: 1px rgba(232,32,26,0.55);
+}
+.sv-band-in span.f { color: var(--red); -webkit-text-stroke: 0; }
+
+/* Г. Живая рамка карточки цены */
+.sv-frame .sale-right { position: relative; isolation: isolate; }
+.sv-frame .sale-right::before {
+  content: ''; position: absolute; inset: -1px; z-index: -1; padding: 1px;
+  background: conic-gradient(from var(--ang, 0deg), transparent 0 70%, rgba(232,32,26,0.9) 85%, transparent 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor; mask-composite: exclude;
+  animation: svSpin 5s linear infinite;
+}
+@property --ang { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
+@keyframes svSpin { to { --ang: 360deg; } }
+@media (prefers-reduced-motion: reduce) { .sv-frame .sale-right::before { animation: none; } }
+.sv-frame .sale-right::before {
+  inset: -2px; padding: 2px;
+  background: conic-gradient(from var(--ang, 0deg), rgba(232,32,26,0.12) 0 55%, rgba(232,32,26,0.95) 78%, rgba(232,32,26,0.12) 100%);
+}

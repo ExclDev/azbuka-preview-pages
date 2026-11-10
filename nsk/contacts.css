@@ -1,0 +1,74 @@
+/* «Контакты» — только колонка с данными (карта и шар не тронуты) + подвал без логотипа.
+   Токены системы: red, red-a10, red-a35, border, white, gray, gray-light, radius-md, font-display. */
+
+/* <address> по умолчанию курсивный — на сайте это не задумано */
+.ed .contacts-list { font-style: normal; gap: 0; margin-top: 8px; }
+
+/* строки с тонкими линиями */
+.ed .contacts-item {
+  position: relative; align-items: center; gap: 20px;
+  padding: 22px 0; border-top: 1px solid var(--border);
+}
+.ed .contacts-item:last-child { border-bottom: 1px solid var(--border); }
+.ed .contacts-item::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: -1px; height: 1px; background: var(--red);
+  transform: scaleX(0); transform-origin: 0 50%; transition: transform .5s cubic-bezier(.2,.7,.2,1);
+}
+.ed .contacts-item:hover::after { transform: scaleX(1); }
+
+/* иконка в плашке, как у карточек системы; по наведению — заливка red и поворот −6° */
+.ed .contacts-icon {
+  width: 56px; height: 56px; flex: none; display: grid; place-items: center;
+  background: rgba(232,32,26,0.1); border: 1px solid rgba(232,32,26,0.35); border-radius: var(--radius-md);
+  color: var(--red);
+  transition: background .4s ease, border-color .4s ease, color .4s ease, transform .4s cubic-bezier(.2,.7,.2,1);
+}
+.ed .contacts-icon svg { width: 26px; height: 26px; stroke: currentColor; }
+.ed .contacts-item:hover .contacts-icon { background: var(--red); border-color: var(--red); color: #fff; transform: rotate(-6deg); }
+.ed .contacts-icon svg * { stroke-dasharray: 120; stroke-dashoffset: 0; }
+.ed .contacts-item.ct-draw .contacts-icon svg * { animation: ctDraw 1.3s cubic-bezier(.65,0,.35,1) both; }
+@keyframes ctDraw { from { stroke-dashoffset: 120; } to { stroke-dashoffset: 0; } }
+
+/* значения: адрес и время — основной текст, телефон — стиль phone системы (Oswald) */
+.ed .contacts-item-label { margin-bottom: 6px; }
+.ed .contacts-item-value { font-size: 17px; color: var(--white); line-height: 1.4; }
+.ed .contacts-item-value a { color: var(--white); }
+.ed .contacts-item-value a[data-city-phone] {
+  font-family: var(--font-display); font-weight: 600; font-size: clamp(24px, 2.2vw, 30px); letter-spacing: .5px;
+}
+.ed .contacts-item-value a:hover { color: var(--red); }
+
+/* телефон и почта: вся строка кликабельна, справа выезжает стрелка */
+.ed .contacts-item.ct-link { cursor: pointer; }
+.ed .contacts-item.ct-link a::before { content: ''; position: absolute; inset: 0; z-index: 1; }
+.ed .ct-arrow {
+  margin-left: auto; width: 22px; height: 22px; color: var(--red); flex: none;
+  opacity: 0; transform: translateX(-12px); transition: opacity .35s ease, transform .45s cubic-bezier(.2,.7,.2,1);
+}
+.ed .contacts-item.ct-link:hover .ct-arrow { opacity: 1; transform: none; }
+
+@media (max-width: 760px) {
+  .ed .contacts-icon { width: 48px; height: 48px; }
+  .ed .contacts-icon svg { width: 22px; height: 22px; }
+  .ed .contacts-item-value { font-size: 15px; }
+  .ed .ct-arrow { opacity: 1; transform: none; }
+}
+
+.ed .contacts-item-value a { white-space: nowrap; }
+@media (max-width: 760px) {
+  .ed .contacts-item-value a[data-city-phone] { font-size: 22px; }
+  .ed .contacts-item-value a[href^="mailto:"] { font-size: 14px; }
+  .ed .contacts-item { gap: 14px; }
+}
+
+/* Мобильные: длинная почта с nowrap растягивала колонку сетки (1fr = minmax(auto,1fr))
+   до ~437px и давала горизонтальную прокрутку на 375px. Даём колонке сжиматься
+   и разрешаем перенос внутри адреса; сдвиг строк при появлении (x:50) не вылезает за экран. */
+.ed .contacts { overflow-x: clip; }
+@media (max-width: 960px) {
+  .ed .contacts-inner { grid-template-columns: minmax(0, 1fr); }
+}
+.ed .contacts-item > div { min-width: 0; }
+@media (max-width: 760px) {
+  .ed .contacts-item-value a { white-space: normal; overflow-wrap: anywhere; }
+}

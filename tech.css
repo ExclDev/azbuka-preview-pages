@@ -1,0 +1,50 @@
+/* «Дизайн проект»: А — чертёж стирается в интерьер, Б — все пункты с галочками, В — акцент плашки, Г — иерархия заголовка. Токены системы. */
+/* А. Чертёж стирается в интерьер при прокрутке (шторка с красной линией) */
+.tech-img { position: relative; }
+.tx-sketch, .tx-line { display: none; }
+.tx-wipe .tx-sketch {
+  display: block; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+  object-position: center top; filter: grayscale(1) contrast(1.35) brightness(1.08);
+  clip-path: inset(0 0 0 var(--tx, 0%)); z-index: 1; pointer-events: none;
+}
+.tx-wipe .tx-line {
+  display: block; position: absolute; top: 0; bottom: 0; left: var(--tx, 0%); width: 2px; margin-left: -1px;
+  background: var(--red); z-index: 2; pointer-events: none;
+}
+.tx-wipe .tx-line::after {
+  content: ''; position: absolute; top: 50%; left: 50%; width: 14px; height: 14px; margin: -7px 0 0 -7px;
+  border-radius: 50%; background: var(--red); box-shadow: 0 0 0 6px rgba(232,32,26,0.25);
+}
+
+/* Б. Все пункты сразу, галочки прорисовываются */
+.tx-list .tech-hidden { display: list-item; }
+.tx-list .tech .btn-dark { display: none; }
+.tx-list .tech-features li { padding-left: 30px; }
+.tx-list .tech-features li::before {
+  width: 18px; height: 18px; top: 1px; border-radius: 0; background: none;
+  -webkit-mask: none; mask: none;
+}
+.tx-chk { display: none; }
+.tx-list .tx-chk {
+  display: block; position: absolute; left: 0; top: 1px; width: 18px; height: 18px; color: var(--red);
+}
+.tx-list .tx-chk path { stroke-dasharray: 24; stroke-dashoffset: 24; transition: stroke-dashoffset .7s cubic-bezier(.65,0,.35,1); }
+.tx-list .tech-features li.tx-on .tx-chk path { stroke-dashoffset: 0; }
+.tx-list .tech-features li { opacity: .35; transform: translateX(-10px); transition: opacity .6s ease, transform .6s cubic-bezier(.2,.7,.2,1); }
+.tx-list .tech-features li.tx-on { opacity: 1; transform: none; }
+
+/* В. Плашка «Мы не работаем без…»: линия прорисовывается, знак «!» привлекает внимание */
+.tech-alert { position: relative; }
+.tx-alert .tech-alert { border-left-color: transparent; }
+.tx-alert .tech-alert::before {
+  content: ''; position: absolute; left: -3px; top: 0; bottom: 0; width: 3px; background: var(--red);
+  transform: scaleY(0); transform-origin: 50% 0; transition: transform 1s cubic-bezier(.65,0,.35,1);
+}
+.tx-alert .tech-alert.tx-on::before { transform: scaleY(1); }
+.tx-alert .tech-alert-icon { transform: scale(0); transition: transform .6s cubic-bezier(.34,1.56,.64,1) .5s; }
+.tx-alert .tech-alert.tx-on .tech-alert-icon { transform: scale(1); }
+.tx-alert .tech-alert.tx-on .tech-alert-icon img { animation: txPing 2.4s ease-out 1.2s 2; border-radius: 50%; }
+@keyframes txPing { 0% { box-shadow: 0 0 0 0 rgba(232,32,26,0.5); } 100% { box-shadow: 0 0 0 14px rgba(232,32,26,0); } }
+
+/* Г. Иерархия заголовка: «Дизайн проект» крупно, продолжение — строкой поменьше */
+.tx-title #tech-title .mo-line:nth-child(n+2) { font-size: .46em; line-height: 1.2; margin-top: .3em; }

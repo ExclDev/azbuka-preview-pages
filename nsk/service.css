@@ -1,0 +1,481 @@
+/* service.css: стили внутренних страниц (шаблон услуги, layouts/service.njk). Подключается после base.css, home.css на внутренних страницах нет.
+   Эталон: макет brand/maket-uslugi-2026-11-09/index.html. Цвета и размеры берутся из токенов base.css (:root); светлые токены системы
+   добавлены ниже, их нет в base.css.
+
+   В файле есть КОПИИ нескольких правил из home.css: .btn-outline, .section-tag / .section-title / .divider, html.scroll-locked.
+   Они нужны общему базовому слою и шапке секции, но лежат в home.css, а он на внутренних страницах не грузится.
+   Правила wordmark и .mo-line скопированы из editorial.css и motion.css по той же причине. Если эти правила меняются на главной,
+   сверить копии здесь. Файлы главной не правились, чтобы её сборка осталась прежней.
+
+   Движение: слой service.js. Скрытые начальные состояния живут только под html.sv-pre (его ставит скрипт в <head>, когда нет
+   prefers-reduced-motion) и снимаются сразу, как service.js взял управление. Без JS и при reduced-motion всё видно в конечном состоянии. */
+
+:root {
+  --light-bg:   #f5f5f7;   /* токены дизайн-системы (tokens.json), в base.css их нет */
+  --light-card: #ffffff;
+  --light-ink:  #1a1a1a;
+  --light-text: #666666;
+  --red-a10:    rgba(232, 32, 26, .10);
+  --red-a12:    rgba(232, 32, 26, .12);
+  --red-a50:    rgba(232, 32, 26, .50);
+  --sv-top: 108px;         /* шапка 72 + панель города 36: контент первого экрана начинается ниже */
+  --ed-sec: clamp(36px, 6vw, 72px);
+  --sv-ease: cubic-bezier(.16, 1, .3, 1);
+}
+@media (min-width: 1920px) { :root { --sv-top: 116px; --ed-sec: 87px; } }
+@media (min-width: 2560px) { :root { --sv-top: 124px; --ed-sec: 96px; } }
+@media (max-width: 768px)  { :root { --sv-top: 100px; } }
+@media (max-width: 480px)  { :root { --sv-top: 96px; } }
+
+/* копии из home.css */
+html.scroll-locked { overflow-y: hidden; }
+.btn-outline { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.4); }
+.btn-outline::after {
+  content: ''; position: absolute; inset: 0; background: #fff;
+  transform: translateY(101%); transition: transform .4s cubic-bezier(.2,.7,.2,1); z-index: -1;
+}
+.btn-outline:hover { border-color: #fff; color: #111; box-shadow: 0 10px 28px rgba(255,255,255,0.18); }
+.btn-outline:hover::after { transform: translateY(0); }
+.section-tag {
+  display: block; font-family: var(--font-body); font-size: 11px; font-weight: 600;
+  letter-spacing: 3px; text-transform: uppercase; color: var(--red); margin-bottom: 8px; text-align: left;
+}
+.section-title {
+  font-family: var(--font-display); font-size: var(--ed-sec); font-weight: 600; line-height: 1.1;
+  text-transform: uppercase; text-align: left; text-wrap: balance;
+}
+.divider { display: flex; justify-content: flex-start; gap: 6px; margin: 16px 0 32px; }
+.divider span:first-child { width: 40px; height: 3px; background: var(--red); }
+.divider span:last-child  { width: 8px;  height: 3px; background: var(--red); }
+/* маска строки заголовка (motion.css, editorial.css) */
+.mo-line { display: block; overflow: hidden; padding: .08em 0 .06em; margin: -.08em 0 -.06em; }
+.mo-line > .mo-in { display: block; }
+/* подвал: название компании во всю ширину (editorial.css). Залито без JS; хвост «У» не режется копирайтом: отступ снизу */
+.ed .footer { overflow: hidden; }
+.ed-wordmark {
+  display: inline-block; font-family: var(--font-display); font-weight: 700; text-transform: uppercase;
+  font-size: 12vw; line-height: 1; white-space: nowrap; margin: clamp(8px, 2vw, 40px) 0 0;
+  padding-bottom: .16em;
+  color: transparent; -webkit-text-stroke: 1px var(--border);
+  background: linear-gradient(90deg, var(--white) 0 50%, transparent 50% 100%) no-repeat;
+  background-size: 200% 100%; background-position: var(--wm, 0%) 0;
+  -webkit-background-clip: text; background-clip: text; user-select: none;
+}
+.ed-wordmark span:last-child {
+  background: linear-gradient(90deg, var(--red) 0 50%, transparent 50% 100%) no-repeat;
+  background-size: 200% 100%; background-position: var(--wm2, 0%) 0;
+  -webkit-background-clip: text; background-clip: text; -webkit-text-stroke-color: rgba(232,32,26,0.35);
+}
+
+/* ═══ Каркас страницы ═══ */
+.sv { background: var(--bg); color: var(--white); width: 100%; overflow-x: clip; font-family: var(--font-body); }
+.sv h1, .sv h2, .sv h3, .sv summary { text-wrap: balance; }
+.sv p { text-wrap: pretty; }
+.sv ::selection { background: var(--red); color: #fff; }
+.sv a:hover { color: var(--red); }
+.sv .btn:hover, .sv .btn-red:hover { color: #fff; }
+.sv .btn-outline:hover { color: #111; }
+.sv-ph { display: inline-block; padding: 0 6px; border: 1px dashed currentColor; border-radius: 6px; font-style: normal; opacity: .8; }
+.sv-sr { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.sv-acc { color: var(--red); }
+.section-title .mo-line, .section-title .mo-in { color: inherit; }
+.sv-sec, .sv-cta { scroll-margin-top: var(--sv-top); }
+.sv-hero { scroll-margin-top: 0; }
+
+.sv-progress { position: fixed; top: 0; left: 0; right: 0; z-index: 1150; height: 3px; pointer-events: none; }
+.sv-progress i { display: block; width: 100%; height: 3px; background: var(--red); transform-origin: left; transform: scaleX(0); }
+
+/* ═══ Первый экран ═══ */
+.sv-crumbs { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; padding: 28px 0 0; list-style: none; font-size: 14px; color: var(--gray); }
+.sv-crumbs li + li::before { content: "/"; margin-right: 8px; color: #555; }
+.sv-crumbs a { text-decoration: none; }
+.sv-hero { position: relative; padding: var(--sv-top) 0 96px; }
+.sv-hero-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 56px; align-items: end; margin-top: 48px; }
+.sv-h1 { margin: 44px 0 0; font-family: var(--font-display); font-weight: 600; text-transform: uppercase; font-size: clamp(32px, 8.6vw, 112px); line-height: .95; letter-spacing: -.01em; }
+/* отступ сверху с компенсирующим отрицательным полем: маска строки (overflow: hidden) не обрезает точки над «Ё», положение заголовка не меняется; одна величина для H1 и призыва */
+:root { --ln-pad: .18em; }
+.sv-h1 .ln { display: block; overflow: hidden; padding-top: var(--ln-pad); margin-top: calc(var(--ln-pad) * -1); }
+.sv-h1 .ln > span { display: block; }
+.sv-h1 .red { color: var(--red); }
+.sv-lead { max-width: 560px; margin: 28px 0 0; font-size: 19px; line-height: 1.55; color: var(--gray-light); }
+.sv-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin: 40px 0 0; padding: 0; list-style: none; background: var(--border); border-radius: var(--radius-md); overflow: hidden; }
+.sv-facts li { padding: 20px 20px 22px; background: var(--bg2); }
+.sv-facts b { display: block; white-space: nowrap; font-family: var(--font-display); font-weight: 600; font-size: 26px; line-height: 1.1; color: var(--white); }
+.sv-facts li > span { display: block; margin-top: 6px; font-size: 14px; line-height: 1.4; color: var(--gray); }
+.sv-ctas { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+.sv-hero-photo { position: relative; margin: 0; height: 520px; border-radius: var(--radius-lg); overflow: hidden; background: var(--bg2); }
+.sv-hero-photo img { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover; }
+.sv-hero-photo figcaption { position: absolute; left: 20px; bottom: 18px; padding: 8px 12px; border-radius: var(--radius-pill); background: rgba(22,19,16,.72); font-size: 13px; color: var(--gray-light); }
+/* чертёж и ч/б фото нужны только когда работает движение (html.sv-motion), иначе остаётся цветное фото */
+.sv-hero-photo .sv-ph-gray, .sv-plan { display: none; }
+.sv-plan { position: absolute; inset: 8% 6%; width: 88%; height: 84%; color: #fff; pointer-events: none; }
+html.sv-motion .sv-hero-photo .sv-ph-gray { display: block; filter: grayscale(1) brightness(.42) contrast(1.15); }
+html.sv-motion .sv-plan { display: block; }
+html.sv-motion .sv-plan path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+
+/* ═══ Секции ═══ */
+.sv-light { background: var(--light-bg); color: var(--light-ink); }
+.sv-light .section-title { color: var(--light-ink); }
+.sv-sec { padding: var(--section-pad) 0; }
+.sv-sec--flush { padding-top: 0; }
+.sv-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 24px; }
+.sv-sub { max-width: 520px; margin: 0; font-size: 17px; line-height: 1.55; color: var(--light-text); }
+.sv-dark .sv-sub { color: var(--gray); }
+
+/* Переключатель квартиры: класс строки и переменные --i, --n, --k, переходы на CSS */
+.sv-tabs { position: relative; display: inline-grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0; margin-top: 40px; padding: 6px; border-radius: var(--radius-pill); background: #fff; box-shadow: 0 4px 20px rgba(0,0,0,.06); }
+.sv-tab-ind { position: absolute; top: 6px; bottom: 6px; left: 6px; width: calc((100% - 12px) / 3); border-radius: var(--radius-pill); background: var(--light-ink); transform: translateX(calc(var(--i, 0) * 100%)); transition: transform .6s var(--sv-ease); }
+.sv-tab { position: relative; z-index: 1; min-height: 44px; padding: 0 26px; white-space: nowrap; border: 0; border-radius: var(--radius-pill); background: transparent; font: 600 15px/1 var(--font-body); color: var(--light-text); cursor: pointer; transition: background .3s ease, color .3s ease; }
+.sv-tab:hover { color: var(--light-ink); }
+.sv-tab.on { color: #fff; }
+.sv-tab:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+.sv-scope { display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 48px; margin-top: 40px; align-items: start; }
+.sv-list { margin: 0; padding: 0; list-style: none; border-top: 1px solid rgba(0,0,0,.1); }
+.sv-row { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 20px; align-items: center; padding: 20px 0; border-bottom: 1px solid rgba(0,0,0,.1); transition: opacity .4s ease; }
+.sv-mark { position: relative; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; transition: background .35s ease, color .35s ease, box-shadow .35s ease; }
+.sv-mark svg { position: absolute; width: 18px; height: 18px; max-width: none; opacity: 0; transform: scale(.4) rotate(-30deg); transition: opacity .35s ease, transform .5s var(--sv-ease); }
+.sv-row.do .i-do, .sv-row.check .i-check, .sv-row.skip .i-skip { opacity: 1; transform: none; }
+.sv-row .i-do path { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset .5s cubic-bezier(.65,0,.35,1) calc(var(--k, 0) * 45ms + .1s); }
+.sv-row.do .i-do path { stroke-dashoffset: 0; }
+.sv-row.do .sv-mark { background: var(--red); color: #fff; }
+.sv-row.check .sv-mark { background: #fff; color: var(--red); box-shadow: inset 0 0 0 1.5px var(--red); }
+.sv-row.skip { opacity: .45; }
+.sv-strike { background: linear-gradient(currentColor, currentColor) no-repeat 0 55% / 0 1.5px; transition: background-size .5s cubic-bezier(.65,0,.35,1) calc(var(--k, 0) * 45ms); }
+.sv-row.skip .sv-strike { background-size: 100% 1.5px; }
+.sv-row, .sv-mark { transition-delay: calc(var(--k, 0) * 45ms); }
+.sv-row.skip .sv-mark { background: transparent; color: var(--gray); box-shadow: inset 0 0 0 1.5px var(--gray-light); }
+.sv-row-t { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 22px; line-height: 1.2; text-transform: uppercase; }
+.sv-row-t a { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 4px; }
+.sv-row-d { margin: 4px 0 0; font-size: 15px; line-height: 1.5; color: var(--light-text); }
+.sv-badge { position: relative; display: grid; padding: 6px 12px; border-radius: var(--radius-pill); font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; transition: background .35s ease, color .35s ease; }
+.sv-badge > span:not(.sv-sr) { grid-area: 1 / 1; opacity: 0; transform: translateY(110%); transition: opacity .3s ease, transform .5s var(--sv-ease) calc(var(--k, 0) * 45ms); }
+.sv-row.do .b-do, .sv-row.check .b-check, .sv-row.skip .b-skip { opacity: 1; transform: none; }
+.sv-row.do .sv-badge { background: var(--red-a10); color: var(--red-dark); }
+.sv-row.check .sv-badge { background: #fff; color: var(--light-ink); }
+.sv-row.skip .sv-badge { background: transparent; color: var(--gray); }
+.sv-sum { position: sticky; top: calc(var(--sv-top) + 12px); padding: 32px; border-radius: var(--radius-lg); background: var(--bg); color: #fff; }
+.sv-sum-k { margin: 0; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--gray); }
+.sv-sum-n { display: flex; align-items: flex-end; margin: 6px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 64px; line-height: 1; font-variant-numeric: tabular-nums; }
+/* число и итог вплотную, как дробь «6/10»; ширина барабана равна числу цифр (--d: 1 или 2) и плавно меняется при 9 → 10 */
+.sv-sum-n .sv-drum { flex: none; width: calc(var(--d, 1) * 1ch); transition: width .5s var(--sv-ease); }
+.sv-sum-of { margin-left: .06em; font-size: .5em; color: var(--red); }
+.sv-drum { display: inline-block; height: 1em; overflow: hidden; vertical-align: top; line-height: 1; }
+.sv-drum-col { display: block; line-height: 1; transform: translateY(calc(var(--n, 0) * -1em)); transition: transform .9s var(--sv-ease); }
+.sv-facts .sv-drum-col { transform: translateY(-6em); transition: none; }
+.sv-sum p.sv-sum-t { margin: 8px 0 0; font-size: 15px; line-height: 1.5; color: var(--gray-light); }
+.sv-sum hr { margin: 24px 0; border: 0; border-top: 1px solid var(--border); }
+.sv-sum .btn { width: 100%; justify-content: center; margin-top: 24px; }
+
+/* Цены и дизайн-проект */
+.sv-prices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 48px; }
+.sv-dp { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr); gap: 1px; margin-top: 16px; border-radius: var(--radius-lg); overflow: hidden; background: var(--border); border: 1px solid var(--border); }
+.sv-dp > div { padding: 32px; background: var(--bg2); }
+.sv-dp-head h3 { margin: 10px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 30px; line-height: 1.1; text-transform: uppercase; }
+.sv-dp-head p:last-child { margin: 16px 0 0; font-size: 15px; line-height: 1.55; color: var(--gray-light); }
+/* номер варианта в кольце; у варианта с акцией кольцо залито */
+.sv-dp-n { display: inline-grid; place-items: center; width: 44px; height: 44px; border: 2px solid var(--red); border-radius: 50%; box-sizing: border-box; font-family: var(--font-display); font-weight: 600; font-size: 20px; line-height: 1; color: var(--red); }
+.sv-dp-opt.is-hit .sv-dp-n { background: var(--red); color: #fff; }
+.sv-dp-opt h4 { margin: 16px 0 0; font-family: var(--font-display); font-weight: 500; font-size: 22px; text-transform: uppercase; }
+.sv-dp-opt p { margin: 8px 0 0; font-size: 15px; line-height: 1.5; color: var(--gray-light); }
+.sv-dp-opt.is-hit { background: var(--bg3); }
+.sv-dp-opt .sv-dp-price { margin-top: 14px; font-family: var(--font-display); font-weight: 600; font-size: 34px; line-height: 1.1; color: #fff; }
+.sv-dp-price s { margin-left: 6px; font-size: .6em; font-weight: 500; color: var(--gray); }
+.sv-old { text-decoration: none; background: linear-gradient(var(--red), var(--red)) no-repeat 0 55% / 100% 2px; }
+.sv-price { display: flex; flex-direction: column; padding: 32px; border-radius: var(--radius-lg); background: var(--bg2); border: 1px solid var(--border); transition: transform .4s cubic-bezier(.2,.7,.1,1), border-color .4s ease; }
+.sv-price:hover { transform: translateY(-6px); border-color: var(--red-a50); }
+.sv-price.hit { background: var(--bg3); border-color: var(--red-a50); }
+.sv-price-k { margin: 0; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--gray); }
+.sv-price h3 { margin: 10px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 30px; line-height: 1.1; text-transform: uppercase; }
+.sv-price-v { margin: 20px 0 0; font-family: var(--font-display); font-weight: 500; font-size: 22px; color: var(--red); }
+.sv-price ul { flex: 1; margin: 24px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; align-content: start; }
+.sv-price li { position: relative; padding-left: 22px; font-size: 15px; line-height: 1.5; color: var(--gray-light); }
+.sv-price li::before { content: ""; position: absolute; left: 0; top: 9px; width: 10px; height: 2px; background: var(--red); }
+.sv-note { margin: 28px 0 0; font-size: 15px; line-height: 1.5; color: var(--gray); }
+
+/* Этапы: без JS и на узких экранах обычная сетка из шести шагов */
+.sv-steps { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0; margin: 56px 0 0; padding: 0; list-style: none; }
+.sv-step { position: relative; padding: 0 20px 0 0; border-top: 2px solid rgba(0,0,0,.1); }
+.sv-step::before { content: ""; position: absolute; left: 0; top: -2px; width: 100%; height: 2px; background: var(--red); transform-origin: left; transform: scaleX(var(--p, 1)); }
+/* номер шага в кольце: центр кольца стоит на линии этапов */
+.sv-step-n { position: relative; z-index: 1; display: grid; place-items: center; width: 56px; height: 56px; margin-top: -29px; border: 2px solid var(--red); border-radius: 50%; box-sizing: border-box; background: var(--light-bg); font-family: var(--font-display); font-weight: 600; font-size: 24px; line-height: 1; color: var(--red); }
+.sv-step h3 { margin: 20px 0 0; font-family: var(--font-display); font-weight: 500; font-size: 20px; line-height: 1.2; text-transform: uppercase; }
+.sv-step p { margin: 8px 0 0; font-size: 15px; line-height: 1.5; color: var(--light-text); }
+/* закреплённая секция (от 1100 px): класс sv-pinned ставит service.js, он же закрепляет секцию и двигает ленту */
+/* финал после шестого шага: только при закреплении (на узких экранах и без JS скрыт) */
+.sv-step-fin { display: none; }
+.sv-step-fin .sv-step-n svg { width: 28px; height: 28px; max-width: none; }
+html.sv-pinned .sv-step-fin { display: block; }
+html.sv-pinned .sv-steps-sec { padding: 0; }
+html.sv-pinned .sv-pin { height: 100vh; height: 100svh; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+html.sv-pinned .sv-steps { display: flex; width: max-content; margin-top: 48px; }
+html.sv-pinned .sv-step { flex: none; width: 400px; padding: 0 56px 0 0; }
+html.sv-pinned .sv-step-n { width: 72px; height: 72px; margin-top: -37px; font-size: 30px; }  /* заливка кольца: service.js, в отрезке шага */
+html.sv-pinned .sv-step h3 { font-size: 28px; margin-top: 20px; }
+html.sv-pinned .sv-step p { font-size: 17px; max-width: 300px; }
+
+/* Портфолио */
+.sv-works { display: grid; grid-template-columns: 1.3fr 1fr 1fr; gap: 16px; margin-top: 48px; }
+.sv-work { display: block; text-decoration: none; color: #fff; }
+.sv-work-img { position: relative; height: 420px; border-radius: var(--radius-lg); overflow: hidden; background: var(--bg2); }
+.sv-work-img img { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover; transition: scale 1.2s cubic-bezier(.2,.7,.1,1); }
+.sv-work:hover .sv-work-img img { scale: 1.05; }
+.sv-work h3 { margin: 16px 0 0; font-family: var(--font-display); font-weight: 500; font-size: 22px; text-transform: uppercase; }
+.sv-work p { margin: 6px 0 0; font-size: 15px; color: var(--gray); }
+
+/* Отзывы */
+.sv-revs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 48px; }
+.sv-rev { margin: 0; padding: 32px; border-radius: var(--radius-lg); background: #fff; box-shadow: 0 4px 20px rgba(0,0,0,.06); }
+.sv-rev p { margin: 0; font-size: 16px; line-height: 1.6; color: var(--light-ink); }
+.sv-rev footer { display: flex; align-items: center; gap: 12px; margin-top: 24px; }
+.sv-ava { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--light-ink); color: #fff; font: 600 14px/1 var(--font-body); }
+.sv-rev cite { font-style: normal; font-weight: 600; font-size: 15px; }
+.sv-rev small { display: block; margin-top: 2px; font-size: 13px; color: var(--light-text); }
+
+/* Вопросы и ответы */
+.sv-faq { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: 56px; align-items: start; }
+.sv-qa { border-top: 1px solid rgba(0,0,0,.1); }
+.sv-qa details { border-bottom: 1px solid rgba(0,0,0,.1); }
+.sv-qa summary { display: flex; justify-content: space-between; align-items: center; gap: 24px; min-height: 44px; padding: 22px 0; cursor: pointer; list-style: none; font-family: var(--font-display); font-weight: 500; font-size: 22px; line-height: 1.25; text-transform: uppercase; }
+.sv-qa summary::-webkit-details-marker { display: none; }
+.sv-qa summary::after { content: "+"; flex: none; font-size: 30px; line-height: 1; color: var(--red); transition: transform .5s var(--sv-ease); }
+.sv-qa details[open] summary::after { transform: rotate(45deg); }
+.sv-qa summary:focus-visible { outline: 2px solid var(--red); outline-offset: 4px; }
+.sv-qa details p { margin: 0; padding: 0 48px 24px 0; font-size: 16px; line-height: 1.6; color: var(--light-text); }
+/* ответ раскрывается по высоте там, где браузер умеет ::details-content; в остальных открывается сразу */
+@supports selector(::details-content) {
+  .sv { interpolate-size: allow-keywords; }
+  .sv-qa details::details-content { block-size: 0; overflow: hidden; transition: block-size .5s var(--sv-ease), content-visibility .5s allow-discrete; }
+  .sv-qa details[open]::details-content { block-size: auto; }
+}
+
+/* Полезно почитать */
+.sv-reads { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 48px; }
+.sv-read { display: flex; flex-direction: column; justify-content: space-between; min-height: 220px; padding: 28px; border-radius: var(--radius-lg); background: #fff; text-decoration: none; color: var(--light-ink); box-shadow: 0 4px 20px rgba(0,0,0,.06); transition: transform .4s cubic-bezier(.2,.7,.1,1); }
+a.sv-read:hover { transform: translateY(-6px); color: var(--light-ink); }
+.sv-read-k { margin: 0; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--red); }
+.sv-read h3 { margin: 12px 0 0; font-family: var(--font-display); font-weight: 500; font-size: 24px; line-height: 1.2; text-transform: uppercase; }
+.sv-read span.go { margin-top: 24px; font-size: 15px; font-weight: 600; transition: transform .4s var(--sv-ease); }
+a.sv-read:hover .go { transform: translateX(6px); }
+.sv-read.svc { background: var(--bg); color: #fff; }
+a.sv-read.svc:hover { color: #fff; }
+
+/* Финальный призыв */
+.sv-cta { position: relative; padding: 120px 0; overflow: hidden; }
+.sv-cta-bg { position: absolute; inset: 0; }
+.sv-cta-bg img { width: 100%; height: 100%; max-width: none; object-fit: cover; opacity: .32; }
+.sv-cta-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, var(--bg) 30%, rgba(22,19,16,.4)); }
+.sv-cta .wrapper { position: relative; }
+.sv-cta h2 { max-width: 760px; margin: 0; font-family: var(--font-display); font-weight: 600; font-size: clamp(40px, 5vw, 72px); line-height: 1; text-transform: uppercase; }
+.sv-cta h2 .red { color: var(--red); }
+.sv-cta h2 .ln { display: block; overflow: hidden; padding-top: var(--ln-pad); margin-top: calc(var(--ln-pad) * -1); }
+.sv-cta h2 .ln > span { display: block; }
+.sv-cta p { max-width: 520px; margin: 24px 0 0; font-size: 18px; line-height: 1.55; color: var(--gray-light); }
+.sv-cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px; margin-top: 36px; }
+.sv-cta-phone { font-family: var(--font-display); font-size: 26px; text-decoration: none; }
+
+/* Навигация по разделам: от 1280 px, подписи при наведении и фокусе */
+.sv-toc { position: fixed; right: 12px; top: 34%; z-index: 30; display: none; flex-direction: column; align-items: flex-end; gap: 0; padding: 8px 6px; border-radius: var(--radius-md); transform: translateY(-50%); /* выше быстрого виджета справа */ transition: background .3s ease; }
+.sv-toc:hover, .sv-toc:focus-within { background: rgba(22,19,16,.86); }
+.sv-toc .tl { display: inline-block; max-width: 0; overflow: hidden; white-space: nowrap; vertical-align: middle; opacity: 0; transition: max-width .4s var(--sv-ease), opacity .3s ease; }
+.sv-toc:hover .tl, .sv-toc:focus-within .tl { max-width: 140px; opacity: 1; }
+.sv-toc a { position: relative; display: flex; justify-content: flex-end; min-width: 28px; min-height: 28px; align-items: center; padding: 0 30px 0 8px; font: 600 12px/1.2 var(--font-body); letter-spacing: .02em; color: var(--gray); text-decoration: none; border-radius: 8px; transition: color .3s ease; }
+.sv-toc a::before { content: ""; position: absolute; right: 8px; top: 50%; width: 8px; height: 2px; background: currentColor; box-shadow: 0 0 0 1px rgba(22,19,16,.35); transition: width .3s ease, background-color .3s ease; }
+.sv-toc a:hover { color: #fff; }
+.sv-toc a.is-on { color: #fff; }
+.sv-toc a.is-on::before { width: 16px; background: var(--red); }
+.sv-toc a:focus-visible { outline: 2px solid var(--red); outline-offset: 1px; }
+@media (min-width: 1280px) { .sv-toc { display: flex; } }
+
+/* ═══ Скрытые начальные состояния: только до старта service.js (html.sv-pre), потом их держит GSAP ═══ */
+html.sv-pre .sv-crumbs, html.sv-pre .sv-hero-copy > *, html.sv-pre .sv-rv { opacity: 0; }
+html.sv-pre .sv-h1 .ln > span, html.sv-pre .section-title .mo-in, html.sv-pre .sv-cta h2 .ln > span { transform: translateY(105%); }
+html.sv-pre .sv-hero-photo { clip-path: inset(0 0 100% 0); }
+html.lenis, html.lenis body { height: auto; }
+html.sv-motion { scroll-behavior: auto !important; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+/* ═══ Адаптив ═══ */
+@media (max-width: 1100px) {
+  .sv-hero-grid, .sv-scope, .sv-faq { grid-template-columns: 1fr; }
+  .sv-hero-photo { height: 420px; }
+  .sv-sum { position: static; }
+  .sv-revs, .sv-reads { grid-template-columns: 1fr 1fr; }
+  .sv-dp { grid-template-columns: 1fr 1fr; }
+  .sv-dp-head { grid-column: 1 / -1; }
+  .sv-steps { grid-template-columns: repeat(3, minmax(0, 1fr)); row-gap: 40px; }
+  .sv-works { grid-template-columns: 1fr 1fr; }
+  .sv-works .sv-work:first-child { grid-column: 1 / -1; }
+}
+@media (max-width: 760px) {
+  .sv-sec { padding: var(--section-pad-mobile) 0; }
+  .sv-sec--flush { padding-top: 0; }
+  .sv-hero { padding-bottom: 56px; }
+  .sv-hero-grid { margin-top: 24px; gap: 32px; }
+  .sv-h1 { margin-top: 28px; }
+  .sv-lead { font-size: 17px; }
+  .sv-facts { grid-template-columns: 1fr; }
+  .sv-facts li { display: flex; align-items: baseline; gap: 12px; padding: 16px 18px; }
+  .sv-facts li > span { margin-top: 0; }
+  .sv-ctas .btn { flex: 1 1 100%; justify-content: center; }
+  .sv-hero-photo { height: 300px; }
+  .sv-tabs { display: grid; grid-template-columns: 1fr; width: 100%; border-radius: var(--radius-lg); box-sizing: border-box; }
+  .sv-tab-ind { width: auto; right: 6px; height: 44px; bottom: auto; transform: translateY(calc(var(--i, 0) * 44px)); }
+  .sv-row { grid-template-columns: 36px minmax(0, 1fr); gap: 14px; }
+  .sv-badge { grid-column: 2; justify-self: start; }
+  .sv-row-t { font-size: 19px; }
+  .sv-sum { padding: 24px; }
+  .sv-sum-n { font-size: 52px; }
+  .sv-prices, .sv-revs, .sv-reads, .sv-works, .sv-dp { grid-template-columns: 1fr; }
+  .sv-steps { grid-template-columns: 1fr 1fr; column-gap: 16px; }
+  .sv-work-img { height: 300px; }
+  .sv-qa summary { font-size: 18px; }
+  .sv-qa details p { padding-right: 0; }
+  .sv-cta { padding: 72px 0; }
+}
+@media (max-width: 360px) {
+  .sv-tab { padding: 0 14px; }
+  .sv-cta-phone { font-size: 22px; }
+}
+
+/* Сниженная анимация: ничего не движется, итоговые значения на месте */
+@media (prefers-reduced-motion: reduce) {
+  .sv *, .sv *::before, .sv *::after, .sv-toc, .sv-toc * { animation: none !important; transition: none !important; }
+  .sv-facts .sv-drum-col { transform: translateY(-6em); }
+}
+@media (prefers-reduced-motion: reduce) {
+  @supports selector(::details-content) { .sv-qa details::details-content { transition: none !important; } }
+}
+
+/* ═══ Страница «Дизайн-проект» ═══
+   Макет: brand/maket-uslugi-2026-11-09/design.html и design-nsk.html. Блоки: hero-deck.njk (первый экран «стопка листов»),
+   sheets.njk («Листы проекта»), prices.njk с variant: big (две карточки). Движение веера при прокрутке — service.js, всё остальное на CSS. */
+
+/* Цены: две карточки с крупной ценой и старой ценой с красным зачёркиванием (его прорисовывает service.js) */
+.sv-prices--big .sv-price-v { margin-top: 16px; font-size: 34px; }
+.sv-prices--big .sv-price-v s { margin-left: 6px; font-size: .55em; color: var(--gray); }
+
+/* Первый экран «стопка листов»: слева описание, цена, кнопки; справа веер из трёх листов */
+.hv-c .hv-c-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 56px; align-items: center; margin-top: 24px; }
+/* H1 в две строки на любой ширине: самая длинная строка («квартиры в Новосибирске») занимает ≈12,1 ширины кегля, поэтому кегль не больше
+   (ширина окна − поля) / 12,4. От 1440 px действует обычный потолок 112 px, как у макета; уже кегль чуть меньше, чем 8,6vw шаблона услуги */
+.hv-c .sv-h1 { font-size: clamp(24px, calc((100vw - 32px) / 12.4), 112px); }
+.hv-price { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; margin: 28px 0 0; }
+.hv-price b { font: 600 44px/1 var(--font-display); color: #fff; }
+.hv-price s { font: 500 22px/1 var(--font-display); color: var(--gray); }
+.hv-price span { flex-basis: 100%; font-size: 14px; color: var(--gray); }
+/* Положение листа = базовое + --fan (прокрутка, 0…1, ставит service.js) + --h (наведение, 0 или 1). Числа без единиц: градусы и проценты ширины листа.
+   --spread сжимает веер на телефоне, --fk — расхождение при прокрутке (на телефоне меньше, чтобы крайние листы не уходили за край экрана). Без JS и при reduced-motion --fan равен 0: веер стоит в конечном положении. */
+.hv-c-deck { position: relative; height: 540px; --fan: 0; --h: 0; --spread: 1; --fk: 1; }
+.hv-card {
+  position: absolute; top: 50%; left: 50%; width: min(78%, 420px); aspect-ratio: 3 / 4; border-radius: 16px; overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0,0,0,.45);
+  transform: translate(-50%, -50%) rotate(calc((var(--r) + var(--fan) * var(--fk) * var(--fr) + var(--h) * var(--hr)) * 1deg))
+             translateX(calc((var(--dx) + var(--fan) * var(--fk) * var(--fx) + var(--h) * var(--hx)) * var(--spread) * 1%));
+  transition: transform .6s var(--sv-ease);
+}
+.hv-card-1 { --r: -9; --dx: -34; --fr: -7; --fx: -26; --hr: -3; --hx: -12; background: var(--bg2); color: #fff; }
+.hv-card-2 { --r: 4;  --dx: -4;  --fr: 0;  --fx: 0;   --hr: 0;  --hx: 0;   background: var(--light-bg); color: var(--light-ink); }
+.hv-card-3 { --r: 12; --dx: 30;  --fr: 6;  --fx: 26;  --hr: 2;  --hx: 12;  background: var(--bg); }
+.hv-card-3 img { width: 100%; height: 100%; max-width: none; object-fit: cover; }
+.hv-c-svg { position: absolute; inset: 16% 8% 8%; width: 84%; height: 76%; max-width: none; }
+.hv-furn { color: var(--red); }
+@media (hover: hover) { .hv-c-deck:hover { --h: 1; } }
+/* при загрузке листы раздаются по очереди; fill-mode backwards: после показа положением снова управляют переменные */
+@media (prefers-reduced-motion: no-preference) {
+  .hv-card { animation: hvDeal 1s var(--sv-ease) backwards; }
+  .hv-card-1 { animation-delay: .2s; }
+  .hv-card-2 { animation-delay: .35s; }
+  .hv-card-3 { animation-delay: .5s; }
+}
+@keyframes hvDeal { from { opacity: 0; transform: translate(-50%, -30%) rotate(0deg); } }
+
+/* «Листы проекта»: радиокнопки и :has, без скриптов. Базовые правила показывают всё (все слои, все описания), скрытие и выбор — в @supports :has */
+.dp-board { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 48px; margin-top: 40px; align-items: start; }
+.dp-list { min-width: 0; margin: 0; padding: 0; border: 0; border-top: 1px solid rgba(0,0,0,.1); }
+.dp-item { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 18px; align-items: start; padding: 18px 0; border-bottom: 1px solid rgba(0,0,0,.1); cursor: pointer; }
+.dp-item input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.dp-n { display: grid; place-items: center; width: 44px; height: 44px; border: 2px solid var(--red); border-radius: 50%; box-sizing: border-box; font: 600 20px/1 var(--font-display); color: var(--red); transition: background .35s ease, color .35s ease; }
+.dp-txt b { display: block; padding-top: 9px; font: 500 22px/1.2 var(--font-display); text-transform: uppercase; color: var(--light-ink); transition: color .35s ease; }
+.dp-txt span { display: block; margin-top: 6px; font-size: 15px; line-height: 1.5; color: var(--light-text); }
+.dp-plan { position: sticky; top: calc(var(--sv-top) + 12px); margin: 0; aspect-ratio: 640 / 560; border-radius: var(--radius-lg); overflow: hidden; background: var(--bg); color: #fff; }
+.dp-svg { position: absolute; inset: 6% 6% 12%; width: 88%; height: 82%; max-width: none; }
+.dp-render { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover; opacity: 0; }
+.dp-walls path { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.lay { color: rgba(255,255,255,.55); }
+.lay path { stroke-dasharray: 1; stroke-dashoffset: 0; }
+.zone { fill: currentColor; fill-opacity: .1; stroke: currentColor; stroke-opacity: .5; stroke-dasharray: 6 6; }
+.dp-cap { display: none; position: absolute; left: 20px; bottom: 18px; padding: 8px 14px; border-radius: var(--radius-pill); background: rgba(22,19,16,.72); font-size: 13px; color: var(--gray-light); }
+.dp-cap .cap { display: none; }
+@supports selector(:has(a)) {
+  .dp-txt b { color: var(--gray); }
+  .dp-txt span { max-height: 0; overflow: hidden; opacity: 0; margin-top: 0; transition: max-height .5s var(--sv-ease), opacity .4s ease, margin .4s ease; }
+  .dp-item:hover .dp-txt b { color: var(--light-ink); }
+  .dp-item:has(input:checked) .dp-n { background: var(--red); color: #fff; }
+  .dp-item:has(input:checked) .dp-txt b { color: var(--light-ink); }
+  .dp-item:has(input:checked) .dp-txt span { max-height: 120px; opacity: 1; margin-top: 6px; }
+  .dp-item:has(input:focus-visible) { outline: 2px solid var(--red); outline-offset: 4px; border-radius: 8px; }
+  .dp-cap { display: block; }
+  .dp-render { transform: scale(1.04); transition: opacity .8s ease, transform 1.2s var(--sv-ease); }
+  .dp-svg { transition: opacity .6s ease; }
+  .lay { opacity: 0; transition: opacity .45s ease, color .45s ease; }
+  .lay path { stroke-dashoffset: 1; transition: stroke-dashoffset .9s cubic-bezier(.65,0,.35,1); }
+  .lay circle { transform-box: fill-box; transform-origin: center; transform: scale(0); transition: transform .45s cubic-bezier(.34,1.56,.64,1); }
+  /* лист N открывает слои 1…N: слой j виден, когда выбран любой лист от j до 7 */
+  .dp-board:has(:is(#sh1,#sh2,#sh3,#sh4,#sh5,#sh6,#sh7):checked) .lay-1,
+  .dp-board:has(:is(#sh2,#sh3,#sh4,#sh5,#sh6,#sh7):checked) .lay-2,
+  .dp-board:has(:is(#sh3,#sh4,#sh5,#sh6,#sh7):checked) .lay-3,
+  .dp-board:has(:is(#sh4,#sh5,#sh6,#sh7):checked) .lay-4,
+  .dp-board:has(:is(#sh5,#sh6,#sh7):checked) .lay-5,
+  .dp-board:has(:is(#sh6,#sh7):checked) .lay-6 { opacity: 1; }
+  .dp-board:has(:is(#sh1,#sh2,#sh3,#sh4,#sh5,#sh6,#sh7):checked) .lay-1 path,
+  .dp-board:has(:is(#sh2,#sh3,#sh4,#sh5,#sh6,#sh7):checked) .lay-2 path,
+  .dp-board:has(:is(#sh3,#sh4,#sh5,#sh6,#sh7):checked) .lay-3 path,
+  .dp-board:has(:is(#sh4,#sh5,#sh6,#sh7):checked) .lay-4 path,
+  .dp-board:has(:is(#sh5,#sh6,#sh7):checked) .lay-5 path,
+  .dp-board:has(:is(#sh6,#sh7):checked) .lay-6 path { stroke-dashoffset: 0; }
+  .dp-board:has(:is(#sh1,#sh2,#sh3,#sh4,#sh5,#sh6,#sh7):checked) .lay-1 circle,
+  .dp-board:has(:is(#sh2,#sh3,#sh4,#sh5,#sh6,#sh7):checked) .lay-2 circle,
+  .dp-board:has(:is(#sh3,#sh4,#sh5,#sh6,#sh7):checked) .lay-3 circle,
+  .dp-board:has(:is(#sh4,#sh5,#sh6,#sh7):checked) .lay-4 circle,
+  .dp-board:has(:is(#sh5,#sh6,#sh7):checked) .lay-5 circle,
+  .dp-board:has(:is(#sh6,#sh7):checked) .lay-6 circle { transform: scale(1); }
+  /* текущий слой красный, пройденные белые */
+  .dp-board:has(#sh1:checked) .lay-1,
+  .dp-board:has(#sh2:checked) .lay-2,
+  .dp-board:has(#sh3:checked) .lay-3,
+  .dp-board:has(#sh4:checked) .lay-4,
+  .dp-board:has(#sh5:checked) .lay-5,
+  .dp-board:has(#sh6:checked) .lay-6 { color: var(--red); }
+  .dp-board:has(#sh1:checked) .cap-1,
+  .dp-board:has(#sh2:checked) .cap-2,
+  .dp-board:has(#sh3:checked) .cap-3,
+  .dp-board:has(#sh4:checked) .cap-4,
+  .dp-board:has(#sh5:checked) .cap-5,
+  .dp-board:has(#sh6:checked) .cap-6,
+  .dp-board:has(#sh7:checked) .cap-7 { display: inline; }
+  /* седьмой лист: план бледнеет, проявляется визуализация */
+  .dp-board:has(#sh7:checked) .dp-render { opacity: .9; transform: none; }
+  .dp-board:has(#sh7:checked) .dp-svg { opacity: .35; }
+}
+@media (prefers-reduced-motion: reduce) { .lay path { stroke-dashoffset: 0 !important; } }
+/* уже 1100 px: панель закреплена сверху над списком. Колонка flex, а не сетка: у элемента сетки область закрепления ограничена его ячейкой,
+   а во flex-колонке панель держится, пока прокручивается весь блок. Высоту ограничиваем, чтобы список оставался виден */
+@media (max-width: 1099px) {
+  .dp-board { display: flex; flex-direction: column; gap: 24px; }
+  .dp-plan { order: -1; flex: none; width: 100%; box-sizing: border-box; top: calc(var(--sv-top) + 8px); z-index: 2; max-height: 38vh; max-height: 38svh; box-shadow: 0 12px 32px rgba(22,19,16,.25); }
+  /* прокрутка к строке (фокус стрелками, якорь) оставляет её под панелью, а не за ней: отступ не меньше высоты панели */
+  .dp-item { scroll-margin-top: calc(var(--sv-top) + min(86vw, 38vh) + 24px); scroll-margin-top: calc(var(--sv-top) + min(86vw, 38svh) + 24px); }
+}
+@media (max-width: 760px) { .dp-txt b { font-size: 18px; } }
+@media (max-width: 1100px) { .hv-c .hv-c-grid { grid-template-columns: 1fr; } .hv-c-deck { height: 420px; } }
+@media (max-width: 760px) { .hv-c-deck { height: 340px; --spread: .55; --fk: .55; } .hv-card { width: 62%; } }
+/* Одна колонка, планшеты (481–1100 px): размер листа выводится из высоты веера, а не из ширины колонки.
+   --ch — высота листа. Веер при --fan: 1 и --h: 1 с учётом поворота и сдвига занимает по высоте ≈ 1,3 --ch (верх на .53 --ch выше центра второго листа,
+   низ на .77 --ch ниже), а по ширине ≈ 2 --ch; поэтому --ch = половина ширины колонки (не больше 560 px, как на 1440), высота коробки 1,32 --ch,
+   центр листов на .53 --ch от верха коробки. Так листы не заходят на кнопки и не выходят за низ первого экрана. До 480 px остаётся телефонная раскладка. */
+@media (min-width: 481px) and (max-width: 1100px) {
+  .hv-c-deck { --ch: min(calc((100vw - 2 * var(--px)) * .5), 560px); --spread: 1; --fk: 1; height: calc(var(--ch) * 1.32); }
+  .hv-card { width: auto; height: var(--ch); top: calc(var(--ch) * .53); }
+}

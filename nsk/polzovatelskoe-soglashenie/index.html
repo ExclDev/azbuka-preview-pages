@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<script>/* ПРЕВЬЮ: заявки и определение города не уходят наружу */(function(){var f=window.fetch;function ok(b){return Promise.resolve(new Response(JSON.stringify(b),{status:200,headers:{"Content-Type":"application/json"}}))}window.fetch=function(u){var s=typeof u==="string"?u:(u&&u.url)||"";if(/api\/lead\.php/.test(s)){if(window.console)console.info("Превью: заявка не отправлена");return ok({ok:true,preview:true})}if(/ipapi\.co/.test(s))return ok({});return f.apply(this,arguments)}})();</script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Пользовательское соглашение | Азбука Ремонта</title>
+<meta name="description" content="Условия использования сайта «Азбука Ремонта»." />
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23E8201A'/%3E%3Ctext x='16' y='23' font-size='20' font-family='Arial' font-weight='bold' fill='white' text-anchor='middle'%3EА%3C/text%3E%3C/svg%3E" type="image/svg+xml" />
+<link rel="apple-touch-icon" href="../images/logo.webp" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+/* Палитра и типографика — те же, что в index.html. Страница самодостаточная. */
+:root {
+  --red:#E8201A; --red-dark:#C41A15;
+  --bg:#161310; --bg2:#1F1B17; --bg3:#28231E;
+  --white:#FFFFFF; --gray:#888888; --gray-light:#CCCCCC;
+  --border:rgba(255,255,255,0.08);
+  --font-display:'Oswald',sans-serif; --font-body:'Inter',sans-serif;
+}
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+body { background:var(--bg); color:var(--gray-light); font-family:var(--font-body);
+       font-size:16px; line-height:1.7; -webkit-font-smoothing:antialiased; }
+.wrap { max-width:820px; margin:0 auto; padding:0 clamp(16px,4vw,28px); }
+
+.site-header { position:sticky; top:0; z-index:10; background:rgba(22,19,16,.92);
+  backdrop-filter:blur(8px); border-bottom:1px solid var(--border); }
+.site-header .wrap { display:flex; align-items:center; justify-content:space-between;
+  gap:16px; min-height:72px; }
+.logo { display:flex; align-items:center; gap:12px; text-decoration:none; color:var(--white); }
+.logo img { width:40px; height:40px; border-radius:9px; display:block; }
+.logo b { font-family:var(--font-display); font-weight:600; font-size:15px;
+  line-height:1.05; text-transform:uppercase; letter-spacing:.04em; }
+.back { color:var(--gray-light); text-decoration:none; font-size:14px; font-weight:500;
+  border:1px solid var(--border); border-radius:999px; padding:9px 18px; white-space:nowrap;
+  transition:border-color .2s,color .2s; }
+.back:hover { border-color:var(--red); color:var(--white); }
+
+main { padding:clamp(40px,7vw,72px) 0 clamp(56px,8vw,96px); }
+.eyebrow { font-size:12px; letter-spacing:5px; text-transform:uppercase; color:var(--red);
+  font-weight:600; margin-bottom:16px; }
+h1 { font-family:var(--font-display); font-weight:600; text-transform:uppercase;
+  font-size:clamp(28px,5vw,44px); line-height:1.12; color:var(--white); margin-bottom:18px; }
+.updated { color:var(--gray); font-size:14px; margin-bottom:40px; }
+
+h2 { font-family:var(--font-display); font-weight:600; text-transform:uppercase;
+  font-size:clamp(19px,2.6vw,24px); line-height:1.25; color:var(--white);
+  margin:44px 0 14px; display:flex; gap:12px; align-items:baseline; }
+h2 .num { color:var(--red); font-size:.8em; }
+p { margin-bottom:14px; }
+ul,ol { margin:0 0 16px 22px; }
+li { margin-bottom:8px; }
+a { color:var(--red); }
+a:hover { color:var(--red-dark); }
+strong { color:var(--white); font-weight:600; }
+
+.todo { display:inline-block; background:rgba(232,32,26,.14); border:1px dashed var(--red);
+  color:#FF8A85; border-radius:6px; padding:1px 8px; font-weight:600; font-size:.94em; }
+
+.note { background:var(--bg2); border:1px solid var(--border); border-left:3px solid var(--red);
+  border-radius:10px; padding:18px 20px; margin:26px 0; font-size:15px; }
+.note p:last-child { margin-bottom:0; }
+
+.site-footer { border-top:1px solid var(--border); background:var(--bg2);
+  padding:32px 0; font-size:14px; color:var(--gray); }
+.site-footer .wrap { display:flex; flex-wrap:wrap; gap:12px 26px; justify-content:space-between; }
+.site-footer a { color:var(--gray-light); text-decoration:none; }
+.site-footer a:hover { color:var(--red); }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a class="logo" href="../">
+      <img src="../images/logo.webp" alt="" />
+      <b>Азбука<br />Ремонта</b>
+    </a>
+    <a class="back" href="../">На главную</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="eyebrow">Документы</div>
+    <h1>Пользовательское соглашение</h1>
+    <p class="updated">Редакция от <span class="todo">ВПИСАТЬ ДАТУ</span></p>
+
+    <div class="note">
+      <p>Настоящее Соглашение регулирует условия использования сайта
+      <a href="https://nsk.azbuka-remonta.ru">nsk.azbuka-remonta.ru</a> (далее — Сайт), владельцем
+      которого является <span class="todo">ВПИСАТЬ НАИМЕНОВАНИЕ ЮРЛИЦА / ИП</span>,
+      ИНН <span class="todo">ИНН</span>, ОГРН <span class="todo">ОГРН</span> (далее — Компания).</p>
+    </div>
+
+    <h2><span class="num">1</span> Общие положения</h2>
+    <p>Использование Сайта означает согласие Пользователя с настоящим Соглашением.
+    Если Пользователь не согласен с его условиями, он должен прекратить использование Сайта.</p>
+    <p>Компания вправе изменять Соглашение без предварительного уведомления. Действующая
+    редакция размещена по адресу
+    <a href="../polzovatelskoe-soglashenie/">nsk.azbuka-remonta.ru/polzovatelskoe-soglashenie</a>.</p>
+
+    <h2><span class="num">2</span> Предмет</h2>
+    <p>Сайт предоставляет информацию об услугах Компании по ремонту и отделке квартир,
+    домов и коммерческих помещений, а также инструменты для отправки заявки:
+    формы обратной связи и квиз-калькулятор предварительной оценки.</p>
+
+    <h2><span class="num">3</span> Статус информации на Сайте</h2>
+    <p>Информация о ценах, сроках, акциях и составе работ носит <strong>справочный
+    характер и не является публичной офертой</strong> в смысле статьи 437 Гражданского
+    кодекса РФ.</p>
+    <p>Расчёт, полученный через квиз-калькулятор, является предварительным. Итоговая
+    стоимость определяется после выезда специалиста, замера и согласования сметы
+    и фиксируется в договоре.</p>
+    <p>Фотографии выполненных работ, отзывы и сроки приведены для примера и могут
+    отличаться от результата на конкретном объекте.</p>
+
+    <h2><span class="num">4</span> Заявки и обратная связь</h2>
+    <p>Отправляя заявку, Пользователь подтверждает, что указанные им данные достоверны,
+    и соглашается на их обработку в соответствии с
+    <a href="../politika-konfidencialnosti/">Политикой конфиденциальности</a>.</p>
+    <p>Отправка заявки не влечёт заключения договора и не порождает обязательств
+    Компании по выполнению работ. Договор заключается отдельно, в письменной форме.</p>
+    <p>Компания обязуется связаться с Пользователем по оставленному номеру телефона
+    в разумный срок в рабочее время.</p>
+
+    <h2><span class="num">5</span> Интеллектуальная собственность</h2>
+    <p>Тексты, изображения, видеоматериалы, логотип и оформление Сайта принадлежат
+    Компании либо используются на законных основаниях. Копирование и использование
+    материалов без письменного согласия Компании не допускается.</p>
+
+    <h2><span class="num">6</span> Ограничение ответственности</h2>
+    <p>Компания не несёт ответственности за временную недоступность Сайта, за работу
+    сторонних сервисов, встроенных на страницах (карты, видеохостинг, шрифты), а также
+    за последствия решений, принятых Пользователем на основании справочной информации
+    Сайта без консультации со специалистом.</p>
+
+    <h2><span class="num">7</span> Ссылки на сторонние ресурсы</h2>
+    <p>Сайт содержит ссылки на внешние ресурсы, включая социальные сети и мессенджеры.
+    Компания не отвечает за содержание таких ресурсов и их политики.</p>
+
+    <h2><span class="num">8</span> Заключительные положения</h2>
+    <p>К настоящему Соглашению применяется законодательство Российской Федерации.
+    Споры разрешаются путём переговоров, а при недостижении согласия — в суде
+    по месту нахождения Компании.</p>
+
+    <h2><span class="num">9</span> Реквизиты и контакты</h2>
+    <p><span class="todo">ВПИСАТЬ НАИМЕНОВАНИЕ ЮРЛИЦА / ИП</span><br />
+    ИНН <span class="todo">ИНН</span>, ОГРН <span class="todo">ОГРН</span><br />
+    Адрес: <span class="todo">ЮРИДИЧЕСКИЙ АДРЕС</span><br />
+    E-mail: <span class="todo">ВПИСАТЬ E-MAIL</span><br />
+    Телефон: <span class="todo">ВПИСАТЬ ТЕЛЕФОН</span></p>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>© Азбука Ремонта</span>
+    <span>
+      <a href="../">Главная</a> ·
+      <a href="../politika-konfidencialnosti/">Политика конфиденциальности</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>
