@@ -38,11 +38,19 @@
 
 /* служебные обёртки маски берут цвет заголовка — красным остаётся только span сайта */
 .ed .mo-line, .ed .mo-in { color: inherit; }
-.ed .mo-line { padding-top: .08em; margin-top: -.08em; padding-bottom: .06em; margin-bottom: -.06em; }
+.ed .mo-line { padding-top: .08em; margin-top: -.08em; padding-bottom: .06em; margin-bottom: -.06em; padding-right: .12em; margin-right: -.12em; }
+/* справа тот же запас с компенсирующим отрицательным полем: ширина текста не меняется, а маска (overflow: hidden) не срезает последнюю букву на 2–4 px */
 
 /* ---------- Первый экран ---------- */
 .ed .hero { align-items: flex-end; }
-.ed .hero .hero-title { font-size: var(--ed-hero); line-height: .98; }
+.ed .hero .hero-content { container-type: inline-size; }
+.ed .hero .hero-title { font-size: min(var(--ed-hero), calc((100vw - 2 * var(--px)) / (var(--hero-em, 1) + .3))); line-height: .98; }
+.ed .hero .hero-title { font-size: min(var(--ed-hero), calc(100cqi / (var(--hero-em, 1) + .3))); }
+/* --hero-em: ширина самой длинной строки H1 в em (Oswald 700, прописные), данные города (heroLineEm), задаётся на самом h1.
+   Строки стоят в nowrap, поэтому кегль не больше «ширина блока / (--hero-em + .3)»: самая длинная строка уже блока минимум на 3 %,
+   запас на другую отрисовку шрифта (Safari, Android). Ширина блока — 100cqi: .hero-content объявлен контейнером (inline-size), так что
+   считается от самого блока, а не от окна: 100vw включает классическую полосу прокрутки (~15 px) и давал срез последней буквы.
+   Первая строка кегля — запасная, для браузеров без контейнерных единиц (она считает от окна без запаса на полосу). */
 
 /* ---------- О компании: фото 5 колонок, текст 6 колонок ---------- */
 @media (min-width: 1025px) {
@@ -269,7 +277,8 @@
 
 /* ---------- Телефон: та же шкала ×1.5 от мобильных значений системы ---------- */
 @media (max-width: 768px) {
-  .ed .hero .hero-title { font-size: clamp(30px, 9.4vw, 45px); }      /* 23–30 × 1.5 */
+  .ed .hero .hero-title { font-size: min(clamp(30px, 9.4vw, 45px), calc((100vw - 2 * var(--px)) / (var(--hero-em, 1) + .3))); }      /* 23–30 × 1.5, но не шире блока */
+  .ed .hero .hero-title { font-size: min(clamp(30px, 9.4vw, 45px), calc(100cqi / (var(--hero-em, 1) + .3))); }
 }
 @media (max-width: 480px) {
   .ed .section-title,
@@ -534,7 +543,7 @@
   .ed .reason-front .reason-name { margin-top: 0; }
   .ed .reason-copy { grid-column: 2; grid-row: 2; }
   .ed .reason-card.is-on .reason-name { transform: none; }
-  .ed .reasons-title span { white-space: nowrap; }
+  .ed .reasons-title span:not(.mo-line):not(.mo-in) { white-space: nowrap; }   /* красное слово не рвётся; строки маски переносятся, иначе длинный заголовок обрезается */
 }
 
 /* --- 4 причины: красная линия растёт вместе с прокруткой строки --- */

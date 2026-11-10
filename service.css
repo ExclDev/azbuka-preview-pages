@@ -48,7 +48,7 @@ html.scroll-locked { overflow-y: hidden; }
 .divider span:first-child { width: 40px; height: 3px; background: var(--red); }
 .divider span:last-child  { width: 8px;  height: 3px; background: var(--red); }
 /* маска строки заголовка (motion.css, editorial.css) */
-.mo-line { display: block; overflow: hidden; padding: .08em 0 .06em; margin: -.08em 0 -.06em; }
+.mo-line { display: block; overflow: hidden; padding: .08em .12em .06em 0; margin: -.08em -.12em -.06em 0; }  /* справа запас, чтобы маска не срезала последнюю букву; ширина текста прежняя */
 .mo-line > .mo-in { display: block; }
 /* подвал: название компании во всю ширину (editorial.css). Залито без JS; хвост «У» не режется копирайтом: отступ снизу */
 .ed .footer { overflow: hidden; }
