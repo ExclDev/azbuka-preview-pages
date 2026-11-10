@@ -1,8 +1,9 @@
-/* ═══ priemka.js: движение страницы «Приёмка квартиры». Подключается после service.js только там, где есть hero.laser, check или act. ═══
+/* ═══ priemka.js: движение страницы «Приёмка квартиры». Подключается после service.js только там, где есть hero.laser, check, act или video. ═══
    1. Первый экран: перекрестие догоняет курсор (pointermove + rAF), луч с точкой опускаются при прокрутке, кадр медленно растёт.
       Лучи и точка стоят на --cx, --cy, --drop (см. priemka.css). Опускание и курсор складываются: точка = (cx, cy + drop), всегда на пересечении лучей.
    2. «Обход квартиры»: стены плана прорисовываются при прокрутке. Сам выбор комнаты работает без JS (радиокнопки и :has).
    3. «Акт осмотра»: строки образца появляются при прокрутке, в конце ставится штамп.
+   4. «Видео»: плеер без GSAP (кнопка «Смотреть со звуком», главы, подсветка текущей главы), см. initVideo.
    Наезд блока на первый экран сделан на CSS (view timeline), здесь его нет.
    Первая часть не зависит от GSAP. Остальное — ScrollTrigger из vendor/, как в service.js; при prefers-reduced-motion или без GSAP
    скрипт ничего не прячет и не двигает: перекрестие встаёт сразу под курсор, остальное стоит в конечном состоянии. */
@@ -84,6 +85,52 @@
     }
     bind();
     if (fine.addEventListener) fine.addEventListener('change', bind);
+  })();
+
+  /* ═══ 4. «Видео» на объекте ═══
+     Не зависит от GSAP и от prefers-reduced-motion: плеер нужен всем. preload="none": пока посетитель не нажал, ролик не качается.
+     Запуск любым способом (кнопка, глава, контролы плеера) скрывает кнопку и включает обычные контролы. Запуск всегда со звуком:
+     вызывается из клика, поэтому браузер разрешает. Перемотка по главе при preload="none" возможна только после loadedmetadata,
+     иначе currentTime запишется в видео без длительности и ролик стартует с нуля. Для перемотки нужны Range-запросы (Accept-Ranges). */
+  (function initVideo() {
+    var v = $('#pvVideo'), btn = $('#pvPlay');
+    if (!v) return;
+    var chs = $$('.pv-ch');
+    var pending = null;                       // секунда, на которую перемотать, когда придут метаданные
+
+    function started() { v.controls = true; if (btn) btn.hidden = true; }
+    function applyPending() {
+      if (pending == null) return;
+      var t = pending; pending = null;
+      try { v.currentTime = t; } catch (e) { /* перемотка не удалась: ролик пойдёт с начала */ }
+    }
+    function play() {
+      var r = v.play();
+      // запуск мог не разрешиться (политика браузера): возвращаем кнопку, чтобы нажать ещё раз
+      if (r && r.catch) r.catch(function () { if (v.paused && btn) { btn.hidden = false; v.controls = false; } });
+    }
+    function go(t) {
+      started();
+      if (t == null) { play(); return; }
+      if (v.readyState >= 1) { pending = null; v.currentTime = t; play(); return; }
+      pending = t;
+      v.addEventListener('loadedmetadata', applyPending, { once: true });
+      play();                                  // запускает загрузку; перемотка сработает на loadedmetadata
+    }
+    function mark() {
+      var cur = -1;
+      chs.forEach(function (b, i) { if (v.currentTime >= +b.dataset.t) cur = i; });
+      chs.forEach(function (b, i) {
+        var on = i === cur && !v.paused && !v.ended;
+        b.classList.toggle('on', on);
+        if (on) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+      });
+    }
+
+    if (btn) btn.addEventListener('click', function () { go(null); });
+    chs.forEach(function (b) { b.addEventListener('click', function () { go(+b.dataset.t); }); });
+    v.addEventListener('play', started);      // запуск из контролов плеера или с клавиатуры
+    ['timeupdate', 'pause', 'ended', 'seeked', 'playing'].forEach(function (n) { v.addEventListener(n, mark); });
   })();
 
   /* ═══ 2–3. Движение при прокрутке (GSAP) ═══ */

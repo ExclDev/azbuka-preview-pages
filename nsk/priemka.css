@@ -195,3 +195,62 @@
   .pk-sheet-k { position: static; display: inline-block; margin-bottom: 14px; }  /* метка в потоке: у узкого листа заголовок упирается в неё */
   .pk-sheet th:nth-child(3), .pk-sheet td:nth-child(3) { display: none; }
 }
+
+
+/* ═══ Видео на приёмке (блок «Видео», blocks/video.njk; плеер — priemka.js) ═══
+   Перенесено из макета (комментарий «Видео на приёмке»). Оглавление страницы здесь на ScrollTrigger, поэтому правила .t-video из макета не нужны. */
+.pv-sec{background:#1f1b17}
+.pv-grid{display:grid;grid-template-columns:auto minmax(0,1fr);gap:72px;align-items:center}
+.pv-player{position:relative;height:min(78svh,720px);aspect-ratio:9/16;border-radius:24px;overflow:hidden;background:#0e0c0a;box-shadow:0 30px 70px rgba(0,0,0,.5),0 0 0 1px rgba(255,255,255,.06)}
+.pv-v{display:block;width:100%;height:100%;object-fit:cover}
+.pv-play{position:absolute;left:50%;bottom:28px;translate:-50% 0;display:flex;align-items:center;gap:12px;padding:12px 20px 12px 12px;border:0;border-radius:999px;background:rgba(22,19,16,.82);color:#ffffff;font:600 15px/1 var(--font-body);white-space:nowrap;cursor:pointer;backdrop-filter:blur(8px);transition:background .3s ease}
+.pv-play[hidden]{display:none}
+.pv-play:hover{background:#e8201a}
+.pv-play:focus-visible{outline:2px solid #ffffff;outline-offset:3px}
+.pv-ico{position:relative;width:40px;height:40px;border-radius:50%;background:#e8201a}
+.pv-play:hover .pv-ico{background:#ffffff}
+.pv-ico::after{content:"";position:absolute;left:15px;top:12px;border-style:solid;border-width:8px 0 8px 13px;border-color:transparent transparent transparent #ffffff}
+.pv-play:hover .pv-ico::after{border-left-color:#e8201a}
+.pv-sub{margin-top:20px}
+.pv-chs{margin:28px 0 0;padding:0;list-style:none;border-top:1px solid rgba(255,255,255,.1)}
+.pv-ch{display:grid;grid-template-columns:52px minmax(0,1fr);gap:16px;align-items:baseline;width:100%;padding:14px 0;border:0;border-bottom:1px solid rgba(255,255,255,.1);background:none;color:inherit;text-align:left;cursor:pointer;font:inherit}
+.pv-t{font:600 16px/1 var(--font-display);color:#e8201a}
+.pv-ch b{display:block;font:500 20px/1.2 var(--font-display);text-transform:uppercase;color:#ffffff;transition:color .3s ease}
+.pv-ch small{display:block;margin-top:4px;font-size:14px;line-height:1.45;color:#888888}
+.pv-ch:hover b,.pv-ch.on b{color:#e8201a}
+.pv-ch:focus-visible{outline:2px solid #e8201a;outline-offset:2px}
+.pv-ctas{margin-top:28px}
+@media (max-width:1100px){.pv-grid{grid-template-columns:1fr;gap:40px}.pv-player{height:auto;width:min(100%,420px);justify-self:center}}
+@media (max-width:640px){.pv-player{width:min(100%,340px)}.pv-ch b{font-size:18px}}
+@keyframes pvRise{from{opacity:0;transform:translateY(48px)}to{opacity:1;transform:none}}
+@supports (animation-timeline: view()){
+@media (prefers-reduced-motion:no-preference){
+  .pv-player{animation:pvRise linear both;animation-timeline:view();animation-range:entry 0% entry 60%}
+  .pv-ch{animation:pvRise linear both;animation-timeline:view();animation-range:entry calc(10% + var(--i) * 5%) entry calc(60% + var(--i) * 5%)}
+}
+}
+
+/* ═══ Секция = экран (компьютер) ═══
+   Ровно 100svh только у «Видео», «Обхода квартиры» и «Акта осмотра». Первый экран и блоки от «Сколько стоит приёмка» остаются прежними.
+   Рабочий диапазон: ширина от 1101 px (на 1100 px и уже блоки в одну колонку: правила выше стоят на max-width: 1100px), высота окна 700–1500 px; на телефоне и планшете высота естественная. */
+@media (min-width:1101px) and (min-height:700px) and (max-height:1500px){
+  .sv{--scr-pad:clamp(28px,6.5svh,88px)}
+  #video,#check,#act{box-sizing:border-box;height:100svh;display:flex;flex-direction:column;justify-content:center;padding-top:var(--scr-pad);padding-bottom:var(--scr-pad)}
+  #video>.wrapper,#check>.wrapper,#act>.wrapper{width:100%}
+  .pv-player{height:calc(100svh - 2 * var(--scr-pad))}
+  .pv-ch{padding:max(8px,1.25svh) 0}
+  .pv-chs{margin-top:max(14px,2.6svh)}
+  .pv-sub{margin-top:max(12px,2svh)}
+  .pk-board{margin-top:max(16px,3svh);gap:40px}
+  .pk-plan{position:relative;top:0;width:min(100%,calc((100svh - 2 * var(--scr-pad) - 215px) * 640 / 520),760px);justify-self:start}
+  .pk-room li{padding:max(7px,1.15svh) 0}
+  .pk-chips{margin-bottom:max(14px,2.4svh)}
+  .pk-total{margin-top:max(12px,2svh)}
+}
+@media (min-width:1101px) and (min-height:700px) and (max-height:820px){
+  .pv-ch small{display:none}
+  .pk-room li{padding:5px 0}
+  .pk-room h3,.pk-total{display:none}
+  .pk-room li div span{font-size:13px}
+  #check .sv-sub{display:none}
+}
