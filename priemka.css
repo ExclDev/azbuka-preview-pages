@@ -259,6 +259,7 @@
   .pk-room h3,.pk-total{display:none}
   .pk-room li div span{font-size:13px}
   #check .sv-sub{display:none}
+  .pk-chip{padding:8px 13px;font-size:14px}   /* четыре комнаты в одну строку: при двух строках 7 пунктов не помещаются (1280×720) */
 }
 
 /* совсем невысокие окна (до 760 px, доступно до ~650 px): плотнее отступы и заголовки, чтобы «Видео» и «Обход» не вылезали из экрана без шапки */
@@ -273,26 +274,31 @@
   .pv-play{bottom:56px}   /* выше баннера cookie (≈70 px у нижнего края окна), иначе он закрывает низ кнопки */
 }
 
-/* ═══ Наезд секций: «Обход» на «Видео», «Акт» на «Обход» (обёртка .pk-stack из layouts/service.njk) ═══
-   Перенесено из макета (комментарий «Наезд секций: обход на видео, акт на обход»). Не возвращать filter, backdrop-filter и
+/* ═══ Наезд секций: «Обход» на «Видео», «Как проходит приёмка» на «Акт» ═══
+   Перенесено из макета (комментарий «Наезд секций: обход на видео, шаги на акт»). Две обёртки из layouts/service.njk:
+   .pk-stack = «Видео» + «Обход» (где есть scope/sheets, они тоже внутри), .pk-stack2 = «Акт» + «Этапы» (только при stepsFirst). Прилипшая секция отпускается в конце своей пары.
+   «Акт» идёт за «Обходом» обычной прокруткой, поэтому у него нет ни скругления, ни тени. Не возвращать filter, backdrop-filter и
    размытые box-shadow на прилипших и движущихся слоях: замер кадров показал рывки (p95 33–50 мс вместо 16,8 мс).
    Скругление и тень есть всегда. Тень наезжающей секции — градиент 36 px через ::before, а не размытая box-shadow.
-   Нижнюю секцию не затемняем и не уменьшаем. Стопка кончается после «Акта»: «Этапы» и всё ниже едут как обычно. */
+   Нижнюю секцию не затемняем и не уменьшаем.
+   «Этапы» закрепляет GSAP ScrollTrigger (service.js), pin-spacer оборачивает #steps: поэтому селекторы здесь идут по id (#steps), а не через `.pk-stack2 > #steps`. */
+.pkB + .pk-stack, .pk-stack2 { position: relative; z-index: 2; }
 .pk-stack > #video { position: relative; border-radius: 28px 28px 0 0; }
 #check { position: relative; z-index: 3; border-radius: 28px 28px 0 0; }
-#act { position: relative; z-index: 4; background: #161310; border-radius: 28px 28px 0 0; }
-.pk-stack > #video::before, #check::before, #act::before { content: ""; position: absolute; left: 0; right: 0; top: -36px; height: 36px; background: linear-gradient(to top, rgba(0,0,0,.32), transparent); pointer-events: none; z-index: -1; }
+#act { position: relative; z-index: 1; background: #161310; }
+.pk-stack2 #steps { position: relative; z-index: 2; border-radius: 28px 28px 0 0; }
+.pk-stack > #video::before, #check::before, .pk-stack2 #steps::before { content: ""; position: absolute; left: 0; right: 0; top: -36px; height: 36px; background: linear-gradient(to top, rgba(0,0,0,.32), transparent); pointer-events: none; z-index: -1; }
 .pv-play { backdrop-filter: none; background: rgba(22,19,16,.9); }
 @supports (animation-timeline: view()) {
-  /* компьютер: секции ровно в экран, «Видео» и «Обход» прилипают, следующая наезжает поверх */
+  /* компьютер: секции ровно в экран, «Видео» и «Акт» прилипают, следующая (обход, этапы) наезжает поверх */
   @media (prefers-reduced-motion: no-preference) and (min-width: 1101px) and (min-height: 700px) and (max-height: 1500px) {
-    .pk-stack > #video, .pk-stack > #check { position: sticky; top: var(--header-h); }
+    .pk-stack > #video, .pk-stack2 > #act { position: sticky; top: var(--header-h); }
     .pk-stack > #video { z-index: 2; }
   }
   /* телефон, планшет и окна вне 700–1500 px по высоте: секции выше экрана, прежний приём как у первого экрана (сдвиг и затемнение по view()).
      Условие списком через запятую: конструкция (not …) с and внутри в макете не сработала. */
   @media (prefers-reduced-motion: no-preference) and (max-width: 1100px), (prefers-reduced-motion: no-preference) and (max-height: 699px), (prefers-reduced-motion: no-preference) and (min-height: 1501px) {
-    #video, #check { animation: pkPin linear both; animation-timeline: view(); animation-range: contain 100% exit 100%; }
-    #video > .wrapper, #check > .wrapper { animation: pkDim linear both; animation-timeline: view(); animation-range: contain 100% exit 100%; }
+    .pk-stack > #video, .pk-stack2 > #act { animation: pkPin linear both; animation-timeline: view(); animation-range: contain 100% exit 100%; }
+    .pk-stack > #video > .wrapper, .pk-stack2 > #act > .wrapper { animation: pkDim linear both; animation-timeline: view(); animation-range: contain 100% exit 100%; }
   }
 }
