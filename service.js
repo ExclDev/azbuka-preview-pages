@@ -155,7 +155,7 @@
 
     var crumbs = $('.sv-crumbs');
     var h1Lines = $$('.sv-h1 .ln > span');
-    var heroCopy = $$('.sv-hero-copy > *');
+    var heroCopy = $$('.sv-hero-copy > *:not(.sv-h1)');   // у первого экрана «Ванной» H1 стоит в этой же колонке: он выезжает по строкам (h1Lines), а не плавает целиком
     var photo = $('.sv-hero-photo');
     var imgs = $$('img', photo || document.createElement('div'));
     var grayImg = $('.sv-ph-gray', photo || document);
@@ -290,15 +290,21 @@
     /* ── Этапы ── */
     var stepsSec = $('.sv-steps-sec');
     var pinST = null;
+    // «Ванная под ключ»: секция этапов вместе с отзывами и вопросами (.vn-hzsec). Где работает view(), ленту и выезд панелей ведёт CSS (service.css, раздел 5),
+    // а закрепление GSAP здесь не нужно. Где view() нет, прежнее закрепление ставится на .sv-pin, а панели идут обычным потоком под этапами.
+    var hzSec = stepsSec && stepsSec.classList.contains('vn-hzsec');
+    var viewCss = !!(window.CSS && CSS.supports && CSS.supports('animation-timeline: view()'));
     if (stepsSec) {
       var track = $('.sv-steps', stepsSec);
       mm.add('(min-width: 1100px)', function () {
+        if (hzSec && viewCss) return;
         // секция закреплена, лента из шагов едет влево; каждый шаг загорается и тянет свою красную линию
         root.classList.add('sv-pinned');
+        var pinEl = hzSec ? $('.sv-pin', stepsSec) : stepsSec;
         var tl =gsap.timeline({
           defaults: { ease: 'none' },
           scrollTrigger: {
-            trigger: stepsSec, start: 'top top', end: function () { return '+=' + Math.round(H() * 2.2); },
+            trigger: pinEl, start: 'top top', end: function () { return '+=' + Math.round(H() * 2.2); },
             pin: true, scrub: true, invalidateOnRefresh: true, anticipatePin: 1
           }
         });
@@ -372,6 +378,19 @@
         var id = a.getAttribute('href').slice(1);
         var sec = document.getElementById(id);
         if (!sec) return;
+        // «Ванная»: отзывы и вопросы выезжают в прилипшем слое, их собственное положение на странице не годится. Границы считаем по шкале выезда (.vn-tl2):
+        // этапы — до середины въезда «Отзывов» (14 % шкалы), «Отзывы» — до середины въезда «Вопросов» (69 %), «Вопросы» — до конца секции.
+        var tl2 = $('.vn-tl2');
+        var hzMode = tl2 && getComputedStyle(tl2).display !== 'none' && (id === 'steps' || id === 'reviews' || id === 'faq');
+        if (hzMode) {
+          var T2 = function () { return tl2.getBoundingClientRect().top + window.pageYOffset; };
+          var R2 = function () { return tl2.offsetHeight - H(); };
+          var at = function (p) { return function () { return T2() + p * R2(); }; };
+          var from = { steps: function () { return $('#steps').getBoundingClientRect().top + window.pageYOffset - H() * .55; }, reviews: at(.14), faq: at(.69) }[id];
+          var to = { steps: at(.14), reviews: at(.69), faq: function () { return $('#steps').getBoundingClientRect().bottom + window.pageYOffset - H() * .55; } }[id];
+          ScrollTrigger.create({ start: from, end: to, invalidateOnRefresh: true, onToggle: function (self) { a.classList.toggle('is-on', self.isActive); } });
+          return;
+        }
         ScrollTrigger.create({
           trigger: sec, start: 'top 55%',
           // у закреплённых этапов раздел длится, пока секция закреплена

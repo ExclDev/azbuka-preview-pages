@@ -32,8 +32,16 @@ function closeMobileMenu() {
       var sec = document.querySelector('.consult');
       if (sec) target = sec;
     }
+    // «Ванная под ключ»: отзывы и вопросы выезжают справа налево в прилипшем слое, сами панели при прокрутке стоят на месте, поэтому ведём не к ним, а к моменту шкалы выезда
+    // (.vn-tl2), когда нужная панель полностью видна: «Отзывы» 28–55 % шкалы (берём 41 %), «Вопросы» 83–100 % (берём 92 %). Режим выезда виден по опорному элементу: без view() и на узких экранах он скрыт.
+    var tl2 = (hash === '#reviews' || hash === '#faq') ? document.querySelector('.vn-tl2') : null;
+    if (tl2 && getComputedStyle(tl2).display !== 'none') {
+      var p = hash === '#reviews' ? 0.41 : 0.92;
+      window.scrollTo({ top: tl2.getBoundingClientRect().top + window.pageYOffset + p * (tl2.offsetHeight - window.innerHeight), behavior: 'smooth' });
+      return true;
+    }
     // секции стопки «Приёмки» на компьютере прилипают под шапку: отступ берётся из scroll-margin-top (--header-h), без запаса +12 px
-    var stack = target.closest && target.closest('.pk-stack, .pk-stack2, .dp-stack') && window.matchMedia('(min-width: 1101px) and (min-height: 700px) and (max-height: 1500px)').matches;
+    var stack = target.closest && target.closest('.pk-stack, .pk-stack2, .dp-stack, .vn') && window.matchMedia('(min-width: 1101px) and (min-height: 700px) and (max-height: 1500px)').matches;
     var margin = stack ? parseFloat(getComputedStyle(target).scrollMarginTop) : 0;
     var top = target.getBoundingClientRect().top + window.pageYOffset - (margin > 0 ? margin : getOffset());
     window.scrollTo({ top: top, behavior: 'smooth' });

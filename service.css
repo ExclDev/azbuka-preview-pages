@@ -660,3 +660,230 @@ html.sv-motion { scroll-behavior: auto !important; }
   .dp-stack .dp-board, .dp-stack .dv-stage { margin-top: 12px; }
   .dp-stack .dp-item { padding: 4px 0; }
 }
+
+/* ═══ Страница «Ванная под ключ» (холст v83, макет bath.html) ═══
+   Всё под префиксами xr- (первый экран «Рентген»), vw- (срез «Что входит»), vn- (наезд этапов на цены, выезд отзывов и вопросов); другие страницы услуг не затронуты.
+   Правило для прилипших и движущихся слоёв: нет filter, backdrop-filter, размытых box-shadow и затемнений; анимируются только transform, translate и opacity.
+   Тень наезжающего края — градиент в ::before. Движение включается только внутри @supports (animation-timeline: view()) и prefers-reduced-motion: no-preference,
+   без них всё идёт обычным потоком. «Секция = экран» считается от --header-h (шапка фиксированная), как на «Приёмке» и «Новостройке». */
+
+/* ── 1. Первый экран «Рентген» ── */
+@property --x { syntax: '<length>'; inherits: true; initial-value: 0px; }
+@property --y { syntax: '<length>'; inherits: true; initial-value: 0px; }
+.xr { margin: 0; display: flex; flex-direction: column; gap: 14px; min-height: 0; }
+.xr-stage { --r: min(118px, 16cqi); position: relative; flex: 1; min-height: 300px; aspect-ratio: 800 / 560; border-radius: 20px; overflow: hidden; background: #1f1b17; container-type: inline-size; cursor: crosshair; transition: --x .9s cubic-bezier(.65,0,.35,1), --y .9s cubic-bezier(.65,0,.35,1); }
+.xr-stage.is-hand { transition: none; }   /* за курсором линза идёт без перехода */
+.xr-svg { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; }
+/* верхний слой «готовая ванная» с круглым окном: внутри круга прозрачно, виден нижний слой «под плиткой» */
+.xr-fin { -webkit-mask: radial-gradient(circle var(--r) at var(--x) var(--y), transparent calc(var(--r) - 1px), #000 var(--r)); mask: radial-gradient(circle var(--r) at var(--x) var(--y), transparent calc(var(--r) - 1px), #000 var(--r)); }
+.xr-lens { position: absolute; left: var(--x); top: var(--y); width: calc(var(--r) * 2); height: calc(var(--r) * 2); margin: calc(var(--r) * -1) 0 0 calc(var(--r) * -1); border: 2px solid #e8201a; border-radius: 50%; pointer-events: none; }
+.xr-lens::before, .xr-lens::after { content: ""; position: absolute; left: 50%; top: 50%; background: #e8201a; }
+.xr-lens::before { width: 14px; height: 2px; margin: -1px 0 0 -7px; }
+.xr-lens::after { width: 2px; height: 14px; margin: -7px 0 0 -1px; }
+.xr-cap { position: absolute; left: 16px; top: 16px; z-index: 2; display: flex; align-items: center; gap: 10px; max-width: calc(100% - 32px); padding: 10px 18px 10px 12px; border-radius: 999px; background: #e8201a; color: #f5f5f7; font: 600 15px/1.25 var(--font-body); pointer-events: none; transition: opacity .5s ease, translate .5s ease; }
+.xr-cap-i { flex: none; width: 20px; height: 20px; max-width: none; }
+.xr-cap-m { display: none; }
+.xr-stage.is-used .xr-cap { opacity: 0; translate: 0 -8px; }   /* после первого касания подсказка плавно уходит */
+@keyframes xrPing { 0% { box-shadow: 0 0 0 0 rgba(232,32,26,.6); } 70%, 100% { box-shadow: 0 0 0 16px rgba(232,32,26,0); } }
+@media (prefers-reduced-motion: no-preference) { .xr-cap { animation: xrPing 2.2s ease-out infinite; } }   /* ореол плашки: размытия нет, расходится кольцо */
+.xr-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.xr-chip { padding: 9px 14px; border: 1px solid rgba(255,255,255,.14); border-radius: 999px; background: none; color: #cccccc; font: 500 14px/1.2 var(--font-body); cursor: pointer; transition: background .3s ease, color .3s ease, border-color .3s ease; }
+.xr-chip span { display: none; }   /* пояснение читает скринридер и строка .xr-note; на экране — только название */
+.xr-note { display: none; margin: 0; font-size: 15px; line-height: 1.5; color: #cccccc; }
+.xr-note b { color: #f5f5f7; }
+.xr-chip:hover { border-color: #f5f5f7; color: #f5f5f7; }
+.xr-chip[aria-pressed="true"] { background: #e8201a; border-color: #e8201a; color: #f5f5f7; }
+.xr-chip:focus-visible { outline: 2px solid #e8201a; outline-offset: 3px; }
+.vn-hero .sv-hero-grid { align-items: stretch; }
+.vn-hero .sv-h1 { margin: 0; }
+.vn-hero .sv-h1 .ln { white-space: nowrap; }
+@media (max-width: 1100px) {
+  .xr-stage { --r: min(118px, 24cqi); flex: none; width: 100%; min-height: 0; }   /* на узких экранах линза крупнее, под чертежом строка-пояснение */
+  .xr-cap { left: 10px; top: 10px; padding: 8px 14px 8px 10px; font-size: 13px; }
+  .xr-cap-d { display: none; }
+  .xr-cap-m { display: inline; }
+  .xr-note { display: block; min-height: 3em; }
+}
+@media (prefers-reduced-motion: reduce) { .xr-stage { transition: none; } }
+/* две колонки (от 1101 px по ширине, любая высота окна): кегль H1 от ширины колонки, иначе «Ванная под ключ» при 112 px выходит из колонки на высоких окнах */
+@media (min-width: 1101px) {
+  .vn-hero .sv-hero-grid { grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 48px; }
+  .vn-hero .sv-hero-copy { container-type: inline-size; }
+  /* длинная строка «Ванная под ключ» ≈ 8,2 em, вторая строка («в Новосибирске») короче */
+  .vn-hero .sv-h1 { font-size: min(108px, 11.4cqi); }
+}
+/* компьютер: первый экран вместе с шапкой ровно в экран, чертёж подстраивается под высоту окна (--sv-top уже занят шапкой и панелью города) */
+@media (min-width: 1101px) and (min-height: 700px) and (max-height: 1500px) {
+  .vn-hero { box-sizing: border-box; height: 100svh; display: flex; flex-direction: column; padding-bottom: clamp(20px, 4svh, 56px); }
+  .vn-hero > .wrapper { flex: 1; display: flex; flex-direction: column; min-height: 0; width: 100%; }
+  .vn-hero .sv-hero-grid { flex: 1; min-height: 0; margin-top: max(16px, 3svh); grid-template-rows: minmax(0, 1fr); align-items: end; }
+  .vn-hero .sv-hero-copy { align-self: center; }
+  .vn-hero .sv-h1 { margin: 0 0 max(16px, 2.4svh); }
+  .vn-hero .xr { height: 100%; align-items: flex-end; justify-content: flex-end; container-type: inline-size; }
+  .vn-hero .xr-stage { flex: 1 1 0; min-height: 0; max-height: calc(100cqi * .7); width: auto; max-width: 100%; }
+  .vn-hero .xr-chips { justify-content: flex-end; }
+}
+
+/* факты первого экрана в узкой колонке: «Гидроизоляция» не должна резаться (колонка 480–600 px, три ячейки) */
+.vn-hero .sv-facts li { padding-left: 16px; padding-right: 16px; }
+@media (min-width: 1101px) { .vn-hero .sv-facts b { font-size: min(26px, 3.8cqi); } }
+
+/* ── 2. «Что входит»: срез. Светлый слой «На виду» на стене из керамогранита, под ним тёмный слой «Под плиткой» ── */
+.vw-k { display: flex; align-items: center; gap: 10px; margin: 0; font: 600 13px/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: #e8201a; }
+.vw-dot { width: 10px; height: 10px; border-radius: 2px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Cpath d='M0 6L6 0' stroke='%23e8201a' stroke-width='2'/%3E%3C/svg%3E"); }
+.vw-under { border-radius: 24px; background: #161310; color: #f5f5f7; padding: 36px; }
+.vw-under-head { display: flex; justify-content: space-between; gap: 32px; align-items: baseline; flex-wrap: wrap; }
+.vw-under-t { margin: 0; max-width: 520px; font-size: 15px; line-height: 1.5; color: #aaaaaa; }
+.vw-hs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; margin: 24px 0 0; padding: 0; list-style: none; border-radius: 16px; overflow: hidden; background: rgba(255,255,255,.08); }
+.vw-h { padding: 24px 24px 22px; background: #1f1b17; }
+.vw-ic { display: block; width: 60px; height: 42px; max-width: none; }
+.vw-h h3 { margin: 16px 0 0; font: 500 22px/1.15 var(--font-display); text-transform: uppercase; color: #f5f5f7; }
+.vw-h p { margin: 6px 0 0; font-size: 15px; line-height: 1.5; color: #aaaaaa; }
+.vw-h .vw-chk { display: flex; gap: 8px; align-items: flex-start; margin-top: 14px; padding-top: 12px; border-top: 1px dashed rgba(255,255,255,.14); font-size: 14px; color: #f5f5f7; }
+.vw-ok { flex: none; width: 16px; height: 16px; max-width: none; margin-top: 2px; color: #e8201a; }
+.vw-top { margin-top: 32px; }
+.vw-k-l { color: #555555; }
+.vw-ss { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 14px 0 0; padding: 0; list-style: none; }
+.vw-s { padding: 22px 24px; border: 1px solid rgba(0,0,0,.1); border-radius: 16px; background: #ffffff; }
+.vw-s h3 { margin: 0; font: 500 22px/1.15 var(--font-display); text-transform: uppercase; color: #1a1a1a; }
+.vw-s p { margin: 6px 0 0; font-size: 15px; line-height: 1.5; color: #666666; }
+.vw-hint, .vw-d { display: none; }
+.vw-l-under { margin-top: 16px; }
+.vw-edge { display: none; }
+@media (max-width: 1100px) { .vw-hs { grid-template-columns: 1fr 1fr; } }
+/* телефон: у скрытых работ значок, название и строка проверки, описание убрано */
+@media (max-width: 760px) {
+  .vw-under { padding: 22px 16px; }
+  .vw-hs { grid-template-columns: 1fr; }
+  .vw-h { display: grid; grid-template-columns: 60px minmax(0, 1fr); column-gap: 16px; padding: 18px 16px; }
+  .vw-ic { grid-row: 1 / 4; }
+  .vw-h h3 { margin-top: 0; font-size: 19px; }
+  .vw-h p:not(.vw-chk) { display: none; }
+  .vw-h .vw-chk { margin-top: 6px; padding-top: 0; border: 0; }
+  .vw-ss { grid-template-columns: 1fr; gap: 8px; }
+  .vw-s { padding: 16px 18px; }
+  .vw-s h3 { font-size: 19px; }
+}
+@keyframes vnRise { from { opacity: 0; transform: translateY(48px); } to { opacity: 1; transform: none; } }
+@keyframes vwPeel { to { translate: 0 calc(-100% - 70px); } }
+@keyframes vwRise { from { scale: .96; opacity: .4; } to { scale: 1; opacity: 1; } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .vw-h, .vw-s { animation: vnRise linear both; animation-timeline: view(); animation-range: entry calc(5% + var(--i) * 4%) entry calc(50% + var(--i) * 4%); }
+  }
+  /* компьютер: дорожка 230svh, кадр прилипает под шапкой, светлый слой уезжает вверх только через translate, тёмный проявляется */
+  @media (prefers-reduced-motion: no-preference) and (min-width: 1101px) and (min-height: 700px) and (max-height: 1500px) {
+    .vn { --scr-pad: clamp(28px, 6.5svh, 88px); --scr-h: calc(100svh - var(--header-h)); }
+    #scope.vw-b { padding: 0; }
+    .vw-d { display: inline; }
+    .vw-m { display: none; }
+    .vw-track { height: 230svh; view-timeline-name: --vwcut; }
+    .vw-pin { position: sticky; top: var(--header-h); height: var(--scr-h); overflow: hidden; }
+    .vw-layer { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; margin: 0; }
+    .vw-layer > .wrapper { width: 100%; }
+    /* стена из керамогранита 60×120 под мрамор: швы 2 px, прожилки (images/vn-marble.svg, у каждой из четырёх плит свои), блик полировки по всей стене */
+    .vw-l-top { z-index: 2; --gr: #d3d1cc; background: linear-gradient(90deg, var(--gr) 0 2px, transparent 2px) 0 0 / 300px 600px, linear-gradient(var(--gr) 0 2px, transparent 2px) 0 0 / 300px 600px, url("images/vn-marble.svg") 0 0 / 1200px 600px, linear-gradient(115deg, rgba(255,255,255,0) 28%, rgba(255,255,255,.6) 44%, rgba(255,255,255,0) 58%) 0 0 / 100% 100% no-repeat, #efeeeb; animation: vwPeel linear both; animation-timeline: --vwcut; animation-range: contain 18% contain 72%; }
+    .vw-l-under { z-index: 1; background: #f5f5f7; }
+    .vw-l-under .vw-under { animation: vwRise linear both; animation-timeline: --vwcut; animation-range: contain 30% contain 80%; }
+    .vw-hint { display: inline-block; margin: 28px 0 0; padding: 10px 16px; border-radius: 999px; background: #1a1a1a; font: 600 13px/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: #f5f5f7; }
+    /* край снятой облицовки: торец керамогранита, слой клея с гребёнкой и тень градиентом */
+    .vw-edge { display: block; position: absolute; left: 0; right: 0; bottom: -30px; height: 30px; background: linear-gradient(#f7f7f9 0 2px, #e2e2e7 2px 10px, #cfcfd5 10px 12px, transparent 12px), repeating-linear-gradient(90deg, #9a948c 0 7px, #8a847c 7px 10px) 0 12px / 100% 18px no-repeat; -webkit-mask: linear-gradient(#000 0 12px, transparent 12px), repeating-linear-gradient(90deg, #000 0 7px, transparent 7px 10px) 0 12px / 100% 18px no-repeat; mask: linear-gradient(#000 0 12px, transparent 12px), linear-gradient(#000, #000) 0 12px / 100% 18px no-repeat; }
+    .vw-edge::after { content: ""; position: absolute; left: 0; right: 0; top: 100%; height: 40px; background: linear-gradient(rgba(0,0,0,.28), transparent); }
+    .vw-b .vw-under { padding: max(22px, 3.4svh) 34px; }
+    .vw-b .vw-h { padding: max(14px, 2.4svh) 22px; }
+  }
+  /* высота окна до 960 px: у скрытых работ остаются значок, название и строка проверки, описания прячутся */
+  @media (prefers-reduced-motion: no-preference) and (min-width: 1101px) and (min-height: 700px) and (max-height: 960px) {
+    .vw-l-under .vw-h p:not(.vw-chk) { display: none; }
+    .vw-l-under .vw-h .vw-chk { margin-top: 8px; padding-top: 8px; }
+  }
+}
+
+/* ── 3. Видео и цены ровно в экран на компьютере ──
+   «Видео» (#video, priemka.css) уже считается от --scr-h; здесь цены и плотность на невысоких окнах. Кнопка «Смотреть со звуком» — как на «Дизайн-проекте» (priemka.css, .pv-play). */
+@media (min-width: 1101px) and (min-height: 700px) and (max-height: 1500px) {
+  .vn { --scr-pad: clamp(28px, 6.5svh, 88px); --scr-h: calc(100svh - var(--header-h)); }
+  .vn #prices { box-sizing: border-box; height: var(--scr-h); display: flex; flex-direction: column; justify-content: center; padding-top: var(--scr-pad); padding-bottom: var(--scr-pad); }
+  .vn #prices > .wrapper { width: 100%; }
+  .vn .sv-prices { margin-top: max(16px, 3svh); }
+  .vn .sv-price { padding: max(18px, 2.8svh) 28px; }
+}
+@media (min-width: 1101px) and (min-height: 700px) and (max-height: 950px) {
+  .vn #prices .sv-sub, .vn #prices .sv-note, .vn .sv-price-k { display: none; }
+  .vn .sv-price h3 { margin-top: 0; }
+  .vn .sv-price ul { gap: 6px; margin-top: 14px; }
+}
+@media (min-width: 1101px) and (min-height: 700px) and (max-height: 760px) {
+  .vn { --scr-pad: 22px; }
+  .vn #prices .section-title { font-size: 48px; }
+  .vn .sv-prices { margin-top: 12px; }
+  .vn .sv-price ul { gap: 4px; margin-top: 10px; }
+}
+#prices, #scope { scroll-margin-top: var(--header-h); }
+
+/* ── 4. «Как идёт ремонт ванной» наезжает на «Цены» ──
+   Компьютер: цены прилипают под шапкой, этапы со скруглением 28px наезжают поверх, тень края — градиент в ::before.
+   Телефон, планшет и окна вне 700–1500 px по высоте: сдвиг цен по view() (vnPin, как pkPin на «Приёмке»). Без view() и при reduced-motion обычная прокрутка. */
+.vn-stack { position: relative; }
+.vn-stack > #prices { position: relative; z-index: 1; }
+.vn-stack > #steps { position: relative; z-index: 2; border-radius: 28px 28px 0 0; }
+.vn-stack > #steps::before { content: ""; position: absolute; left: 0; right: 0; top: -36px; height: 36px; background: linear-gradient(to top, rgba(0,0,0,.32), transparent); pointer-events: none; z-index: -1; }
+@keyframes vnPin { from { translate: 0 0; } to { translate: 0 min(100%, 100svh); } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) and (min-width: 1101px) and (min-height: 700px) and (max-height: 1500px) {
+    .vn-stack > #prices { position: sticky; top: var(--header-h); }
+  }
+  @media (prefers-reduced-motion: no-preference) and (max-width: 1100px), (prefers-reduced-motion: no-preference) and (max-height: 699px), (prefers-reduced-motion: no-preference) and (min-height: 1501px) {
+    .vn-stack > #prices { animation: vnPin linear both; animation-timeline: view(); animation-range: contain 100% exit 100%; }
+  }
+}
+
+/* ── 5. После этапов «Отзывы» и «Вопросы» выезжают справа налево ──
+   От 1100 px и при поддержке view() секция этапов удлиняется до 320svh (лента) + 260svh (панели). Шкала ленты --t-steps переезжает с секции на пустой элемент .vn-tl1 высотой 320svh:
+   лента идёт, как шла бы на секции в 320svh. Панели лежат в прилипшем слое .vn-hz поверх кадра этапов и ездят по шкале --t-hz (.vn-tl2). Положение шкал: 0–28 % въезд «Отзывов»,
+   28–55 % стоят, 55–83 % «Отзывы» уходят влево и въезжают «Вопросы», 83–100 % «Вопросы» стоят. Лента этапов здесь на CSS (как в макете), а не на GSAP, потому что нужна общая шкала с панелями;
+   при выключенном CSS-режиме (нет view(), узкий экран) работает прежнее закрепление service.js, панели идут обычным потоком под этапами. */
+.vn-hzsec { position: relative; timeline-scope: --t-hz; }
+.vn-tl1, .vn-tl2 { display: none; }
+@keyframes vnHz { 0% { translate: 50% 0; } 28%, 55% { translate: 0 0; } 83%, 100% { translate: -50% 0; } }
+@keyframes vnTrack { 0%, 10% { translate: 0 0; } 100% { translate: -2000px 0; } }
+@keyframes vnStepOn { from { opacity: .28; } to { opacity: 1; } }
+@keyframes vnNodeOn { 0%, 60% { background: #f5f5f7; color: #e8201a; } 100% { background: #e8201a; color: #ffffff; } }
+@keyframes vnScale { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) and (min-width: 1100px) {
+    .vn-hzsec { height: calc(320svh + 260svh); padding: 0; }
+    .vn-tl1, .vn-tl2 { display: block; position: absolute; left: 0; width: 1px; pointer-events: none; }
+    .vn-tl1 { top: 0; height: 320svh; view-timeline-name: --t-steps; }
+    .vn-tl2 { top: 220svh; height: 360svh; view-timeline-name: --t-hz; }
+    /* лента этапов (в макете .sv-pin и ниже) */
+    .vn-hzsec .sv-pin { position: sticky; top: 0; height: 100svh; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+    .vn-hzsec .sv-steps { display: flex; width: max-content; margin-top: 48px; animation: vnTrack linear both; animation-timeline: --t-steps; animation-range: contain 0% contain 100%; }
+    .vn-hzsec .sv-step { flex: none; width: 400px; padding: 0 56px 0 0; animation: vnStepOn linear both; animation-timeline: --t-steps; }
+    .vn-hzsec .sv-step::before { animation: vnScale linear both; animation-timeline: --t-steps; }
+    .vn-hzsec .sv-step-n { width: 72px; height: 72px; margin-top: -37px; font-size: 30px; animation: vnNodeOn linear both; animation-timeline: --t-steps; }
+    .vn-hzsec .sv-step:nth-child(1) .sv-step-n, .vn-hzsec .sv-step:nth-child(1), .vn-hzsec .sv-step:nth-child(1)::before { animation-range: contain 0% contain 2%; }
+    .vn-hzsec .sv-step:nth-child(2) .sv-step-n, .vn-hzsec .sv-step:nth-child(2), .vn-hzsec .sv-step:nth-child(2)::before { animation-range: contain 4% contain 10%; }
+    .vn-hzsec .sv-step:nth-child(3) .sv-step-n, .vn-hzsec .sv-step:nth-child(3), .vn-hzsec .sv-step:nth-child(3)::before { animation-range: contain 22% contain 28%; }
+    .vn-hzsec .sv-step:nth-child(4) .sv-step-n, .vn-hzsec .sv-step:nth-child(4), .vn-hzsec .sv-step:nth-child(4)::before { animation-range: contain 40% contain 46%; }
+    .vn-hzsec .sv-step:nth-child(5) .sv-step-n, .vn-hzsec .sv-step:nth-child(5), .vn-hzsec .sv-step:nth-child(5)::before { animation-range: contain 58% contain 64%; }
+    .vn-hzsec .sv-step:nth-child(6) .sv-step-n, .vn-hzsec .sv-step:nth-child(6), .vn-hzsec .sv-step:nth-child(6)::before { animation-range: contain 76% contain 82%; }
+    .vn-hzsec .sv-step-fin { display: block; }
+    .vn-hzsec .sv-step.sv-step-fin, .vn-hzsec .sv-step.sv-step-fin::before, .vn-hzsec .sv-step-fin .sv-step-n { animation-range: contain 94% contain 100%; }
+    .vn-hzsec .sv-step h3 { font-size: 28px; margin-top: 20px; }
+    .vn-hzsec .sv-step p { font-size: 17px; max-width: 300px; }
+    /* панели «Отзывы» и «Вопросы» */
+    .vn-hz { position: sticky; top: 0; z-index: 3; height: 100svh; margin-top: -100svh; overflow: hidden; pointer-events: none; }
+    .vn-hz-track { display: flex; width: 200%; height: 100%; pointer-events: auto; animation: vnHz linear both; animation-timeline: --t-hz; animation-range: contain 0% contain 100%; }
+    .vn-panel { position: relative; flex: 0 0 50%; height: 100%; display: flex; flex-direction: column; justify-content: center; background: #f5f5f7; }
+    /* тень въезжающей панели у её левого края: градиент, без размытых теней */
+    .vn-panel::before { content: ""; position: absolute; top: 0; bottom: 0; left: -36px; width: 36px; background: linear-gradient(to left, rgba(0,0,0,.16), transparent); pointer-events: none; }
+    /* кадр на весь экран, шапка закрывает его верх: верхний отступ считается с её высотой */
+    .vn-panel > section { width: 100%; padding: calc(var(--header-h) + clamp(20px, 3.5svh, 48px)) 0 clamp(28px, 6.5svh, 88px) !important; }
+    .vn-panel > #faq .sv-faq { align-items: start; }
+  }
+  @media (prefers-reduced-motion: no-preference) and (min-width: 1100px) and (max-height: 760px) {
+    .vn-panel > #reviews .sv-sub { display: none; }
+    .vn-panel .sv-rev p { -webkit-line-clamp: 5; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
+  }
+}
