@@ -33,7 +33,7 @@ function closeMobileMenu() {
       if (sec) target = sec;
     }
     // секции стопки «Приёмки» на компьютере прилипают под шапку: отступ берётся из scroll-margin-top (--header-h), без запаса +12 px
-    var stack = target.closest && target.closest('.pk-stack, .pk-stack2') && window.matchMedia('(min-width: 1101px) and (min-height: 700px) and (max-height: 1500px)').matches;
+    var stack = target.closest && target.closest('.pk-stack, .pk-stack2, .dp-stack') && window.matchMedia('(min-width: 1101px) and (min-height: 700px) and (max-height: 1500px)').matches;
     var margin = stack ? parseFloat(getComputedStyle(target).scrollMarginTop) : 0;
     var top = target.getBoundingClientRect().top + window.pageYOffset - (margin > 0 ? margin : getOffset());
     window.scrollTo({ top: top, behavior: 'smooth' });

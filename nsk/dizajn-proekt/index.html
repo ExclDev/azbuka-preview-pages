@@ -128,7 +128,7 @@
 <link rel="preload" as="font" type="font/woff2" href="../fonts/inter-cyrillic-400.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/inter-latin-400.woff2" crossorigin />
 <link rel="stylesheet" href="../base.css?v=a7836a52ec" />
-<link rel="stylesheet" href="../service.css?v=991ddeeb5b" />
+<link rel="stylesheet" href="../service.css?v=6be64de300" />
 </head>
 <body class="city-bar-visible">
 <div class="city-bar" id="cityBar" role="navigation" aria-label="Выбор города">
@@ -190,7 +190,7 @@
   <button class="btn btn-red btn-cta" onclick="openPopup('Мобильное меню — Оставить заявку'); closeMobileMenu()">Оставить заявку</button>
 </nav>
 <div class="sv-progress" aria-hidden="true"><i></i></div>
-<nav class="sv-toc" aria-label="Разделы страницы"><a href="#sheets" class="t-sheets"><span class="tl">Листы</span></a><a href="#prices" class="t-prices"><span class="tl">Цены</span></a><a href="#steps" class="t-steps"><span class="tl">Этапы</span></a><a href="#reviews" class="t-reviews"><span class="tl">Отзывы</span></a><a href="#faq" class="t-faq"><span class="tl">Вопросы</span></a></nav>
+<nav class="sv-toc" aria-label="Разделы страницы"><a href="#sheets" class="t-sheets"><span class="tl">Листы</span></a><a href="#video" class="t-video"><span class="tl">Видео</span></a><a href="#prices" class="t-prices"><span class="tl">Цены</span></a><a href="#steps" class="t-steps"><span class="tl">Этапы</span></a><a href="#reviews" class="t-reviews"><span class="tl">Отзывы</span></a><a href="#faq" class="t-faq"><span class="tl">Вопросы</span></a></nav>
 
 <main class="sv" id="main">
 <section class="sv-hero hv-c" id="top" aria-labelledby="sv-h1">
@@ -220,7 +220,7 @@
 
 
 
-
+<div class="dp-stack">
 <section class="sv-light sv-sec dp-sec" id="sheets" aria-labelledby="sheets-title">
   <div class="wrapper">
     <div class="sv-head">
@@ -262,7 +262,36 @@
       </figure>
     </div>
   </div>
+</section><section class="sv-dark sv-sec dv-b" id="video" aria-labelledby="video-title" data-dv>
+  <div class="wrapper">
+    <div class="sv-head dv-head">
+      <div><p class="section-tag">Видео с объекта</p>
+<h2 class="section-title" id="video-title"><span class="mo-line"><span class="mo-in">С листа <span class="sv-acc">на стену</span></span></span></h2>
+<div class="divider sv-div"><span></span><span></span></div></div>
+      <p class="sv-sub">То, что нарисовано в проекте, специалист показывает уже в квартире. Нажмите на решение, видео перемотается к нему.</p>
+    </div>
+    <div class="dv-stage">
+      <ul class="dv-cards dv-l">
+        <li><button class="dv-card" type="button" data-t="0" style="--i: 0"><span class="dv-t">0:00</span><b>Решения из проекта</b><small>Приезжаем на объект с листами проекта</small><span class="dv-go" aria-hidden="true">Смотреть</span></button></li>
+        <li><button class="dv-card" type="button" data-t="4" style="--i: 1"><span class="dv-t">0:04</span><b>Подоконники</b><small>Из искусственного камня, подбираем по образцам</small><span class="dv-go" aria-hidden="true">Смотреть</span></button></li>
+        <li><button class="dv-card" type="button" data-t="12" style="--i: 2"><span class="dv-t">0:12</span><b>Стены</b><small>Где штукатурка, где фанера и гипсокартон</small><span class="dv-go" aria-hidden="true">Смотреть</span></button></li>
+      </ul>
+      <div class="dv-player">
+        <video class="dv-v" preload="none" playsinline poster="../images/samples/dp-nsk-video-poster.webp" width="720" height="1280" controlslist="nodownload noplaybackrate noremoteplayback" disablepictureinpicture disableremoteplayback aria-label="Видео: специалист «Азбуки Ремонта» в Новосибирске показывает на объекте решения из дизайн-проекта"><source src="../videos/dp-nsk-video.webm" type="video/webm"><source src="../videos/dp-nsk-video.mp4" type="video/mp4">
+        </video>
+        <button class="dv-play" type="button"><span class="dv-ico" aria-hidden="true"></span><span>Смотреть со звуком · 0:42</span></button>
+      </div>
+      <ul class="dv-cards dv-r">
+        <li><button class="dv-card" type="button" data-t="18" style="--i: 3"><span class="dv-t">0:18</span><b>Подвесная тумба</b><small>Стену под неё собрали из фанеры и гипсокартона</small><span class="dv-go" aria-hidden="true">Смотреть</span></button></li>
+        <li><button class="dv-card" type="button" data-t="28" style="--i: 4"><span class="dv-t">0:28</span><b>Слои на листе</b><small>Декоративный слой в одной плоскости со стеной</small><span class="dv-go" aria-hidden="true">Смотреть</span></button></li>
+        <li><button class="dv-card" type="button" data-t="32" style="--i: 5"><span class="dv-t">0:32</span><b>Покрытия</b><small>Разные материалы на одной стене</small><span class="dv-go" aria-hidden="true">Смотреть</span></button></li>
+      </ul>
+    </div>
+  </div>
 </section>
+
+</div>
+
 <section class="sv-dark sv-sec" id="prices" aria-labelledby="prices-title">
   <div class="wrapper">
     <div class="sv-head">
@@ -672,10 +701,11 @@
 /* Город этого сайта: объект нужен base.js (заявки, сообщение об ошибке) и home.js (заголовок первого экрана) */
 window.AZ_CITY = {"key":"novosibirsk","name":"Новосибирск","phone":"8 (923) 141-01-54","phoneHref":"tel:+79231410154","heroLine2":"ремонт в Новосибирске"};
 </script>
-<script src="../base.js?v=5b2b213e1e"></script>
+<script src="../base.js?v=d7daac7a9c"></script>
 <script src="../vendor/gsap.min.js?v=2d26f4c060"></script>
 <script src="../vendor/ScrollTrigger.min.js?v=489bcf6d9c"></script>
 <script src="../vendor/lenis.min.js?v=44dcd10f2a"></script>
 <script src="../service.js?v=fca5e6be94"></script>
+<script src="../dvideo.js?v=11a8f8061a"></script>
 </body>
 </html>

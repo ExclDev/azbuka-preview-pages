@@ -479,3 +479,182 @@ html.sv-motion { scroll-behavior: auto !important; }
   .hv-c-deck { --ch: min(calc((100vw - 2 * var(--px)) * .5), 560px); --spread: 1; --fk: 1; height: calc(var(--ch) * 1.32); }
   .hv-card { width: auto; height: var(--ch); top: calc(var(--ch) * .53); }
 }
+
+/* ═══ Секции до «Работ» в экран (компьютер), страницы с screens: true («Ремонт в новостройке») ═══
+   Перенесено из макета (комментарий «Новостройка: секции до портфолио в экран»). Только от 1101 px по ширине и 700–1500 px по высоте окна; телефон и узкие окна не затронуты.
+   Шапка на сайте фиксированная, поэтому в макетных 109 px не считаем: первый экран = ровно 100svh (его верхний отступ --sv-top уже занят шапкой и панелью города),
+   «Что входит» и «Цены» = экран под шапкой (100svh − --header-h), как «Видео» и «Обход» на «Приёмке». «Этапы» (закрепление), «Работы» и ниже без изменений. */
+:root { --header-h: calc(var(--sv-top) + 1px); }   /* то же значение, что в priemka.css: +1 px нижней рамки шапки */
+.sv-scr #scope, .sv-scr #prices { scroll-margin-top: var(--header-h); }
+@media (min-width: 1101px) and (min-height: 700px) and (max-height: 1500px) {
+  .sv-scr { --scr-pad: clamp(28px, 6.5svh, 88px); --scr-h: calc(100svh - var(--header-h)); }
+  .sv-scr #top { box-sizing: border-box; height: 100svh; display: flex; flex-direction: column; padding-bottom: var(--scr-pad); }
+  .sv-scr #top > .wrapper { flex: 1; display: flex; flex-direction: column; min-height: 0; width: 100%; }
+  .sv-scr #top .sv-hero-grid { flex: 1; min-height: 0; margin-top: max(16px, 3svh); grid-template-rows: minmax(0, 1fr); }
+  .sv-scr #top .sv-hero-photo { height: 100%; min-height: 0; }
+  .sv-scr #scope, .sv-scr #prices { box-sizing: border-box; height: var(--scr-h); display: flex; flex-direction: column; justify-content: center; padding-top: var(--scr-pad); padding-bottom: var(--scr-pad); }
+  .sv-scr #scope > .wrapper, .sv-scr #prices > .wrapper { width: 100%; }
+  .sv-scr .sv-scope { margin-top: max(16px, 2.6svh); align-items: center; }
+  .sv-scr .sv-list { display: grid; grid-auto-flow: column; grid-template-rows: repeat(5, auto); grid-template-columns: 1fr 1fr; column-gap: 36px; }   /* десять этапов: две колонки по пять */
+  .sv-scr .sv-row { grid-template-columns: 36px minmax(0, 1fr) auto; gap: 14px; padding: max(8px, 1.5svh) 0; }
+  .sv-scr .sv-row-t { font-size: 19px; }
+  .sv-scr .sv-row-d { font-size: 14px; line-height: 1.4; }
+  .sv-scr .sv-badge { font-size: 12px; padding-left: 10px; padding-right: 10px; }
+  .sv-scr .sv-sum { position: relative; top: 0; }
+  .sv-scr .sv-prices { margin-top: max(16px, 3svh); }
+  .sv-scr .sv-dp > div { padding: max(18px, 2.8svh) 28px; }
+  .sv-scr #prices .sv-note { margin-top: max(10px, 1.6svh); }
+}
+/* невысокие окна (до 820 px): прячем описания этапов, подзаголовки scope и prices, «Если бюджет ограничен», описания вариантов дизайн-проекта и сноску */
+@media (min-width: 1101px) and (min-height: 700px) and (max-height: 820px) {
+  .sv-scr { --scr-pad: 26px; }
+  .sv-scr .sv-row-d { display: none; }
+  .sv-scr .sv-row { padding: 9px 0; }
+  .sv-scr .sv-sum { padding: 20px 24px; }
+  .sv-scr .sv-sum hr { margin: 12px 0; }
+  .sv-scr .sv-sum-n { font-size: 48px; }   /* не из макета: на сайте секция ниже на высоту шапки, сводка иначе выше списка и выходит за низ на 1280×720 */
+  .sv-scr .sv-sum .btn { margin-top: 14px; }
+  .sv-scr #scope .sv-sub, .sv-scr #prices .sv-sub, .sv-scr #prices .sv-note, .sv-scr .sv-price-k, .sv-scr .sv-dp-opt p:not(.sv-dp-price), .sv-scr .sv-dp-head p:last-child { display: none; }
+  .sv-scr .sv-price { padding: 22px 28px; }
+  .sv-scr .sv-price h3 { margin-top: 0; }
+  .sv-scr .sv-price-v { margin-top: 10px !important; }
+  .sv-scr .sv-price ul { display: grid; gap: 4px; margin-top: 10px; }
+  .sv-scr .sv-price li { padding-top: 0; padding-bottom: 0; }
+  .sv-scr .sv-dp > div { padding: 16px 24px; }
+  .sv-scr .sv-dp-opt h4 { margin-top: 8px; }
+  .sv-scr .sv-dp-price { margin-top: 6px !important; font-size: 28px !important; }
+}
+/* 821–950 px по высоте (1440×900): на сайте секция ниже макетной на высоту шапки, «Цены» со всем текстом не помещаются. Прячем подзаголовок и описания вариантов дизайн-проекта (не из макета) */
+@media (min-width: 1101px) and (min-height: 821px) and (max-height: 950px) {
+  .sv-scr #prices .sv-sub, .sv-scr .sv-dp-opt p:not(.sv-dp-price) { display: none; }
+  .sv-scr .sv-price { padding: 24px 28px; }
+  .sv-scr .sv-price ul { gap: 8px; margin-top: 16px; }
+  .sv-scr .sv-price-v { margin-top: 12px; }
+}
+/* совсем невысокие окна (до 760 px, 1280×720): заголовки секций 48 px и меньше отступ, как у «Видео» и «Обхода» на «Приёмке» (не из макета: на сайте секция ниже макетной на высоту шапки) */
+@media (min-width: 1101px) and (min-height: 700px) and (max-height: 760px) {
+  .sv-scr { --scr-pad: 22px; }
+  .sv-scr #scope .section-title, .sv-scr #prices .section-title { font-size: 48px; }
+  .sv-scr .sv-scope { margin-top: 12px; }
+  .sv-scr .sv-prices { margin-top: 12px; }
+}
+/* первый экран на окнах до 950 px по высоте (не из макета): левая колонка (текст, факты, кнопки) выше грида и наезжала на вторую строку H1.
+   H1 и отступы считаем от высоты окна, на 1440×900 и выше разметка прежняя (по макету) */
+@media (min-width: 1101px) and (min-height: 700px) and (max-height: 950px) {
+  .sv-scr #top .sv-h1 { font-size: min(8.6vw, 12svh); margin-top: max(10px, 2svh); }
+  .sv-scr #top .sv-lead { margin-top: max(10px, 1.8svh); font-size: 17px; line-height: 1.5; }
+  .sv-scr #top .sv-facts { margin-top: max(12px, 2.2svh); }
+  .sv-scr #top .sv-facts li { padding: 12px 18px 14px; }
+  .sv-scr #top .sv-ctas { margin-top: max(12px, 2.2svh); }
+}
+/* 821–860 px по высоте: сразу выше макетного порога 820 «Цены» ещё не помещаются: прячем и сноску, и «Если бюджет ограничен» */
+@media (min-width: 1101px) and (min-height: 821px) and (max-height: 860px) {
+  .sv-scr #prices .sv-note, .sv-scr .sv-price-k { display: none; }
+}
+/* 821–880 px по высоте: описания этапов и плотная сводка уже нужны (на 1366 px они переносятся и «Что входит» выходит за низ на 33–49 px) */
+@media (min-width: 1101px) and (min-height: 821px) and (max-height: 880px) {
+  .sv-scr .sv-row-d { display: none; }
+  .sv-scr .sv-row { padding: 9px 0; }
+  .sv-scr .sv-sum { padding: 20px 24px; }
+  .sv-scr .sv-sum hr { margin: 12px 0; }
+  .sv-scr .sv-sum-n { font-size: 48px; }
+  .sv-scr .sv-sum .btn { margin-top: 14px; }
+}
+/* ширина до 1439 px (колонки уже, описания этапов переносятся на три строки) и высота до 1100 px: то же уплотнение, что до 880 px по высоте */
+@media (min-width: 1101px) and (max-width: 1439px) and (min-height: 700px) and (max-height: 1100px) {
+  .sv-scr .sv-row-d { display: none; }
+  .sv-scr .sv-row { padding: 9px 0; }
+  .sv-scr .sv-sum { padding: 20px 24px; }
+  .sv-scr .sv-sum hr { margin: 12px 0; }
+  .sv-scr .sv-sum-n { font-size: 48px; }
+  .sv-scr .sv-sum .btn { margin-top: 14px; }
+}
+
+/* ═══ «Видео с объекта» на «Дизайн-проекте» (Новосибирск): blocks/video-stage.njk, плеер — dvideo.js ═══
+   Перенесено из макета design-nsk.html (комментарии «Видео на объекте (варианты размещения)» и «Листы в экран, видео наезжает на листы»).
+   Плеер 9:16 по центру, по три карточки-решения с тайм-кодом по бокам; активная карточка с красной рамкой и риской к плееру. */
+.dv-b { background: #1f1b17; }
+.dv-player { position: relative; aspect-ratio: 9 / 16; border-radius: 24px; overflow: hidden; background: #0e0c0a; box-shadow: 0 0 0 1px rgba(255,255,255,.06); }
+.dv-v { display: block; width: 100%; height: 100%; object-fit: cover; }
+.dv-play { position: absolute; left: 50%; bottom: 24px; translate: -50% 0; display: flex; align-items: center; gap: 12px; padding: 12px 20px 12px 12px; border: 0; border-radius: 999px; background: rgba(22,19,16,.9); color: #f5f5f7; font: 600 15px/1 var(--font-body); white-space: nowrap; cursor: pointer; transition: background .3s ease; }
+/* на невысоких окнах плеер уже кнопки: подпись переносится на вторую строку, а не обрезается (не из макета) */
+.dv-play { max-width: calc(100% - 24px); white-space: normal; text-align: left; line-height: 1.2; }
+.dv-play[hidden] { display: none; }
+.dv-play:hover { background: #e8201a; }
+.dv-play:focus-visible { outline: 2px solid #f5f5f7; outline-offset: 3px; }
+.dv-ico { position: relative; width: 40px; height: 40px; border-radius: 50%; background: #e8201a; }
+.dv-play:hover .dv-ico { background: #f5f5f7; }
+.dv-ico::after { content: ""; position: absolute; left: 15px; top: 12px; border-style: solid; border-width: 8px 0 8px 13px; border-color: transparent transparent transparent #f5f5f7; }
+.dv-play:hover .dv-ico::after { border-left-color: #e8201a; }
+.dv-stage { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); gap: 40px; align-items: center; margin-top: 48px; }
+.dv-b .dv-player { height: min(76svh, 700px); }
+.dv-cards { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
+.dv-card { position: relative; display: block; width: 100%; padding: 22px 24px; border: 1px solid rgba(255,255,255,.1); border-radius: 18px; background: #26211c; color: inherit; text-align: left; cursor: pointer; font: inherit; transition: border-color .3s ease, background .3s ease; }
+.dv-t { font: 600 16px/1 var(--font-display); color: #e8201a; }
+.dv-card b { display: block; margin-top: 10px; font: 500 22px/1.15 var(--font-display); text-transform: uppercase; color: #f5f5f7; }
+.dv-card small { display: block; margin-top: 6px; font-size: 14px; line-height: 1.45; color: #999999; }
+.dv-go { position: absolute; top: 22px; right: 24px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: #888888; transition: color .3s ease; }
+.dv-card:hover, .dv-card.on { border-color: #e8201a; background: #2c2620; }
+.dv-card:hover .dv-go, .dv-card.on .dv-go { color: #e8201a; }
+.dv-card:focus-visible { outline: 2px solid #e8201a; outline-offset: 3px; }
+/* соединительная риска к плееру у активной карточки */
+.dv-l .dv-card::after, .dv-r .dv-card::after { content: ""; position: absolute; top: 50%; width: 40px; height: 2px; background: #e8201a; transform: scaleX(0); transition: transform .4s cubic-bezier(.16,1,.3,1); }
+.dv-l .dv-card::after { left: 100%; transform-origin: left; }
+.dv-r .dv-card::after { right: 100%; transform-origin: right; }
+.dv-card.on::after { transform: scaleX(1); }
+@media (min-width: 1280px) { .dv-r { padding-right: 36px; } }
+@media (max-width: 1100px) {
+  .dv-stage { grid-template-columns: 1fr 1fr; gap: 16px; }
+  .dv-b .dv-player { grid-column: 1 / -1; grid-row: 1; height: auto; width: min(100%, 400px); justify-self: center; margin-bottom: 16px; }
+  .dv-card::after { display: none; }
+}
+@media (max-width: 640px) { .dv-stage { grid-template-columns: 1fr; } .dv-card { padding: 18px 20px; } .dv-card b { font-size: 19px; } }
+@keyframes dvRise { from { opacity: 0; transform: translateY(48px); } to { opacity: 1; transform: none; } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .dv-player { animation: dvRise linear both; animation-timeline: view(); animation-range: entry 0% entry 60%; }
+    .dv-card { animation: dvRise linear both; animation-timeline: view(); animation-range: entry calc(10% + var(--i) * 5%) entry calc(60% + var(--i) * 5%); }
+  }
+}
+
+/* «Листы» и «Видео» в экран, видео наезжает на листы (обёртка .dp-stack из layouts/service.njk, только где есть такое видео; у Томска её нет).
+   Компьютер (от 1101 px, высота окна 700–1500 px): обе секции ровно «экран под шапкой», «Листы» прилипают под шапкой, «Видео» (скругление 28 px, тень градиентом 36 px через ::before) едет поверх.
+   Телефон, планшет и окна вне 700–1500 px: сдвиг «Листов» по view() (dvPin, как pkPin на «Приёмке»), без затемнения: в макете его нет, а под сдвигом лежит закреплённая панель плана.
+   Не возвращать filter, backdrop-filter, размытые box-shadow и затемнения на прилипших слоях (p95 кадров 33–50 мс вместо 16,8). */
+.dp-stack > #sheets, .dp-stack > #video { scroll-margin-top: var(--header-h); }
+.dp-stack > #video { position: relative; z-index: 2; border-radius: 28px 28px 0 0; }
+.dp-stack > #video::before { content: ""; position: absolute; left: 0; right: 0; top: -36px; height: 36px; background: linear-gradient(to top, rgba(0,0,0,.32), transparent); pointer-events: none; z-index: -1; }
+@media (min-width: 1101px) and (min-height: 700px) and (max-height: 1500px) {
+  .dp-stack { --scr-pad: clamp(28px, 6.5svh, 88px); --scr-h: calc(100svh - var(--header-h)); }
+  .dp-stack > #sheets, .dp-stack > #video { box-sizing: border-box; height: var(--scr-h); display: flex; flex-direction: column; justify-content: center; padding-top: var(--scr-pad); padding-bottom: var(--scr-pad); }
+  .dp-stack > #sheets > .wrapper, .dp-stack > #video > .wrapper { width: 100%; }
+  .dp-stack .dp-board { margin-top: max(16px, 2.6svh); align-items: center; }
+  .dp-stack .dp-plan { position: relative; top: 0; width: min(100%, calc((var(--scr-h) - 2 * var(--scr-pad) - 190px) * 640 / 560)); justify-self: end; }
+  .dp-stack .dp-item { padding: max(8px, 1.4svh) 0; }
+  .dp-stack .dv-stage { margin-top: max(16px, 2.6svh); }
+  .dp-stack .dv-b .dv-player, .dp-stack > #video .dv-player { height: calc(var(--scr-h) - 2 * var(--scr-pad) - 200px); }
+  .dp-stack .dv-card { padding: max(14px, 2svh) 22px; }
+  .dp-stack .dv-go { top: max(14px, 2svh); }
+}
+/* невысокие окна (до 820 px по высоте) */
+@media (min-width: 1101px) and (min-height: 700px) and (max-height: 820px) {
+  .dp-stack #sheets .sv-sub, .dp-stack #video .sv-sub, .dp-stack .dv-card small { display: none; }
+  .dp-stack .dp-item { padding: 6px 0; }
+  .dp-stack .dv-card b { margin-top: 6px; font-size: 19px; }
+}
+@keyframes dvPin { from { translate: 0 0; } to { translate: 0 min(100%, 100svh); } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) and (min-width: 1101px) and (min-height: 700px) and (max-height: 1500px) {
+    .dp-stack > #sheets { position: sticky; top: var(--header-h); z-index: 1; }
+  }
+  @media (prefers-reduced-motion: no-preference) and (max-width: 1100px), (prefers-reduced-motion: no-preference) and (max-height: 699px), (prefers-reduced-motion: no-preference) and (min-height: 1501px) {
+    .dp-stack > #sheets { animation: dvPin linear both; animation-timeline: view(); animation-range: contain 100% exit 100%; }
+  }
+}
+/* совсем невысокие окна (до 760 px, 1280×720): отступ секции 22 px и заголовки 48 px, как на «Приёмке» (не из макета: на сайте секция ниже макетной на высоту шапки) */
+@media (min-width: 1101px) and (min-height: 700px) and (max-height: 760px) {
+  .dp-stack { --scr-pad: 22px; }
+  .dp-stack #sheets .section-title, .dp-stack #video .section-title { font-size: 48px; }
+  .dp-stack .dp-board, .dp-stack .dv-stage { margin-top: 12px; }
+  .dp-stack .dp-item { padding: 4px 0; }
+}
