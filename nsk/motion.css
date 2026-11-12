@@ -122,14 +122,14 @@ html.lenis, html.lenis body { height: auto; }
 .motion-on .about { position: relative; z-index: 3; background: var(--bg); }
 
 /* значки hero приходят лесенкой */
-.motion-on .hero-after .hero-badge,
-.motion-on .hero-ctas > * {
-  opacity: 0; transform: translateY(26px);
-  transition: opacity .7s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1);
+.motion-on.hero-seq .hero-after .hero-badge,
+.motion-on.hero-seq .hero-ctas > * {
+  transform: translateY(26px);   /* только сдвиг: плашки и кнопки видны с первой отрисовки */
+  transition: transform .9s cubic-bezier(.16,1,.3,1);
 }
-.motion-on .hero-after { opacity: 1; transform: none; }
-.motion-on .hero-after.show .hero-badge,
-.motion-on .hero-ctas.show > * { opacity: 1; transform: none; }
+.motion-on.hero-seq .hero-after { opacity: 1; transform: none; }
+.motion-on.hero-seq .hero-after.show .hero-badge,
+.motion-on.hero-seq .hero-ctas.show > * { transform: none; }
 .motion-on .hero-after.show .hero-badge:nth-child(2) { transition-delay: .09s; }
 .motion-on .hero-after.show .hero-badge:nth-child(3) { transition-delay: .18s; }
 .motion-on .hero-ctas.show > *:nth-child(2) { transition-delay: .1s; }

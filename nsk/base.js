@@ -1,12 +1,25 @@
 /* ═══ base.js: общий код всех страниц (меню, попапы, заявки, квиз, виджеты, cookie). Собран из бывшего inline/script-app, script-cookie ═══ */
+/* Первая отрисовка уже была? Скрипты движения (service.js, motion.js, home.js) прячут текст первого экрана и выводят его заново только
+   если успели раньше неё. Если нет (медленная сеть), текст и кнопки остаются на месте. */
+window.azPainted = function () {
+  try { return performance.getEntriesByName('first-contentful-paint').length > 0; } catch (e) { return false; }
+};
 const burger     = document.getElementById('burger');
 const mobileMenu = document.getElementById('mobileMenu');
+/* Пока меню открыто, остальная страница (кроме шапки с бургером и самого меню) недоступна для фокуса и скринридера: inert */
+function setPageInert(on) {
+  Array.prototype.forEach.call(document.body.children, function (el) {
+    if (el === mobileMenu || el.classList.contains('header') || /^(SCRIPT|STYLE|NOSCRIPT|LINK)$/.test(el.tagName)) return;
+    if (on) el.setAttribute('inert', ''); else el.removeAttribute('inert');
+  });
+}
 burger.addEventListener('click', () => {
   const isOpen = mobileMenu.classList.toggle('open');
   burger.classList.toggle('open', isOpen);
   burger.setAttribute('aria-expanded', String(isOpen));
   document.documentElement.classList.toggle('scroll-locked', isOpen);
   document.querySelector('.header').classList.toggle('nvx-solid', isOpen);
+  setPageInert(isOpen);
 });
 function closeMobileMenu() {
   mobileMenu.classList.remove('open');
@@ -14,7 +27,21 @@ function closeMobileMenu() {
   burger.setAttribute('aria-expanded', 'false');
   document.documentElement.classList.remove('scroll-locked');
   document.querySelector('.header').classList.remove('nvx-solid');
+  setPageInert(false);
 }
+/* Esc закрывает меню и возвращает фокус на бургер; Tab ходит по кругу: бургер → пункты меню → бургер */
+document.addEventListener('keydown', (e) => {
+  if (!mobileMenu.classList.contains('open')) return;
+  if (e.key === 'Escape') { closeMobileMenu(); burger.focus(); return; }
+  if (e.key !== 'Tab') return;
+  const items = [burger].concat(Array.prototype.filter.call(
+    mobileMenu.querySelectorAll('a[href], button:not([disabled])'),
+    (n) => n.offsetParent !== null || getComputedStyle(n).position === 'fixed'
+  ));
+  const i = items.indexOf(document.activeElement);
+  if (e.shiftKey && (i <= 0)) { e.preventDefault(); items[items.length - 1].focus(); }
+  else if (!e.shiftKey && (i === items.length - 1 || i === -1)) { e.preventDefault(); items[0].focus(); }
+});
 
 /* ═══ Навигация: панели шапки и группы мобильного меню (12.11.2026) ═══
    Панель открывается наведением (только hover:hover), кликом и с клавиатуры; между пунктами перетекает: размер берётся из содержимого

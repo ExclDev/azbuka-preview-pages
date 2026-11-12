@@ -38,8 +38,9 @@ html.scroll-locked { overflow-y: hidden; }
 .btn-outline:hover::after { transform: translateY(0); }
 .section-tag {
   display: block; font-family: var(--font-body); font-size: 11px; font-weight: 600;
-  letter-spacing: 3px; text-transform: uppercase; color: var(--red); margin-bottom: 8px; text-align: left;
+  letter-spacing: 3px; text-transform: uppercase; color: var(--red-text); margin-bottom: 8px; text-align: left;
 }
+.sv-light .section-tag, .pk-sheet .section-tag { color: var(--red-ink); }   /* на светлой подложке: #E8201A давал 4,15:1 */
 .section-title {
   font-family: var(--font-display); font-size: var(--ed-sec); font-weight: 600; line-height: 1.1;
   text-transform: uppercase; text-align: left; text-wrap: balance;
@@ -115,6 +116,7 @@ html.sv-motion .sv-plan path { stroke-dasharray: 1; stroke-dashoffset: 1; }
 
 /* ═══ Секции ═══ */
 .sv-light { background: var(--light-bg); color: var(--light-ink); }
+.sv-light, .pk-sheet, .hv-card-2, .vw-s { --gray: var(--gray-ink); }   /* серый на светлой подложке: 5,3:1 вместо 3,3:1 */
 .sv-light .section-title { color: var(--light-ink); }
 .sv-sec { padding: var(--section-pad) 0; }
 .sv-sec--flush { padding-top: 0; }
@@ -173,7 +175,7 @@ html.sv-motion .sv-plan path { stroke-dasharray: 1; stroke-dashoffset: 1; }
 .sv-dp-head h3 { margin: 10px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 30px; line-height: 1.1; text-transform: uppercase; }
 .sv-dp-head p:last-child { margin: 16px 0 0; font-size: 15px; line-height: 1.55; color: var(--gray-light); }
 /* номер варианта в кольце; у варианта с акцией кольцо залито */
-.sv-dp-n { display: inline-grid; place-items: center; width: 44px; height: 44px; border: 2px solid var(--red); border-radius: 50%; box-sizing: border-box; font-family: var(--font-display); font-weight: 600; font-size: 20px; line-height: 1; color: var(--red); }
+.sv-dp-n { display: inline-grid; place-items: center; width: 44px; height: 44px; border: 2px solid var(--red); border-radius: 50%; box-sizing: border-box; font-family: var(--font-display); font-weight: 600; font-size: 20px; line-height: 1; color: var(--red-text); }
 .sv-dp-opt.is-hit .sv-dp-n { background: var(--red); color: #fff; }
 .sv-dp-opt h4 { margin: 16px 0 0; font-family: var(--font-display); font-weight: 500; font-size: 22px; text-transform: uppercase; }
 .sv-dp-opt p { margin: 8px 0 0; font-size: 15px; line-height: 1.5; color: var(--gray-light); }
@@ -186,7 +188,7 @@ html.sv-motion .sv-plan path { stroke-dasharray: 1; stroke-dashoffset: 1; }
 .sv-price.hit { background: var(--bg3); border-color: var(--red-a50); }
 .sv-price-k { margin: 0; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--gray); }
 .sv-price h3 { margin: 10px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 30px; line-height: 1.1; text-transform: uppercase; }
-.sv-price-v { margin: 20px 0 0; font-family: var(--font-display); font-weight: 500; font-size: 22px; color: var(--red); }
+.sv-price-v { margin: 20px 0 0; font-family: var(--font-display); font-weight: 500; font-size: 22px; color: var(--red-text); }
 .sv-price ul { flex: 1; margin: 24px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; align-content: start; }
 .sv-price li { position: relative; padding-left: 22px; font-size: 15px; line-height: 1.5; color: var(--gray-light); }
 .sv-price li::before { content: ""; position: absolute; left: 0; top: 9px; width: 10px; height: 2px; background: var(--red); }
@@ -252,7 +254,8 @@ html.sv-pinned .sv-step p { font-size: 17px; max-width: 300px; }
 .sv-reads { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 48px; }
 .sv-read { display: flex; flex-direction: column; justify-content: space-between; min-height: 220px; padding: 28px; border-radius: var(--radius-lg); background: #fff; text-decoration: none; color: var(--light-ink); box-shadow: 0 4px 20px rgba(0,0,0,.06); transition: transform .4s cubic-bezier(.2,.7,.1,1); }
 a.sv-read:hover { transform: translateY(-6px); color: var(--light-ink); }
-.sv-read-k { margin: 0; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--red); }
+.sv-read-k { margin: 0; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--red-ink); }
+.sv-read.svc .sv-read-k { color: var(--red-text); }
 .sv-read h3 { margin: 12px 0 0; font-family: var(--font-display); font-weight: 500; font-size: 24px; line-height: 1.2; text-transform: uppercase; }
 .sv-read span.go { margin-top: 24px; font-size: 15px; font-weight: 600; transition: transform .4s var(--sv-ease); }
 a.sv-read:hover .go { transform: translateX(6px); }
@@ -287,8 +290,9 @@ a.sv-read.svc:hover { color: #fff; }
 @media (min-width: 1280px) { .sv-toc { display: flex; } }
 
 /* ═══ Скрытые начальные состояния: только до старта service.js (html.sv-pre), потом их держит GSAP ═══ */
-html.sv-pre .sv-crumbs, html.sv-pre .sv-hero-copy > *, html.sv-pre .sv-rv { opacity: 0; }
-html.sv-pre .sv-h1 .ln > span, html.sv-pre .section-title .mo-in, html.sv-pre .sv-cta h2 .ln > span { transform: translateY(105%); }
+/* Крошки, H1, лид, факты и кнопки первого экрана сюда не входят: они видны сразу, без ожидания GSAP (см. service.js, introOn) */
+html.sv-pre .sv-rv { opacity: 0; }
+html.sv-pre .section-title .mo-in, html.sv-pre .sv-cta h2 .ln > span { transform: translateY(105%); }
 html.sv-pre .sv-hero-photo { clip-path: inset(0 0 100% 0); }
 html.lenis, html.lenis body { height: auto; }
 html.sv-motion { scroll-behavior: auto !important; }
@@ -396,7 +400,7 @@ html.sv-motion { scroll-behavior: auto !important; }
 .dp-list { min-width: 0; margin: 0; padding: 0; border: 0; border-top: 1px solid rgba(0,0,0,.1); }
 .dp-item { position: relative; display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 18px; align-items: start; padding: 18px 0; border-bottom: 1px solid rgba(0,0,0,.1); cursor: pointer; }
 .dp-item input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
-.dp-n { display: grid; place-items: center; width: 44px; height: 44px; border: 2px solid var(--red); border-radius: 50%; box-sizing: border-box; font: 600 20px/1 var(--font-display); color: var(--red); transition: background .35s ease, color .35s ease; }
+.dp-n { display: grid; place-items: center; width: 44px; height: 44px; border: 2px solid var(--red); border-radius: 50%; box-sizing: border-box; font: 600 20px/1 var(--font-display); color: var(--red-ink); transition: background .35s ease, color .35s ease; }
 .dp-txt b { display: block; padding-top: 9px; font: 500 22px/1.2 var(--font-display); text-transform: uppercase; color: var(--light-ink); transition: color .35s ease; }
 .dp-txt span { display: block; margin-top: 6px; font-size: 15px; line-height: 1.5; color: var(--light-text); }
 .dp-plan { position: sticky; top: calc(var(--sv-top) + 12px); margin: 0; aspect-ratio: 640 / 560; border-radius: var(--radius-lg); overflow: hidden; background: var(--bg); color: #fff; }
@@ -595,7 +599,7 @@ html.sv-motion { scroll-behavior: auto !important; }
 .dv-t { font: 600 16px/1 var(--font-display); color: #e8201a; }
 .dv-card b { display: block; margin-top: 10px; font: 500 22px/1.15 var(--font-display); text-transform: uppercase; color: #f5f5f7; }
 .dv-card small { display: block; margin-top: 6px; font-size: 14px; line-height: 1.45; color: #999999; }
-.dv-go { position: absolute; top: 22px; right: 24px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: #888888; transition: color .3s ease; }
+.dv-go { position: absolute; top: 22px; right: 24px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--gray); transition: color .3s ease; }
 .dv-card:hover, .dv-card.on { border-color: #e8201a; background: #2c2620; }
 .dv-card:hover .dv-go, .dv-card.on .dv-go { color: #e8201a; }
 .dv-card:focus-visible { outline: 2px solid #e8201a; outline-offset: 3px; }
@@ -680,7 +684,7 @@ html.sv-motion { scroll-behavior: auto !important; }
 .xr-lens::before, .xr-lens::after { content: ""; position: absolute; left: 50%; top: 50%; background: #e8201a; }
 .xr-lens::before { width: 14px; height: 2px; margin: -1px 0 0 -7px; }
 .xr-lens::after { width: 2px; height: 14px; margin: -7px 0 0 -1px; }
-.xr-cap { position: absolute; left: 16px; top: 16px; z-index: 2; display: flex; align-items: center; gap: 10px; max-width: calc(100% - 32px); padding: 10px 18px 10px 12px; border-radius: 999px; background: #e8201a; color: #f5f5f7; font: 600 15px/1.25 var(--font-body); pointer-events: none; transition: opacity .5s ease, translate .5s ease; }
+.xr-cap { position: absolute; left: 16px; top: 16px; z-index: 2; display: flex; align-items: center; gap: 10px; max-width: calc(100% - 32px); padding: 10px 18px 10px 12px; border-radius: 999px; background: #e8201a; color: #fff; font: 600 15px/1.25 var(--font-body); pointer-events: none; transition: opacity .5s ease, translate .5s ease; }
 .xr-cap-i { flex: none; width: 20px; height: 20px; max-width: none; }
 .xr-cap-m { display: none; }
 .xr-stage.is-used .xr-cap { opacity: 0; translate: 0 -8px; }   /* после первого касания подсказка плавно уходит */
@@ -692,7 +696,7 @@ html.sv-motion { scroll-behavior: auto !important; }
 .xr-note { display: none; margin: 0; font-size: 15px; line-height: 1.5; color: #cccccc; }
 .xr-note b { color: #f5f5f7; }
 .xr-chip:hover { border-color: #f5f5f7; color: #f5f5f7; }
-.xr-chip[aria-pressed="true"] { background: #e8201a; border-color: #e8201a; color: #f5f5f7; }
+.xr-chip[aria-pressed="true"] { background: #e8201a; border-color: #e8201a; color: #fff; }
 .xr-chip:focus-visible { outline: 2px solid #e8201a; outline-offset: 3px; }
 .vn-hero .sv-hero-grid { align-items: stretch; }
 .vn-hero .sv-h1 { margin: 0; }
@@ -729,7 +733,7 @@ html.sv-motion { scroll-behavior: auto !important; }
 @media (min-width: 1101px) { .vn-hero .sv-facts b { font-size: min(26px, 3.8cqi); } }
 
 /* ── 2. «Что входит»: срез. Светлый слой «На виду» на стене из керамогранита, под ним тёмный слой «Под плиткой» ── */
-.vw-k { display: flex; align-items: center; gap: 10px; margin: 0; font: 600 13px/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: #e8201a; }
+.vw-k { display: flex; align-items: center; gap: 10px; margin: 0; font: 600 13px/1 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--red-text); }
 .vw-dot { width: 10px; height: 10px; border-radius: 2px; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='6' height='6'%3E%3Cpath d='M0 6L6 0' stroke='%23e8201a' stroke-width='2'/%3E%3C/svg%3E"); }
 .vw-under { border-radius: 24px; background: #161310; color: #f5f5f7; padding: 36px; }
 .vw-under-head { display: flex; justify-content: space-between; gap: 32px; align-items: baseline; flex-wrap: wrap; }
@@ -887,3 +891,11 @@ html.sv-motion { scroll-behavior: auto !important; }
     .vn-panel .sv-rev p { -webkit-line-clamp: 5; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
   }
 }
+
+/* ═══ Зоны нажатия 44×44 px (тач-экраны): ::before с отрицательным inset, видимый размер не меняется ═══ */
+.sv-crumbs a { position: relative; }
+.sv-crumbs a::before { content: ""; position: absolute; inset: -14px -6px; }
+.xr-chip { position: relative; }
+.xr-chip::before { content: ""; position: absolute; inset: -4px 0; }       /* 37 → 45 */
+.sv-cta-phone { position: relative; }
+.sv-cta-phone::before { content: ""; position: absolute; inset: -2px 0; }  /* 42 → 46 */

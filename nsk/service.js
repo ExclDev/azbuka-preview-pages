@@ -164,9 +164,14 @@
     var cap = photo ? $('figcaption', photo) : null;   // не искать по всей странице: у «Листов проекта» своя подпись, и её это движение не касается
 
     /* ── Скрытые начальные состояния. После этого блока html.sv-pre снимается: дальше их держат инлайн-стили GSAP ── */
-    S(crumbs, { opacity: 0, y: 16 });
-    S(h1Lines, { yPercent: 105 });
-    S(heroCopy, { opacity: 0, y: 16 });
+    /* Крошки, H1, лид, факты и кнопки видны с первой отрисовки. Скрываем и выводим их только если скрипты успели раньше неё;
+       на медленной сети (GSAP приехал после первой отрисовки) текст остаётся на месте, без пустого экрана и прыжка. */
+    var introOn = !(window.azPainted && window.azPainted());
+    if (introOn) {
+      S(crumbs, { y: 16 });          // без opacity:0: подписи, лид, цена и кнопки видны с первой отрисовки, входят сдвигом
+      S(h1Lines, { yPercent: 105 });
+      S(heroCopy, { y: 16 });
+    }
     if (photo) S(photo, { clipPath: 'inset(0% 0% 100% 0%)' });
     if (colorImg && grayImg) S(colorImg, { clipPath: 'inset(0% 100% 0% 0%)' });
     if (plan) { S($$('.pl-txt', plan), { opacity: 0 }); }
@@ -184,9 +189,11 @@
 
     /* ── Загрузка: появление первого экрана ── */
     var intro = gsap.timeline({ defaults: { ease: EXPO } });
-    if (crumbs) intro.to(crumbs, { opacity: 1, y: 0, duration: .7, ease: 'sine.out', clearProps: 'transform,opacity' }, 0);
-    h1Lines.forEach(function (el, i) { intro.to(el, { yPercent: 0, duration: 1, clearProps: 'transform' }, i * .1); });
-    heroCopy.forEach(function (el, i) { intro.to(el, { opacity: 1, y: 0, duration: .9, clearProps: 'transform,opacity' }, .2 + i * .1); });
+    if (introOn) {
+      if (crumbs) intro.to(crumbs, { y: 0, duration: .7, ease: 'sine.out', clearProps: 'transform' }, 0);
+      h1Lines.forEach(function (el, i) { intro.to(el, { yPercent: 0, duration: 1, clearProps: 'transform' }, i * .1); });
+      heroCopy.forEach(function (el, i) { intro.to(el, { y: 0, duration: .9, clearProps: 'transform' }, .2 + i * .1); });
+    }
     if (drumCol) {
       // y: 0 задан явно, чтобы GSAP не прочитал CSS-сдвиг -6em как начальное значение
       intro.fromTo(drumCol, { y: 0, yPercent: 0 }, { y: 0, yPercent: -600 / 7, duration: 1.4 }, .45);

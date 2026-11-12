@@ -83,7 +83,10 @@
   var heroBg = $('.hero-bg-img');
   var heroTitle = $('[data-hero-title]');
   var heroEyebrow = $('.hero-eyebrow');
-  var revealed = false;
+  /* Вход в первый экран (печать заголовка, въезд подписи, зум фона) только если скрипт успел раньше первой отрисовки.
+     Иначе заголовок, подпись, плашки и кнопки остаются на месте: без пустого экрана и прыжка на медленной сети. */
+  var introOn = !(window.azPainted && window.azPainted());
+  var revealed = !introOn;
   var queued = null;
 
   // Печать заголовка (родная анимация сайта) стартует после прелоадера
@@ -106,9 +109,11 @@
     if (args) origType(args[0], args[1]);
   }
 
-  gsap.set(heroBg, { scale: 1.32, transformOrigin: '50% 45%' });
-  if (heroEyebrow) gsap.set(heroEyebrow, { animation: 'none', opacity: 0, x: -30 });
-  if (heroTitle) gsap.set(heroTitle, { autoAlpha: 0 });
+  if (introOn) {
+    gsap.set(heroBg, { scale: 1.32, transformOrigin: '50% 45%' });
+    if (heroEyebrow) gsap.set(heroEyebrow, { animation: 'none', x: -30 });
+    if (heroTitle) gsap.set(heroTitle, { autoAlpha: 0 });
+  }
   root.classList.remove('motion-pre');
 
   var intro = gsap.timeline({ defaults: { ease: EXPO } });
@@ -128,9 +133,9 @@
       .add(function () { pre.style.display = 'none'; }, 2.6);
   }
   var t0 = pre ? 1.75 : 0;
-  intro
+  if (introOn) intro
     .to(heroBg, { scale: 1, duration: 2.4, ease: 'expo.out' }, t0 - 0.2)
-    .to(heroEyebrow, { opacity: 1, x: 0, duration: 1.1 }, t0 + 0.15)
+    .to(heroEyebrow, { x: 0, duration: 1.1 }, t0 + 0.15)
     .add(function () {
       revealed = true;
       if (heroTitle) gsap.set(heroTitle, { autoAlpha: 1 });

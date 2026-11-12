@@ -42,7 +42,7 @@
   margin: 0; font-family: var(--font-display); font-weight: 600; text-transform: uppercase;
   font-size: clamp(20px, 1.8vw, 27px); line-height: 1.15;
 }
-.pv-fin .pv-finish p span { color: var(--red); }
+.pv-fin .pv-finish p span { color: var(--red-text); }
 @media (max-width: 760px) {
   .pv-fin .pv-finish { grid-template-columns: 1fr; padding: 24px; }
   .pv-fin .pv-finish .pv-fin-dot { left: -52px; width: 32px; height: 32px; margin-top: -16px; }

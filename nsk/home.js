@@ -431,6 +431,7 @@ function typeHeroTitle(redText, whiteText) {
     return;
   }
   if (typeTimer) { clearInterval(typeTimer); typeTimer = null; }
+  document.documentElement.classList.add('hero-seq');   // смена города после загрузки: плашки и кнопки выезжают заново
   if (badges) badges.classList.remove('show');
   if (ctas)   ctas.classList.remove('show');
   titleEl.innerHTML =
@@ -479,7 +480,11 @@ function typeHeroTitle(redText, whiteText) {
     }
   }, SPEED);
 }
-typeHeroTitle('Профессиональный', AZ_CITY.heroLine2);
+/* Печать заголовка и выезд плашек с кнопками: только если скрипт успел до первой отрисовки. Иначе заголовок, плашки и кнопки видны сразу. */
+if (!(window.azPainted && window.azPainted()) && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+  document.documentElement.classList.add('hero-seq');
+  typeHeroTitle('Профессиональный', AZ_CITY.heroLine2);
+}
 (function () {
   'use strict';
   var lb        = document.getElementById('lightbox');
@@ -556,6 +561,7 @@ typeHeroTitle('Профессиональный', AZ_CITY.heroLine2);
   var DEFAULT_ALT = 'Пример ремонта — Азбука Ремонта';
   var stageImg = document.createElement('img');
   stageImg.className = 'portfolio-modal-img';
+  stageImg.alt = 'Фото работы';   // до первого показа; дальше подпись работы или «Фото работы N из M» (showPhoto)
   stage.appendChild(stageImg);
   function wrap(i, len) { return ((i % len) + len) % len; }
   /* ═══ Превью-сетка ═══ */
@@ -635,7 +641,7 @@ typeHeroTitle('Профессиональный', AZ_CITY.heroLine2);
     current = wrap(idx, photos.length);
     var photo = photos[current];
     stageImg.src = photo.src;
-    stageImg.alt = photo.title || DEFAULT_ALT;
+    stageImg.alt = photo.title || ('Фото работы ' + (current + 1) + ' из ' + photos.length);
     titleEl.textContent   = photo.title || '';
     subEl.textContent     = photo.sub   || '';
     counterEl.textContent = (current + 1) + ' / ' + photos.length;
@@ -767,7 +773,12 @@ typeHeroTitle('Профессиональный', AZ_CITY.heroLine2);
       card.style.transform = 'translateX(' + s.x + 'px) scale(' + s.scale + ') rotateY(' + s.ry + 'deg)';
       card.style.opacity   = s.opacity;
     });
-    dotEls.forEach(function (d, i) { d.classList.toggle('active', i === currentIndex); });
+    /* на телефоне видны 5 точек вокруг текущей (у каждой зона нажатия 44 px, все 15 в ряд не помещаются); is-far прячет остальные только в CSS ≤768 px */
+    var from = Math.max(0, Math.min(currentIndex - 2, dotEls.length - 5));
+    dotEls.forEach(function (d, i) {
+      d.classList.toggle('active', i === currentIndex);
+      d.classList.toggle('is-far', i < from || i > from + 4);
+    });
     var cEl = document.getElementById('arCounterCurrent');
     if (cEl) cEl.textContent = String(currentIndex + 1).padStart(2, '0');
   }

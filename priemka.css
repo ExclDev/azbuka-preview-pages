@@ -115,7 +115,7 @@
 .pk-hit { position: absolute; cursor: pointer; border-radius: 4px; }
 .pk-hit:hover { background: rgba(255,255,255,.05); }
 .pk-scan { position: absolute; top: 0; bottom: 0; left: 0; width: 2px; background: #e8201a; box-shadow: 0 0 18px 4px rgba(232,32,26,.55); opacity: 0; pointer-events: none; }
-.pk-cap { position: absolute; left: 20px; bottom: 14px; padding: 6px 12px; border-radius: 999px; background: rgba(22,19,16,.72); font-size: 12px; color: #888; }
+.pk-cap { position: absolute; left: 20px; bottom: 14px; padding: 6px 12px; border-radius: 999px; background: rgba(22,19,16,.72); font-size: 12px; color: var(--gray-light); }
 .pk-chips { display: none; flex-wrap: wrap; gap: 8px; margin: 0 0 28px; padding: 0; border: 0; min-width: 0; }
 .pk-chip { position: relative; padding: 10px 16px; border: 1px solid rgba(0,0,0,.14); border-radius: 999px; font: 500 15px/1.2 var(--font-body); color: #555; cursor: pointer; transition: background .3s ease, color .3s ease, border-color .3s ease; }
 .pk-chip input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
@@ -127,9 +127,9 @@
 .pk-n { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #e8201a; font: 600 14px/1 var(--font-display); color: #fff; transform: translateY(5px); }
 .pk-room b { display: block; font-size: 16px; color: #1a1a1a; }
 .pk-room li div span { display: block; margin-top: 2px; font-size: 14px; line-height: 1.45; color: #666; }
-.pk-room em { font-style: normal; font-size: 13px; white-space: nowrap; color: #888; }
+.pk-room em { font-style: normal; font-size: 13px; white-space: nowrap; color: var(--gray-ink); }
 .pk-total { margin: 24px 0 0; font-size: 15px; line-height: 1.5; color: #666; }
-.pk-total b { font: 600 22px/1 var(--font-display); color: #e8201a; }
+.pk-total b { font: 600 22px/1 var(--font-display); color: var(--red-ink); }
 
 @supports selector(:has(a)) {
   .pk-chips { display: flex; }
@@ -180,7 +180,7 @@
 .pk-get li { padding: 16px 0; border-top: 1px solid rgba(255,255,255,.1); font-size: 16px; line-height: 1.5; color: #ccc; }
 .pk-get b { display: block; font: 500 20px/1.25 var(--font-display); text-transform: uppercase; color: #fff; }
 .pk-sheet { position: relative; margin: 0; padding: 36px 36px 40px; border-radius: 6px; background: #f5f5f7; color: #1a1a1a; box-shadow: 0 30px 60px rgba(0,0,0,.35); rotate: -1.2deg; }
-.pk-sheet-k { position: absolute; top: 18px; right: 20px; margin: 0; padding: 4px 10px; border: 1px dashed #888; border-radius: 6px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: #888; }
+.pk-sheet-k { position: absolute; top: 18px; right: 20px; margin: 0; padding: 4px 10px; border: 1px dashed var(--gray-ink); border-radius: 6px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--gray-ink); }
 .pk-sheet h3 { margin: 0; font: 600 26px/1.1 var(--font-display); text-transform: uppercase; }
 .pk-sheet-m { margin: 8px 0 22px; font-size: 14px; color: #666; }
 .pk-sheet table { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 1.4; }
@@ -218,9 +218,9 @@
 .pv-sub{margin-top:20px}
 .pv-chs{margin:28px 0 0;padding:0;list-style:none;border-top:1px solid rgba(255,255,255,.1)}
 .pv-ch{display:grid;grid-template-columns:52px minmax(0,1fr);gap:16px;align-items:baseline;width:100%;padding:14px 0;border:0;border-bottom:1px solid rgba(255,255,255,.1);background:none;color:inherit;text-align:left;cursor:pointer;font:inherit}
-.pv-t{font:600 16px/1 var(--font-display);color:#e8201a}
+.pv-t{font:600 16px/1 var(--font-display);color:var(--red-text)}
 .pv-ch b{display:block;font:500 20px/1.2 var(--font-display);text-transform:uppercase;color:#ffffff;transition:color .3s ease}
-.pv-ch small{display:block;margin-top:4px;font-size:14px;line-height:1.45;color:#888888}
+.pv-ch small{display:block;margin-top:4px;font-size:14px;line-height:1.45;color:var(--gray)}
 .pv-ch:hover b,.pv-ch.on b{color:#e8201a}
 .pv-ch:focus-visible{outline:2px solid #e8201a;outline-offset:2px}
 .pv-ctas{margin-top:28px}

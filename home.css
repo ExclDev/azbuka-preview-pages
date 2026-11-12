@@ -65,7 +65,7 @@ html.scroll-locked { overflow-y: hidden; }
   font-weight: 600;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: var(--red);
+  color: var(--red-text);
   margin-bottom: 8px;
 }
 .section-title {
@@ -109,7 +109,7 @@ html.scroll-locked { overflow-y: hidden; }
 .hero-content { position: relative; z-index: 2; width: 100%; }
 .hero-eyebrow {
   font-size: 12px; letter-spacing: 5px; text-transform: uppercase;
-  color: var(--red); margin-bottom: 18px; font-weight: 600;
+  color: var(--red-text); margin-bottom: 18px; font-weight: 600;
   /* Оверлей ослаблен ради читаемости интерьера, а красный на светлом кадре
      держит контраст хуже белого — подстраховываем тенью, а не затемнением. */
   text-shadow: 0 1px 12px rgba(0,0,0,0.6);
@@ -404,8 +404,7 @@ html.scroll-locked { overflow-y: hidden; }
 .anim-d2 { animation-delay: .2s; }
 .anim-d3 { animation-delay: .3s; }
 .hero-eyebrow {
-  opacity: 0;
-  animation: heroEyebrowIn .6s ease .1s forwards;
+  animation: heroEyebrowIn .6s ease .1s backwards;   /* подпись видна сразу, въезжает сдвигом */
 }
 .hero-title { min-height: 1.0em; }
 .hero-title em { display: block; white-space: nowrap; }
@@ -425,15 +424,9 @@ html.scroll-locked { overflow-y: hidden; }
 .hero-title em .type-caret { background: #ffffff; }
 .hero-title .white-line .type-caret { background: var(--red); }
 .type-caret.done { animation: none; opacity: 0; width: 0; margin: 0; }
-.hero-after {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity .6s ease, transform .6s ease;
-}
-.hero-after.show {
-  opacity: 1;
-  transform: translateY(0);
-}
+/* Плашки и кнопки видны всегда: до конца печати заголовка они только сдвинуты вниз (html.hero-seq ставит home.js, когда успевает запустить печать), без opacity:0 */
+.hero-after { transition: transform .6s ease; }
+.hero-seq .hero-after:not(.show) { transform: translateY(24px); }
 @media (min-width: 2560px) {
   .hero-title { font-size: 120px; }
   .hero-eyebrow { font-size: 14px; letter-spacing: 6px; }
@@ -528,7 +521,7 @@ html.scroll-locked { overflow-y: hidden; }
 @media (max-width: 768px) {
   .hero { padding-top: 64px; padding-bottom: 48px; align-items: flex-end; }
   .hero-title { font-size: clamp(30px, 7.2vw, 52px); margin-bottom: 28px; }
-  .hero-eyebrow { font-size: 10px; letter-spacing: 3px; margin-bottom: 12px; }
+  .hero-eyebrow { font-size: 12px; letter-spacing: 3px; margin-bottom: 12px; }
   .hero-badges { flex-direction: column; gap: 10px; margin-bottom: 28px; }
   .hero-badge { padding: 10px 14px; }
   .hero-badge img { width: 30px; height: 30px; }
@@ -604,7 +597,7 @@ html.scroll-locked { overflow-y: hidden; }
 }
 .process { padding: var(--section-pad) 0; background: #f5f5f7; }
 .process .section-title { color: #1a1a1a; }
-.process .section-tag { color: var(--red); }
+.process .section-tag { color: var(--red-text); }
 .process-title { text-align: center; margin-bottom: 8px; }
 .process-divider { justify-content: center; }
 .process-steps {
@@ -690,7 +683,7 @@ html.scroll-locked { overflow-y: hidden; }
   border-radius: var(--radius-pill);
   background: rgba(232,32,26,0.08);
   border: 1px solid rgba(232,32,26,0.18);
-  color: var(--red);
+  color: var(--red-ink);
   font-family: var(--font-body); font-size: 11px; font-weight: 600;
   letter-spacing: 1px; text-transform: uppercase; line-height: 1.4;
 }
@@ -1112,7 +1105,7 @@ html.scroll-locked { overflow-y: hidden; }
 .ar-meta-source-label { font-size: 11px; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; }
 .ar-meta-source-name {
   font-family: var(--font-display); font-size: 15px; font-weight: 600;
-  color: var(--red); letter-spacing: 0.5px;
+  color: var(--red-text); letter-spacing: 0.5px;
 }
 .ar-stack-wrap {
   position: relative;
@@ -1168,6 +1161,7 @@ html.scroll-locked { overflow-y: hidden; }
   border: none;
   padding: 0;
   cursor: pointer;
+  position: relative;
   background: rgba(255,255,255,0.15);
   transition: height .3s ease, width .3s ease, border-radius .3s ease, background .3s ease;
 }
@@ -1225,7 +1219,7 @@ html.scroll-locked { overflow-y: hidden; }
 .ar-avatar--red { background: var(--red); }
 .ar-avatar--blue { background: #1565C0; }
 .ar-avatar--green { background: #2E7D32; }
-.ar-avatar--orange { background: #E65100; }
+.ar-avatar--orange { background: #C24100; }   /* белые инициалы: было 3,79:1, стало 5,19:1 */
 .ar-author { font-weight: 600; font-size: 14px; color: var(--white); }
 .ar-date { font-size: 12px; color: var(--gray); margin-top: 2px; }
 .ar-stars { display: flex; gap: 3px; flex-shrink: 0; }
@@ -1240,7 +1234,8 @@ html.scroll-locked { overflow-y: hidden; }
 .ar-expand-btn {
   align-self: flex-start;
   font-size: 12px; font-family: var(--font-body);
-  color: var(--red); background: none; border: none;
+  color: var(--red-text); background: none; border: none;
+  position: relative;
   border-bottom: 1px solid transparent;
   padding: 0; cursor: pointer;
   transition: border-color .2s;
@@ -1263,6 +1258,7 @@ html.scroll-locked { overflow-y: hidden; }
 .ar-btn:hover { background: var(--red); border-color: var(--red); transform: scale(1.08); }
 .ar-btn:disabled { opacity: .35; pointer-events: none; }
 .ar-2gis-link {
+  position: relative;
   font-size: 13px; color: var(--gray);
   border-bottom: 1px solid transparent;
   transition: color .2s, border-color .2s;
@@ -1526,4 +1522,21 @@ a.nvx-chip:hover { border-color: var(--red); background: rgba(232,32,26,.08); }
 @media (prefers-reduced-motion: reduce) {
   /* на устройстве с наведением слой «под отделкой» открывается сразу, без шторки; на тач-экране остаётся верхнее фото */
   .nvx-c, .nvx-top-img, .nvx-seam, .nvx-more svg { transition: none !important; }
+}
+
+/* ═══ Зоны нажатия 44×44 px (тач-экраны), видимый размер не меняется: псевдоэлемент ::before с отрицательным inset ═══ */
+.ar-dot::before, .ar-expand-btn::before, .ar-2gis-link::before { content: ""; position: absolute; }
+.ar-expand-btn::before { inset: -16px -6px; }          /* 12 px текст: зона 44 по высоте, по ширине не меньше 44 (см. min-width ниже) */
+.ar-expand-btn { min-width: 32px; }
+.ar-2gis-link::before { inset: -11px -4px; }
+.av-sound-btn::before { content: ""; position: absolute; inset: -5px; }   /* 34 → 44 */
+.ar-btn { position: relative; }
+.ar-btn::before { content: ""; position: absolute; inset: -2px; }         /* 40 → 44 */
+@media (max-width: 768px) {
+  .ar-dots { gap: 36px; }                                /* зоны по 44 px встык, не перекрываются */
+  .ar-dot::before { inset: -18px; }
+  .ar-dot.is-far { display: none; }
+}
+@media (min-width: 769px) {
+  .ar-dot::before { inset: -18px -4px; }                  /* мышь: зона выше, но соседние точки (шаг 16 px) не перекрываются */
 }
