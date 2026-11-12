@@ -659,6 +659,7 @@ function openVideo(id) {
 })();
 (function () {
   var banner = document.getElementById('cookieBanner');
+  if (!banner) return;   /* сайт без счётчика: баннера нет, --cookie-h остаётся 0 */
   /* Выбор по cookie хранится в localStorage['cookieAccepted']: accepted | declined. Прежнее значение '1' — согласие.
      Метрика грузится только после «Принять» (window.azMetrikaLoad из inline/metrika.njk, на сайте без счётчика его нет). */
   function read() { try { return localStorage.getItem('cookieAccepted'); } catch (e) { return null; } }

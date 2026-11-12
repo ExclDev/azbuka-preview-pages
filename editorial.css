@@ -1,11 +1,9 @@
 /* =========================================================
    Азбука Ремонта — Editorial Motion
    Строго по дизайн-системе «Азбука Ремонта» (tokens.json + README
-   компонентов). Отступления только два, оба согласованы:
-   1) все заголовки увеличены в ОДНОЙ пропорции ×1.5 от шкалы
-      системы (межстрочные — из системы);
-   2) «4 причины» — строками, а не карточками-переворотами
-      (элементы и цвета — из ReasonCard).
+   компонентов). Отступление одно, согласованное: все заголовки
+   увеличены в ОДНОЙ пропорции ×1.5 от шкалы системы
+   (межстрочные — из системы).
    Цвета берутся только из переменных сайта и литералов-токенов
    системы (red-a08/a10/a12/a18/a35, light-bg/card/ink/text).
    ========================================================= */
@@ -26,7 +24,7 @@
 
 /* ---------- Шапка секции (SectionHeading): тег → заголовок → разделитель ---------- */
 .ed .section-title,
-.ed .reasons-title, .ed .process-title, .ed .remote-title,
+.ed .process-title,
 .ed .ar-reviews-title, .ed #av-reels-title, .ed #contacts-title, .ed #tech-title {
   font-size: var(--ed-sec);
   line-height: 1.1;
@@ -63,57 +61,6 @@
   .ed .about-content { grid-column: 7 / 13; }
 }
 
-/* ---------- 4 причины: строки из элементов ReasonCard ---------- */
-.ed .reasons-grid { display: block; margin-top: 40px; perspective: none; }
-.ed .reason-card { min-height: 0; perspective: none; position: relative; cursor: default; }
-/* верхняя граница строки: border → red по наведению (как у карточек системы) */
-.ed .reason-card::before {
-  content: ''; position: absolute; left: 0; right: 0; top: 0; height: 1px;
-  background: var(--border);
-  transform: scaleX(var(--ln, 1)); transform-origin: 0 50%;
-  transition: background .3s ease, height .3s ease;
-}
-.ed .reason-card:hover::before { background: var(--red); height: 2px; }
-.ed .reasons-grid .reason-card:last-child { border-bottom: 1px solid var(--border); }
-.ed .reason-inner,
-.ed .reason-card:hover .reason-inner,
-.ed .reason-card.flipped .reason-inner {
-  transform: none; min-height: 0; transform-style: flat;
-  display: grid; position: relative;
-  grid-template-columns: 160px minmax(0, 1fr) minmax(0, 1.1fr) 60px;
-  align-items: center; column-gap: 40px;
-  padding: 32px 0;
-  transition: transform .4s cubic-bezier(.2,.7,.2,1);
-}
-.ed .reason-face { display: contents; }
-.ed .reason-back-num, .ed .reason-back-name { display: none; }
-.ed .reason-num {
-  grid-column: 1; grid-row: 1; margin: 0;
-  font-size: var(--ed-num); line-height: 1;
-  color: rgba(232,32,26,0.12);                       /* numeral: red 0.12 */
-  transition: color .4s ease;
-}
-.ed .reason-card:hover .reason-num { color: rgba(232,32,26,0.35); }   /* red-a35 */
-.ed .reason-front .reason-name {
-  grid-column: 2; grid-row: 1; margin: 0;
-  font-size: var(--ed-card); line-height: 1.1;
-  transition: color .3s ease;
-}
-.ed .reason-card:hover .reason-name { color: var(--red); }
-.ed .reason-back .reason-text { grid-column: 3; grid-row: 1; margin: 0; color: var(--gray-light); }
-.ed .reason-icon { grid-column: 4; grid-row: 1; margin: 0; }   /* плашка 60px: red-a10 + red-a35 */
-@media (max-width: 760px) {
-  .ed .reason-inner,
-  .ed .reason-card:hover .reason-inner,
-  .ed .reason-card.flipped .reason-inner {
-    grid-template-columns: 72px minmax(0, 1fr); row-gap: 10px; column-gap: 16px; padding: 24px 0;
-  }
-  .ed .reason-num { font-size: 64px; grid-row: 1 / 3; align-self: start; }
-  .ed .reason-front .reason-name { font-size: 20px; }
-  .ed .reason-back .reason-text { grid-column: 2; grid-row: 2; }
-  .ed .reason-icon { display: none; }
-}
-
 /* ---------- Работы + консультация ---------- */
 @media (min-width: 1025px) {
   .ed .consult-inner { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); }
@@ -139,20 +86,6 @@
     padding-left: var(--px); padding-right: var(--px);
   }
 }
-
-/* ---------- Берём заботы: заголовок слева, лид справа, RemoteCard из системы ---------- */
-@media (min-width: 1025px) {
-  .ed .remote .wrapper {
-    display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 24px;
-  }
-  .ed .remote .wrapper > .section-tag { grid-column: 1 / 13; }
-  .ed .remote .remote-title { grid-column: 1 / 8; }
-  .ed .remote .wrapper > .divider { grid-column: 1 / 13; grid-row: 3; }
-  .ed .remote-lead { grid-column: 8 / 13; grid-row: 2; align-self: end; margin: 0; }
-  .ed .remote-grid { grid-column: 1 / 13; }
-}
-.ed .remote-lead { text-align: left; margin-left: 0; }
-.ed .remote-card-title { font-size: var(--ed-card); line-height: 1.1; }
 
 /* ---------- Технический проект: фото уходит в край экрана ---------- */
 @media (min-width: 1025px) {
@@ -292,7 +225,7 @@
 }
 @media (max-width: 480px) {
   .ed .section-title,
-  .ed .reasons-title, .ed .process-title, .ed .remote-title,
+  .ed .process-title,
   .ed .ar-reviews-title, .ed #av-reels-title, .ed #contacts-title, .ed #tech-title {
     font-size: clamp(32px, 9.5vw, 54px);                               /* 24–36 × 1.5 */
   }
@@ -397,53 +330,6 @@
   .ed-card { width: calc(var(--ch) * 0.78); }
 }
 
-/* --- 4 причины: номера без нулей, без иконок справа --- */
-.ed .reason-icon { display: none; }
-.ed .reason-inner,
-.ed .reason-card:hover .reason-inner,
-.ed .reason-card.flipped .reason-inner { grid-template-columns: 120px minmax(0, 1fr) minmax(0, 1.2fr); }
-@media (max-width: 760px) {
-  .ed .reason-inner,
-  .ed .reason-card:hover .reason-inner,
-  .ed .reason-card.flipped .reason-inner { grid-template-columns: 52px minmax(0, 1fr); }
-}
-
-/* --- 4 причины: цифра по центру колонки + подсветка строки по прокрутке --- */
-.ed .reason-num {
-  justify-self: center; text-align: center;
-  overflow: hidden;                                   /* маска для выезда цифры */
-  color: transparent;
-  background: linear-gradient(to top, var(--red) 50%, rgba(232,32,26,0.12) 50%);
-  background-size: 100% 200%; background-position: 0 0;
-  -webkit-background-clip: text; background-clip: text;
-  transition: background-position .9s cubic-bezier(.2,.7,.2,1);
-}
-.ed .reason-num .mo-digit { display: inline-block; will-change: transform; }
-.ed .reason-card:hover .reason-num { color: transparent; }
-.ed .reason-card.is-on .reason-num { background-position: 0 100%; }      /* заливка снизу вверх */
-.ed .reason-front .reason-name { transition: color .4s ease, transform .6s cubic-bezier(.2,.7,.2,1); }
-.ed .reason-card.is-on .reason-name { transform: translateX(16px); }
-.ed .reason-back .reason-text { transition: color .4s ease; }
-.ed .reason-card.is-on .reason-text { color: var(--white); }
-/* неактивные строки гаснут цветом: текст gray держит 5.2:1 на bg */
-.ed .reasons-grid.ed-spot .reason-card:not(.is-on) .reason-name,
-.ed .reasons-grid.ed-spot .reason-card:not(.is-on) .reason-text { color: var(--gray); }
-.ed .reasons-grid.ed-spot .reason-card:not(.is-on):hover .reason-name { color: var(--red); }
-.ed .reasons-grid.ed-spot .reason-card:not(.is-on):hover .reason-text { color: var(--gray-light); }
-.ed .reason-num, .ed .reason-name, .ed .reason-text { transition-property: background-position, color, transform, opacity; }
-.ed .reason-name, .ed .reason-text { transition-duration: .5s; }
-/* заливка — на самой цифре (у контейнера только маска) */
-.ed .reason-num { background: none; color: inherit; -webkit-background-clip: border-box; background-clip: border-box; }
-.ed .reason-num .mo-digit {
-  color: transparent;
-  background: linear-gradient(to top, var(--red) 50%, rgba(232,32,26,0.35) 50%);
-  background-size: 100% 200%; background-position: 0 0;
-  -webkit-background-clip: text; background-clip: text;
-  transition: background-position .9s cubic-bezier(.2,.7,.2,1);
-}
-.ed .reason-card.is-on .reason-num .mo-digit,
-.ed .reason-card:hover .reason-num .mo-digit { background-position: 0 100%; }
-
 /* --- О компании: название наезжает на фото (единственное исключение из шкалы ×1.5) --- */
 @media (min-width: 1025px) {
   .ed .about-top {
@@ -527,120 +413,3 @@
 
 /* --- Порядок работы: убраны крупные цифры в правом углу карточек --- */
 .ed .process-step::before { content: none !important; display: none !important; }
-
-/* --- 4 причины: пояснение стилем contact-value, ровные цифры счётчика --- */
-.ed .reason-back .reason-text { font-size: 17px; line-height: 1.5; text-wrap: pretty; }
-.ed .reason-name .counter { font-variant-numeric: tabular-nums; }
-@media (max-width: 760px) { .ed .reason-back .reason-text { font-size: 15px; } }
-
-/* подсказка виджета не перекрывает строки причин */
-.ed-no-hint .qw-hint.qw-hint--show { opacity: 0; visibility: hidden; pointer-events: none; }
-
-/* --- 4 причины: пояснение и цитата из отзыва в одной колонке --- */
-.ed .reason-inner,
-.ed .reason-card:hover .reason-inner,
-.ed .reason-card.flipped .reason-inner { align-items: start; padding: 36px 0; }
-.ed .reason-front .reason-name { margin-top: 14px; }
-.ed .reason-copy { grid-column: 3; grid-row: 1; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
-.ed .reason-proof { margin: 0; font-size: 15px; line-height: 1.5; color: var(--gray); transition: color .4s ease; }
-.ed .reason-cite { display: block; margin-top: 4px; font-size: 13px; font-style: normal; color: var(--gray); }
-.ed .reason-card.is-on .reason-proof,
-.ed .reason-card:hover .reason-proof { color: var(--gray-light); }
-@media (max-width: 760px) {
-  .ed .reason-inner,
-  .ed .reason-card:hover .reason-inner,
-  .ed .reason-card.flipped .reason-inner { padding: 24px 0; }
-  .ed .reason-front .reason-name { margin-top: 0; }
-  .ed .reason-copy { grid-column: 2; grid-row: 2; }
-  .ed .reason-card.is-on .reason-name { transform: none; }
-  .ed .reasons-title span:not(.mo-line):not(.mo-in) { white-space: nowrap; }   /* красное слово не рвётся; строки маски переносятся, иначе длинный заголовок обрезается */
-}
-
-/* --- 4 причины: красная линия растёт вместе с прокруткой строки --- */
-.ed .reason-card::after {
-  content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px;
-  background: var(--red); pointer-events: none;
-  transform: scaleX(var(--act, 0)); transform-origin: 0 50%;
-}
-/* линия идёт по шкале строки (раньше ScrollTrigger писал --act на каждый кадр): «top 58%» → «bottom 58%» у строки = entry 42svh … entry 100% + 42svh */
-@keyframes edAct { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    /* псевдоэлемент не видит шкалу, объявленную на его же элементе (шкала стоит в конце): у каждой строки своё имя, общий предок .reasons-grid поднимает их в timeline-scope */
-    /* .about режет содержимое overflow: hidden и тем становится контейнером прокрутки для view() строк: clip режет так же, но контейнером не делает */
-    .ed .about { overflow: clip; }
-    .ed .reasons-grid { timeline-scope: --edact1, --edact2, --edact3, --edact4, --edact5, --edact6; }
-    .ed .reason-card:nth-child(1) { view-timeline-name: --edact1; }
-    .ed .reason-card:nth-child(2) { view-timeline-name: --edact2; }
-    .ed .reason-card:nth-child(3) { view-timeline-name: --edact3; }
-    .ed .reason-card:nth-child(4) { view-timeline-name: --edact4; }
-    .ed .reason-card:nth-child(5) { view-timeline-name: --edact5; }
-    .ed .reason-card:nth-child(6) { view-timeline-name: --edact6; }
-    .ed .reason-card::after { animation: edAct linear both; animation-range: entry 42svh entry calc(100% + 42svh); }
-    .ed .reason-card:nth-child(1)::after { animation-timeline: --edact1; }
-    .ed .reason-card:nth-child(2)::after { animation-timeline: --edact2; }
-    .ed .reason-card:nth-child(3)::after { animation-timeline: --edact3; }
-    .ed .reason-card:nth-child(4)::after { animation-timeline: --edact4; }
-    .ed .reason-card:nth-child(5)::after { animation-timeline: --edact5; }
-    .ed .reason-card:nth-child(6)::after { animation-timeline: --edact6; }
-  }
-}
-
-/* --- 4 причины: пояснение загорается по словам, затем светлеет цитата --- */
-.ed .reason-back .reason-text { --rw-step: 30ms; --rw-time: .5s; }
-.ed .reason-card.is-on .rw-w {
-  animation: rwSweep var(--rw-time) cubic-bezier(.2,.7,.2,1) both;
-  animation-delay: calc(.1s + var(--i) * var(--rw-step));
-}
-@keyframes rwSweep {
-  from { color: var(--gray); }
-  45%  { color: var(--red); }
-  to   { color: var(--white); }
-}
-.ed .reason-card.is-on .reason-proof { transition-delay: .35s; }
-.ed .reason-card:hover .reason-proof { transition-delay: 0s; }
-@media (max-width: 760px) {
-  .ed .reason-back .reason-text { --rw-step: 20ms; --rw-time: .35s; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .ed .reason-card.is-on .rw-w { animation: none; }
-}
-
-/* --- 4 причины: рамка с кадром активной строки, только на широких экранах --- */
-.ed .reason-photo { display: none; }
-@media (min-width: 1280px) {
-  .ed .reasons-layout {
-    display: grid; grid-template-columns: minmax(0, 1fr) clamp(340px, 28vw, 440px);
-    column-gap: 48px; align-items: stretch; margin-top: 40px;
-  }
-  .ed .reasons-layout .reasons-grid { margin-top: 0; }
-  .ed .reasons-layout .reason-inner,
-  .ed .reasons-layout .reason-card:hover .reason-inner,
-  .ed .reasons-layout .reason-card.flipped .reason-inner {
-    grid-template-columns: 88px minmax(0, 1fr) minmax(0, 1.35fr); column-gap: 28px; padding: 32px 0;
-  }
-  .ed .reasons-layout .reason-front .reason-name { font-size: 24px; }
-  .ed .reasons-layout .reason-card.is-on .reason-name { transform: translateX(8px); }
-  .ed .reason-photo {
-    display: block; position: relative; margin: 0; min-height: 100%;
-    border-radius: var(--radius-md); overflow: hidden; background: var(--bg2);
-  }
-  .ed .reason-photo img {
-    position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
-    clip-path: inset(0 100% 0 0); z-index: 0;
-  }
-  .ed .reason-photo img.is-prev { clip-path: inset(0 0 0 0); z-index: 1; }
-  .ed .reason-photo img.is-show {
-    clip-path: inset(0 0 0 0); z-index: 2;
-    transition: clip-path .8s cubic-bezier(.65,0,.35,1);
-  }
-  .ed .reason-photo-count {
-    position: absolute; left: 16px; bottom: 14px; z-index: 3;
-    font-family: var(--font-display); font-size: 18px; font-weight: 600;
-    color: var(--white); text-shadow: 0 1px 12px rgba(0,0,0,0.6);
-    font-variant-numeric: tabular-nums;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .ed .reason-photo img.is-show { transition: none; }
-}

@@ -52,16 +52,16 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/inter-cyrillic-400.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="fonts/inter-latin-400.woff2" crossorigin />
 <link rel="stylesheet" href="base.css?v=68f73f7520" />
-<link rel="stylesheet" href="motion.css?v=92d04cc666" />
-<link rel="stylesheet" href="editorial.css?v=6e92bcba09" />
+<link rel="stylesheet" href="motion.css?v=ccb087613e" />
+<link rel="stylesheet" href="editorial.css?v=a9ae4fef66" />
 <link rel="stylesheet" href="consult.css?v=3aaf924e9f" />
 <link rel="stylesheet" href="process.css?v=5e892ab7b0" />
-<link rel="stylesheet" href="remote.css?v=54206f44e9" />
+<link rel="stylesheet" href="cares.css?v=305e768e1c" />
 <link rel="stylesheet" href="tech.css?v=bd268752db" />
 <link rel="stylesheet" href="sale.css?v=fcea544750" />
 <link rel="stylesheet" href="contacts.css?v=28f1342fba" />
 <link rel="stylesheet" href="hero.css?v=6ab4777c13" />
-<link rel="stylesheet" href="home.css?v=b26d17db7a" />
+<link rel="stylesheet" href="home.css?v=144f67c84b" />
 </head>
 <body class="city-bar-visible">
 <div class="city-bar" id="cityBar" role="navigation" aria-label="Выбор города">
@@ -190,9 +190,7 @@
   <div class="hero-bg"></div>
   <div class="wrapper hero-content">
     <p class="hero-eyebrow">Новосибирск</p>
-    <h1 class="hero-title" data-hero-title style="--hero-em: 11.3">
-      <em>Профессиональный</em>
-      ремонт в Новосибирске
+    <h1 class="hero-title" data-hero-title style="--hero-em: 11.3"><em>Профессиональный</em> <span class="white-line"><span class="word-white">ремонт</span><span class="rest-red"> в Новосибирске</span></span>
     </h1>
     <div class="hero-badges hero-after" id="heroBadges">
       <div class="hero-badge">
@@ -338,96 +336,135 @@
         </div>
       </div>
     </div>
-    <div>
-      <p class="section-tag" style="display:block;text-align:center">Почему мы</p>
-      <h2 class="section-title reasons-title">4 <span>причины</span> обратиться к нам</h2>
-      <div class="divider reasons-divider"><span></span><span></span></div>
-      <div class="reasons-layout">
-      <div class="reasons-grid">
-        <article class="reason-card anim">
-          <div class="reason-inner">
-            <div class="reason-face reason-front">
-              <div class="reason-num">1</div>
-              <div class="reason-icon">
-                <img src="images/about-1.webp" alt="Ремонт квартиры в Новосибирске — готовый объект" width="48" height="48" loading="lazy" />
-              </div>
-              <h3 class="reason-name">Смета не плывёт</h3>
+  </div>
+</section>
+<section class="cares" id="why" aria-labelledby="cares-title">
+  <div class="cares-track" id="caresTrack">
+    <div class="cares-stage">
+      <div class="wrapper">
+        <header class="cares-head">
+          <p class="section-tag">Почему мы</p>
+          <h2 class="cares-title" id="cares-title">Берём заботы <span>на себя</span></h2>
+          <div class="divider" aria-hidden="true"><span></span><span></span></div>
+          <p class="cares-lead">Обычно ремонт держится на заказчике: он ищет проектировщика, считает бюджет, ездит на объект. С нами из двенадцати таких забот <strong>у вас остаются три</strong>. Так мы ведём объекты <strong>с 2010 года — их уже больше 600</strong>.</p>
+        </header>
+
+        <div class="cares-bar" aria-hidden="true"><span>Берём на себя</span><b><span id="caresBarN">9</span> <small>из 12</small></b></div>
+        <div class="cares-grid">
+          <div>
+            <div class="cares-colh"><h3>Обычно ложится на вас</h3></div>
+            <ol class="cares-list" id="caresList">
+              <li class="care is-taken" data-ours>
+                <span class="care-t"><span class="care-tx">Найти, кто сделает проект</span></span>
+                <span class="chip" aria-hidden="true"><span class="you">вам</span><span class="we">мы</span></span>
+                <span class="care-n">Делаем технический проект сами или работаем по проекту от другой студии.</span>
+              </li>
+              <li class="care" data-yours>
+                <span class="care-t"><span class="care-tx">Утвердить планировку</span></span>
+                <span class="chip" aria-hidden="true"><span class="you">вам</span></span>
+                <span class="care-n">Решение за вами: проект делаем под ваши пожелания.</span>
+              </li>
+              <li class="care is-taken" data-ours data-proof>
+                <span class="care-t"><span class="care-tx">Уложиться в бюджет</span></span>
+                <span class="chip" aria-hidden="true"><span class="you">вам</span><span class="we">мы</span></span>
+                <span class="care-n">Цену фиксируем в договоре. Всё, что не учли, согласуем заранее.</span>
+                <blockquote class="m-proof"><span>«в сроки уложились, смета не поплыла»</span><cite>Евгения Юрчак, 2ГИС</cite></blockquote>
+              </li>
+              <li class="care is-taken" data-ours data-proof>
+                <span class="care-t"><span class="care-tx">Договориться о сроках</span></span>
+                <span class="chip" aria-hidden="true"><span class="you">вам</span><span class="we">мы</span></span>
+                <span class="care-n">Сроки прописываем в договоре.</span>
+                <blockquote class="m-proof"><span>«ремонт сделали ровно в обещанные сроки»</span><cite>Наталья Решетова, 2ГИС</cite></blockquote>
+              </li>
+              <li class="care is-taken" data-ours>
+                <span class="care-t"><span class="care-tx">Принять квартиру у застройщика</span></span>
+                <span class="chip" aria-hidden="true"><span class="you">вам</span><span class="we">мы</span></span>
+                <span class="care-n">Проверим квартиру со специалистом и зафиксируем недочёты до ремонта.</span>
+              </li>
+              <li class="care is-taken" data-ours>
+                <span class="care-t"><span class="care-tx">Закупить черновые материалы</span></span>
+                <span class="chip" aria-hidden="true"><span class="you">вам</span><span class="we">мы</span></span>
+                <span class="care-n">Закупаем и привозим на объект сами.</span>
+              </li>
+              <li class="care" data-yours>
+                <span class="care-t"><span class="care-tx">Выбрать чистовую отделку</span></span>
+                <span class="chip" aria-hidden="true"><span class="you">вам</span></span>
+                <span class="care-n">Выбираете вы, а мы помогаем подобрать и купить.</span>
+              </li>
+              <li class="care is-taken" data-ours>
+                <span class="care-t"><span class="care-tx">Найти бригаду и следить за ней</span></span>
+                <span class="chip" aria-hidden="true"><span class="you">вам</span><span class="we">мы</span></span>
+                <span class="care-n">На каждом этапе с вами на связи менеджер и прораб.</span>
+              </li>
+              <li class="care is-taken" data-ours>
+                <span class="care-t"><span class="care-tx">Ездить на объект</span></span>
+                <span class="chip" aria-hidden="true"><span class="you">вам</span><span class="we">мы</span></span>
+                <span class="care-n">Присылаем фото и видео с объекта.</span>
+              </li>
+              <li class="care is-taken" data-ours>
+                <span class="care-t"><span class="care-tx">Прилетать из другого города</span></span>
+                <span class="chip" aria-hidden="true"><span class="you">вам</span><span class="we">мы</span></span>
+                <span class="care-n">Ведём ремонт дистанционно, вопросы решаем на связи.</span>
+              </li>
+              <li class="care is-taken" data-ours>
+                <span class="care-t"><span class="care-tx">Заказать мебель и технику</span></span>
+                <span class="chip" aria-hidden="true"><span class="you">вам</span><span class="we">мы</span></span>
+                <span class="care-n">Комплектуем квартиру с партнёрами: мебель, техника, текстиль.</span>
+              </li>
+              <li class="care" data-yours>
+                <span class="care-t"><span class="care-tx">Принять работу</span></span>
+                <span class="chip" aria-hidden="true"><span class="you">вам</span></span>
+                <span class="care-n">По акту, с гарантией 24 месяца.</span>
+              </li>
+            </ol>
+          </div>
+
+          <div class="ours-col" aria-hidden="true">
+            <div class="cares-colh cares-colh--ours"><h3>С «Азбукой Ремонта» — на нас</h3></div>
+            <ol class="ours">
+              <li class="our our-slot"><div class="our-body"><span class="our-t">Технический проект</span><span class="our-n">Свой или от другой студии</span></div><span class="our-mark"><svg viewBox="0 0 16 16" focusable="false"><path d="M3 8.5l3.2 3L13 4.5"/></svg></span></li>
+              <li class="our our-empty"></li>
+              <li class="our our-slot"><div class="our-body"><span class="our-t">Смета не плывёт</span><span class="our-n">Цена зафиксирована в договоре</span></div><span class="our-mark"><svg viewBox="0 0 16 16" focusable="false"><path d="M3 8.5l3.2 3L13 4.5"/></svg></span></li>
+              <li class="our our-slot"><div class="our-body"><span class="our-t">Сдаём в срок</span><span class="our-n">Сроки — пункт договора</span></div><span class="our-mark"><svg viewBox="0 0 16 16" focusable="false"><path d="M3 8.5l3.2 3L13 4.5"/></svg></span></li>
+              <li class="our our-slot"><div class="our-body"><span class="our-t">Приёмка квартиры</span><span class="our-n">Со специалистом, до ремонта</span></div><span class="our-mark"><svg viewBox="0 0 16 16" focusable="false"><path d="M3 8.5l3.2 3L13 4.5"/></svg></span></li>
+              <li class="our our-slot"><div class="our-body"><span class="our-t">Черновые материалы</span><span class="our-n">Закупаем и привозим сами</span></div><span class="our-mark"><svg viewBox="0 0 16 16" focusable="false"><path d="M3 8.5l3.2 3L13 4.5"/></svg></span></li>
+              <li class="our our-empty"></li>
+              <li class="our our-slot"><div class="our-body"><span class="our-t">Прораб и менеджер</span><span class="our-n">На связи на каждом этапе</span></div><span class="our-mark"><svg viewBox="0 0 16 16" focusable="false"><path d="M3 8.5l3.2 3L13 4.5"/></svg></span></li>
+              <li class="our our-slot"><div class="our-body"><span class="our-t">Фото и видео с объекта</span><span class="our-n">Ход работ видно без поездок</span></div><span class="our-mark"><svg viewBox="0 0 16 16" focusable="false"><path d="M3 8.5l3.2 3L13 4.5"/></svg></span></li>
+              <li class="our our-slot"><div class="our-body"><span class="our-t">Ремонт на расстоянии</span><span class="our-n">Для заказчиков из других городов</span></div><span class="our-mark"><svg viewBox="0 0 16 16" focusable="false"><path d="M3 8.5l3.2 3L13 4.5"/></svg></span></li>
+              <li class="our our-slot"><div class="our-body"><span class="our-t">Мебель и техника</span><span class="our-n">Комплектуем с партнёрами</span></div><span class="our-mark"><svg viewBox="0 0 16 16" focusable="false"><path d="M3 8.5l3.2 3L13 4.5"/></svg></span></li>
+              <li class="our our-empty"></li>
+            </ol>
+          </div>
+
+          <div class="cares-side">
+            <div class="tally" aria-hidden="true">
+              <div class="tally-n" id="caresN">9</div>
+              <p class="tally-t">из <b>12 забот</b> берём на себя</p>
             </div>
-            <div class="reason-face reason-back">
-              <div class="reason-back-num">1</div>
-              <p class="reason-name reason-back-name">Смета не плывёт</p>
-              <div class="reason-copy">
-                <p class="reason-text">Цену фиксируем в договоре. Всё, что не учли в смете, согласуем с вами заранее.</p>
-                <blockquote class="reason-proof"><span>«в сроки уложились, смета не поплыла»</span><cite class="reason-cite"><span>Евгения Юрчак</span>, 2ГИС</cite></blockquote>
-              </div>
+            <div class="proof-wrap" aria-hidden="true">
+              <figure class="proof" id="caresProof">
+                <div class="proof-i lead" data-row="-1"><span class="rating"><b>4,9</b><span class="stars">★★★★★</span><small>2ГИС</small></span><p>Что пишут заказчики о каждой из этих забот — ниже по мере прокрутки.</p></div>
+                <div class="proof-i" data-row="2"><p class="proof-q">«в сроки уложились, смета не поплыла»</p><cite><span>Евгения Юрчак</span> · 2ГИС</cite></div>
+                <div class="proof-i" data-row="3"><p class="proof-q">«ремонт сделали ровно в обещанные сроки»</p><cite><span>Наталья Решетова</span> · 2ГИС</cite></div>
+              </figure>
+            </div>
+            <div class="stamp" aria-hidden="true">
+              <svg viewBox="0 0 150 150" focusable="false">
+                <defs><path id="caresRing" d="M75 75 m-56 0 a56 56 0 1 1 112 0 a56 56 0 1 1 -112 0"/></defs>
+                <circle cx="75" cy="75" r="70" fill="none" stroke="currentColor" stroke-width="2"/>
+                <circle cx="75" cy="75" r="44" fill="none" stroke="currentColor" stroke-width="1.2"/>
+                <text class="stamp-ring"><textPath href="#caresRing" startOffset="0" textLength="350" lengthAdjust="spacing">Прописано в договоре · Азбука Ремонта ·</textPath></text>
+                <text class="stamp-num" x="75" y="70" text-anchor="middle">24</text>
+                <text class="stamp-sub" x="75" y="88" text-anchor="middle">МЕСЯЦА</text>
+              </svg>
+            </div>
+            <div class="cares-foot">
+              <button class="btn btn-red" type="button" onclick="openPopup('Главная — Берём заботы — Получить смету за 24 часа')">Получить смету за 24 часа</button>
             </div>
           </div>
-        </article>
-        <article class="reason-card anim anim-d1">
-          <div class="reason-inner">
-            <div class="reason-face reason-front">
-              <div class="reason-num">2</div>
-              <div class="reason-icon">
-                <img src="images/about-2.webp" alt="Отделка стен и потолков под ключ" width="48" height="48" loading="lazy" />
-              </div>
-              <h3 class="reason-name">Сдаём в срок</h3>
-            </div>
-            <div class="reason-face reason-back">
-              <div class="reason-back-num">2</div>
-              <p class="reason-name reason-back-name">Сдаём в срок</p>
-              <div class="reason-copy">
-                <p class="reason-text">Сроки прописываем в договоре, а ход работ показываем на фото и видео с объекта.</p>
-                <blockquote class="reason-proof"><span>«ремонт сделали ровно в обещанные сроки»</span><cite class="reason-cite"><span>Наталья Решетова</span>, 2ГИС</cite></blockquote>
-              </div>
-            </div>
-          </div>
-        </article>
-        <article class="reason-card anim anim-d2">
-          <div class="reason-inner">
-            <div class="reason-face reason-front">
-              <div class="reason-num">3</div>
-              <div class="reason-icon">
-                <img src="images/about-3.webp" alt="Укладка напольного покрытия — Азбука Ремонта" width="48" height="48" loading="lazy" />
-              </div>
-              <h3 class="reason-name"><span class="counter" data-target="600">600</span> объектов с 2010 года</h3>
-            </div>
-            <div class="reason-face reason-back">
-              <div class="reason-back-num">3</div>
-              <p class="reason-name reason-back-name">600 объектов с 2010 года</p>
-              <div class="reason-copy">
-                <p class="reason-text">Каждый объект — с фотоотчётом и актом приёмки.</p>
-                <blockquote class="reason-proof"><span>«нам показали реальные реализованные объекты, а не просто картинки»</span><cite class="reason-cite"><span>Nikita Iron</span>, 2ГИС</cite></blockquote>
-              </div>
-            </div>
-          </div>
-        </article>
-        <article class="reason-card anim anim-d3">
-          <div class="reason-inner">
-            <div class="reason-face reason-front">
-              <div class="reason-num">4</div>
-              <div class="reason-icon">
-                <img src="images/about-4.webp" alt="Монтаж сантехники и электрики при ремонте" width="48" height="48" loading="lazy" />
-              </div>
-              <h3 class="reason-name">От проекта до мебели</h3>
-            </div>
-            <div class="reason-face reason-back">
-              <div class="reason-back-num">4</div>
-              <p class="reason-name reason-back-name">От проекта до мебели</p>
-              <div class="reason-copy">
-                <p class="reason-text">Ведём объект под ключ: от технического проекта до чистовой отделки и установки мебели.</p>
-                <blockquote class="reason-proof"><span>«всем, кто ищет комплексный подход»</span><cite class="reason-cite"><span>Мария Рубшева</span>, 2ГИС</cite></blockquote>
-              </div>
-            </div>
-          </div>
-        </article>
-      </div>
-        <figure class="reason-photo" aria-hidden="true">
-          <img class="is-show" src="images/reasons/reason-smeta.webp" alt="" width="782" height="1400" loading="lazy" />
-          <img src="images/reasons/reason-process.webp" alt="" width="1050" height="1400" loading="lazy" />
-          <img src="images/portfolio/portfolio-20.webp" alt="" width="950" height="1267" loading="lazy" />
-          <img src="images/portfolio/portfolio-01.webp" alt="" width="950" height="1267" loading="lazy" />
-          <figcaption class="reason-photo-count"><span id="reasonPhotoNum">1</span> / 4</figcaption>
-        </figure>
+        </div>
+        <p class="cares-sr">С «Азбукой Ремонта» 9 из 12 забот берём на себя: технический проект, смета не плывёт, сдаём в срок, приёмка квартиры, черновые материалы, прораб и менеджер, фото и видео с объекта, ремонт на расстоянии, мебель и техника. Вам остаётся: утвердить планировку, выбрать чистовую отделку, принять работу.</p>
       </div>
     </div>
   </div>
@@ -711,31 +748,6 @@
         <div class="process-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="56" height="56"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg></div>
         <h3 class="process-step-title">Сдача объекта</h3>
         <p class="process-step-text">Финальный контроль качества по итоговому акту приёмки работ. Вручаем гарантийный талон на 24 месяца.</p>
-      </div>
-    </div>
-  </div>
-</section>
-<section class="remote" id="remote" aria-labelledby="remote-title">
-  <div class="wrapper">
-    <p class="section-tag" style="display:block;text-align:center">Ремонт без вашего участия</p>
-    <h2 class="section-title remote-title" id="remote-title">Берём заботы <span>на себя</span></h2>
-    <div class="divider reasons-divider"><span></span><span></span></div>
-    <p class="remote-lead">Ведём ремонт для иногородних заказчиков и для тех, у кого нет времени заниматься объектом: вы на связи с нами дистанционно, а материалы и комплектацию мы берём на себя.</p>
-    <div class="remote-grid" role="list">
-      <div class="remote-card anim" role="listitem">
-        <div class="remote-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="56" height="56" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/><path d="M9 8.5a4 4 0 016 0"/><path d="M10.5 11a2 2 0 013 0"/></svg></div>
-        <h3 class="remote-card-title">Дистанционно</h3>
-        <p class="remote-card-text">Делаем ремонт для иногородних заказчиков. Все вопросы решаем дистанционно и держим вас в курсе на каждом этапе.</p>
-      </div>
-      <div class="remote-card anim anim-d1" role="listitem">
-        <div class="remote-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="56" height="56" aria-hidden="true"><path d="M21 8l-9-5-9 5 9 5 9-5z"/><path d="M3 8v8l9 5 9-5V8"/><path d="M12 13v8"/></svg></div>
-        <h3 class="remote-card-title">Материалы</h3>
-        <p class="remote-card-text">Черновые материалы закупаем сами, а чистовые помогаем подобрать и купить.</p>
-      </div>
-      <div class="remote-card anim anim-d2" role="listitem">
-        <div class="remote-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="56" height="56" aria-hidden="true"><path d="M4 18v-5a2 2 0 012-2h12a2 2 0 012 2v5"/><path d="M2 18h20"/><path d="M6 11V8a2 2 0 012-2h8a2 2 0 012 2v3"/><path d="M5 18v2M19 18v2"/></svg></div>
-        <h3 class="remote-card-title">Под ключ с партнёрами</h3>
-        <p class="remote-card-text">Помогаем укомплектовать квартиру вместе с партнёрами: мягкая и корпусная мебель, бытовая техника, текстиль.</p>
       </div>
     </div>
   </div>
@@ -1136,18 +1148,11 @@
     </svg>
   </button>
 </div>
-<div class="cookie-banner cookie-banner--hidden" id="cookieBanner" role="region" aria-label="Использование cookie">
-  <span class="cookie-banner__text">Используем cookie для статистики посещений. Подробнее — в <a href="politika-konfidencialnosti/">политике конфиденциальности</a>.</span>
-  <div class="cookie-banner__actions">
-    <button class="cookie-banner__btn" id="cookieAccept" type="button">Принять</button>
-    <button class="cookie-banner__btn cookie-banner__btn--alt" id="cookieDecline" type="button">Отклонить</button>
-  </div>
-</div>
 <script>
 /* Город этого сайта: объект нужен base.js (заявки, сообщение об ошибке) и home.js (заголовок первого экрана) */
 window.AZ_CITY = {"key":"novosibirsk","name":"Новосибирск","phone":"8 (923) 141-01-54","phoneHref":"tel:+79231410154","heroLine2":"ремонт в Новосибирске"};
 </script>
-<script src="base.js?v=d3aeeb7558"></script>
+<script src="base.js?v=df81b58898"></script>
 <script>
 /* Данные города для home.js: настройки отзывов и запасные отзывы на случай, если reviews*.json не загрузится */
 window.AZ_HOME = {
@@ -1187,14 +1192,14 @@ fallbackConfig: { total: 27, avg: 5.0, url: 'https://2gis.ru/novosibirsk/geo/700
   ]
 };
 </script>
-<script src="home.js?v=a11fb29918"></script>
+<script src="home.js?v=a8b0af10c3"></script>
 <script src="vendor/gsap.min.js?v=2d26f4c060"></script>
 <script src="vendor/ScrollTrigger.min.js?v=489bcf6d9c"></script>
 <script src="vendor/lenis.min.js?v=44dcd10f2a"></script>
-<script src="motion.js?v=168eeb9594"></script>
+<script src="motion.js?v=22724fca1b"></script>
 <script src="consult.js?v=85972f6dc2"></script>
 <script src="process.js?v=32cf3b3d4b"></script>
-<script src="remote.js?v=b4dbf13bb2"></script>
+<script src="cares.js?v=d5f3f59cea"></script>
 <script src="tech.js?v=2969d51a7e"></script>
 <script src="sale.js?v=b17f9fe555"></script>
 <script src="contacts.js?v=5ef3a6f5b8"></script>

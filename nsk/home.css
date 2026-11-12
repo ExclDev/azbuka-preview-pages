@@ -215,81 +215,6 @@ html.scroll-locked { overflow-y: hidden; }
       transition: none !important;
     }
 }
-.reasons-title { text-align: center; margin-bottom: 8px; }
-.reasons-divider { justify-content: center; }
-.reasons-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2px; margin-top: 40px;
-  perspective: 1600px; 
-}
-.reason-card {
-  position: relative;
-  min-height: 290px;
-  background: transparent;
-  perspective: 1200px;
-}
-.reason-inner {
-  position: relative;
-  width: 100%; height: 100%;
-  min-height: 290px;
-  transition: transform .7s cubic-bezier(.4,.2,.2,1);
-  transform-style: preserve-3d;
-}
-.reason-card:hover .reason-inner { transform: translateY(-6px) rotateY(180deg); }
-.reason-card.flipped .reason-inner { transform: translateY(-6px) rotateY(180deg); }
-.reason-face {
-  position: absolute; inset: 0;
-  display: flex; flex-direction: column;
-  padding: 32px;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
-}
-.reason-front {
-  background: var(--bg2);
-  border-top: 2px solid transparent;
-  transition: border-color .3s;
-}
-.reason-card:hover .reason-front { border-top-color: var(--red); }
-.reason-back {
-  background: linear-gradient(150deg, #2a1413 0%, #1a1010 100%);
-  border-top: 2px solid var(--red);
-  transform: rotateY(180deg);
-  justify-content: center;
-}
-.reason-back-num {
-  position: absolute; top: 16px; right: 22px;
-  font-family: var(--font-display); font-size: 56px; font-weight: 700;
-  color: rgba(232,32,26,0.18); line-height: 1; pointer-events: none;
-}
-.reason-back-name { color: #fff; margin-bottom: 14px; }
-.reason-back-name span, .reason-back-name { position: relative; }
-.reason-back .reason-text { color: var(--gray-light); font-size: 13px; line-height: 1.65; }
-.reason-num {
-  font-family: var(--font-display); font-size: 64px; font-weight: 700;
-  color: rgba(232,32,26,0.12); line-height: 1; margin-bottom: 16px;
-}
-.reason-icon {
-  width: 60px; height: 60px;
-  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-  background: rgba(232,32,26,0.10);
-  border: 1px solid rgba(232,32,26,0.35);
-  border-radius: var(--radius-md);
-  overflow: hidden; 
-  margin-bottom: 20px;
-}
-.reason-icon img {
-  width: 100%; height: 100%;
-  object-fit: cover;               
-  border-radius: var(--radius-md); 
-}
-.reason-name {
-  font-family: var(--font-display); font-size: 18px; font-weight: 600;
-  text-transform: uppercase; margin-bottom: 12px;
-}
-.reason-text { font-size: 13px; color: var(--gray); line-height: 1.6; }
 .consult {
   background: var(--bg2);
   display: flex;
@@ -414,15 +339,17 @@ html.scroll-locked { overflow-y: hidden; }
 .hero-title .rest-red { display: inline; color: var(--red); }
 .type-caret {
   display: inline-block;
+  position: relative;
   width: 5px;
-  height: 0.85em;
-  background: var(--red);
+  height: 0;                  /* курсор не раздувает строку: высота H1 при печати = высота статичной разметки */
+  line-height: 0;              /* нулевая коробка стоит на 0,45em выше базовой линии; ::before компенсирует это смещением -0,6em */
+  vertical-align: baseline;
   animation: caretBlink .8s step-end infinite;
-  vertical-align: text-bottom;
   margin-left: 2px;
 }
-.hero-title em .type-caret { background: #ffffff; }
-.hero-title .white-line .type-caret { background: var(--red); }
+.type-caret::before { content: ""; position: absolute; left: 0; bottom: -0.6em; width: 100%; height: 0.85em; background: var(--red); }
+.hero-title em .type-caret::before { background: #ffffff; }
+.hero-title .white-line .type-caret::before { background: var(--red); }
 .type-caret.done { animation: none; opacity: 0; width: 0; margin: 0; }
 /* Плашки и кнопки видны всегда: до конца печати заголовка они только сдвинуты вниз (html.hero-seq ставит home.js, когда успевает запустить печать), без opacity:0 */
 .hero-after { transition: transform .6s ease; }
@@ -437,11 +364,6 @@ html.scroll-locked { overflow-y: hidden; }
   .section-tag { font-size: 13px; letter-spacing: 4px; }
   .about-top { gap: 120px; margin-bottom: 120px; }
   .about-text { font-size: 17px; }
-  .reason-card { padding: 48px 36px; }
-  .reason-num { font-size: 88px; }
-  .reason-icon img { width: 100%; height: 100%; }
-  .reason-name { font-size: 22px; }
-  .reason-text { font-size: 15px; }
   .consult-form { padding: 80px 70px; }
   .consult-form-title { font-size: 52px; }
   .process-icon { width: 72px; height: 72px; }
@@ -462,10 +384,6 @@ html.scroll-locked { overflow-y: hidden; }
   .hero-badge-text { font-size: 15px; }
   .section-title { font-size: 58px; }
   .about-top { gap: 100px; margin-bottom: 100px; }
-  .reason-card { padding: 44px 32px; }
-  .reason-num { font-size: 80px; }
-  .reason-icon img { width: 100%; height: 100%; }
-  .reason-name { font-size: 20px; }
   .consult-form { padding: 70px 60px; }
   .consult-form-title { font-size: 46px; }
   .process-icon { width: 68px; height: 68px; }
@@ -491,8 +409,6 @@ html.scroll-locked { overflow-y: hidden; }
   .hero-badges { gap: 14px; }
   .hero-badge { padding: 10px 16px; }
   .about-top { gap: 48px; margin-bottom: 60px; }
-  .reasons-grid { grid-template-columns: repeat(2, 1fr); }
-  .reason-card { padding: 28px 22px; }
   .consult-inner { grid-template-columns: 1fr; }
   .consult-photos { height: 420px; }
   .consult-form { padding: 48px 40px; }
@@ -505,7 +421,6 @@ html.scroll-locked { overflow-y: hidden; }
   .about-top { grid-template-columns: 1fr; gap: 40px; }
   .about-img::after { display: none; }
   .about-img img { aspect-ratio: 16/9; max-height: none; object-fit: cover; }
-  .reasons-grid { grid-template-columns: 1fr 1fr; }
   .consult-inner { grid-template-columns: 1fr; }
   .consult-photos { height: 380px; }
   .process-steps { grid-template-columns: 1fr 1fr; }
@@ -530,9 +445,6 @@ html.scroll-locked { overflow-y: hidden; }
   .about-text { font-size: 14px; }
   .about-btns { flex-direction: column; gap: 10px; }
   .about-btns .btn { justify-content: center; }
-  .reasons-grid { grid-template-columns: 1fr; gap: 16px; }
-  .reason-card { padding: 28px 20px; }
-  .reason-num { font-size: 56px; }
   .consult-photos { height: 300px; }
   .consult-form { padding: 40px 20px; }
   .consult-form-title { font-size: clamp(24px, 6vw, 34px); margin-bottom: 24px; }
@@ -567,8 +479,6 @@ html.scroll-locked { overflow-y: hidden; }
   .hero-badge { padding: 8px 12px; }
   .hero-badge img { width: 26px; height: 26px; }
   .hero-badge-text { font-size: 12px; }
-  .reason-num { font-size: 48px; }
-  .reason-name { font-size: 16px; }
   .contacts-icon { width: 28px; height: 28px; }
 }
 /* дубль .btn-cta::after из base.css; анимация подключается там на классе .is-live */
@@ -1404,68 +1314,6 @@ html.scroll-locked { overflow-y: hidden; }
 }
 @media (max-width: 480px) {
   .av-card { width: min(78vw, 300px); height: min(62vh, 420px); }
-}
-.remote { padding: var(--section-pad) 0; background: var(--bg); }
-.remote-title { text-align: center; margin-bottom: 8px; }
-.remote-lead {
-  max-width: 720px; margin: 0 auto; text-align: center;
-  font-size: 15px; line-height: 1.7; color: var(--gray-light);
-}
-.remote-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px; margin-top: 48px;
-}
-.remote-card {
-  position: relative;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-top: 2px solid transparent;
-  border-radius: var(--radius-md);
-  padding: 36px 30px;
-  transition: transform .4s cubic-bezier(.2,.7,.2,1), border-color .3s ease, box-shadow .4s ease;
-}
-.remote-card:hover {
-  transform: translateY(-8px);
-  border-top-color: var(--red);
-  box-shadow: 0 20px 48px rgba(0,0,0,0.45);
-}
-.remote-icon {
-  width: 64px; height: 64px; margin-bottom: 20px;
-  display: flex; align-items: center; justify-content: center;
-  background: rgba(232,32,26,0.1);
-  border: 1px solid rgba(232,32,26,0.35);
-  border-radius: var(--radius-md);
-  transition: background .4s ease, border-color .4s ease, transform .4s cubic-bezier(.2,.7,.2,1);
-}
-.remote-icon svg { width: 32px; height: 32px; color: var(--red); transition: color .4s ease; }
-.remote-card:hover .remote-icon {
-  background: var(--red); border-color: var(--red);
-  transform: rotate(-6deg) scale(1.05);
-}
-.remote-card:hover .remote-icon svg { color: #fff; }
-.remote-card-title {
-  font-family: var(--font-display); font-size: 18px; font-weight: 600;
-  text-transform: uppercase; margin-bottom: 12px; color: var(--white);
-  transition: color .3s ease;
-}
-.remote-card:hover .remote-card-title { color: var(--red); }
-.remote-card-text { font-size: 13px; color: var(--gray); line-height: 1.6; }
-@media (max-width: 960px) {
-  .remote-grid { grid-template-columns: 1fr; }
-}
-@media (max-width: 768px) {
-  .remote-card { padding: 28px 20px; }
-}
-@media (min-width: 2560px) {
-  .remote-lead { font-size: 18px; }
-  .remote-icon { width: 72px; height: 72px; }
-  .remote-card-title { font-size: 22px; }
-  .remote-card-text { font-size: 15px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .remote-card, .remote-icon, .remote-icon svg { transition: none; }
-  .remote-card:hover, .remote-card:hover .remote-icon { transform: none; }
 }
 @media (min-width: 1366px) and (max-width: 1599px) {
   .header-right .btn { padding: 12px 16px; }

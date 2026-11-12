@@ -142,7 +142,7 @@ html.lenis, html.lenis body { height: auto; }
 .motion-on .hero-ctas.show > *:nth-child(2) { transition-delay: .1s; }
 
 /* --- Наклон карточек за курсором --- */
-.motion-on .remote-card, .motion-on .process-step { transform-style: preserve-3d; will-change: transform; }
+.motion-on .process-step { transform-style: preserve-3d; will-change: transform; }
 
 /* --- Линия порядка работы --- */
 .motion-on .process-steps { position: relative; }

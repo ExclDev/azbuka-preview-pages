@@ -16,19 +16,10 @@
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduce || !window.gsap || !window.ScrollTrigger) {
-    /* Без GSAP класс ed-no-hint не ставится, и плашка «Рассчитать стоимость»
-       закрывала бы строки «Почему мы». Та же логика, что у ScrollTrigger ниже:
-       пока блок на экране, плашка спрятана. */
-    var hintGrid = document.querySelector('.reasons-grid');
-    if (hintGrid && 'IntersectionObserver' in window) {
-      new IntersectionObserver(function (en) {
-        root.classList.toggle('ed-no-hint', en[0].isIntersecting);
-      }).observe(hintGrid);
-    }
     bail(); return;
   }
 
-  /* Прогресс, подсветка «4 причин» и надпись в подвале: где есть animation-timeline, их ведёт CSS (motion.css, editorial.css),
+  /* Прогресс и надпись в подвале: где есть animation-timeline, их ведёт CSS (motion.css, editorial.css),
      где нет (Safari до 26, Firefox) — ScrollTrigger, как раньше. */
   var cssTl = !!(window.CSS && CSS.supports && CSS.supports('animation-timeline: view()'));
   clearTimeout(window.__moFailsafe);
@@ -239,77 +230,6 @@
       gsap.fromTo(batch, { '--ln': 0 }, { '--ln': 1, duration: 1.4, ease: 'expo.inOut', stagger: 0.09 });
     }
   });
-
-  /* ---------------------------------------------------------
-     4 причины: цифры выезжают из-под маски, активная строка
-     подсвечивается, пока проходит середину экрана
-     --------------------------------------------------------- */
-  var rGrid = $('.reasons-grid');
-  var rCards = $$('.reason-card');
-  if (rGrid && rCards.length) {
-    var rPhotos = $$('.reason-photo img');
-    var rPhotoNum = document.getElementById('reasonPhotoNum');
-    var rPhotoCur = 0;
-    /* скрытые шторкой кадры браузер сам не грузит: подгружаем заранее, иначе смена кадра покажет пустоту */
-    ScrollTrigger.create({
-      trigger: rGrid, start: 'top 200%', once: true,
-      onEnter: function () { rPhotos.forEach(function (im) { im.loading = 'eager'; }); }
-    });
-    function showReasonPhoto(i) {
-      if (i === rPhotoCur || !rPhotos[i]) return;
-      rPhotos.forEach(function (im) { im.classList.remove('is-prev'); });
-      rPhotos[rPhotoCur].classList.remove('is-show');
-      rPhotos[rPhotoCur].classList.add('is-prev');
-      rPhotos[i].classList.add('is-show');
-      rPhotoCur = i;
-      if (rPhotoNum) rPhotoNum.textContent = i + 1;
-    }
-    rCards.forEach(function (card, idx) {
-      var num = $('.reason-num', card);
-      if (!num) return;
-      num.innerHTML = '<span class="mo-digit">' + num.textContent.trim() + '</span>';
-      var dg = num.firstChild;
-      gsap.set(dg, { yPercent: 110 });
-      ScrollTrigger.create({
-        trigger: card, start: 'top 88%', once: true,
-        onEnter: function () { gsap.to(dg, { yPercent: 0, duration: 1.1, ease: 'expo.out', delay: 0.15 }); }
-      });
-      var rt = $('.reason-back .reason-text', card);
-      if (rt) {
-        rt.innerHTML = rt.textContent.trim().split(/\s+/).map(function (w, i) {
-          return '<span class="rw-w" style="--i:' + i + '">' + w + '</span>';
-        }).join(' ');
-      }
-      var cnt = $('.counter[data-target]', card);
-      var cntTween = null;
-      ScrollTrigger.create({
-        trigger: card, start: 'top 58%', end: 'bottom 58%',
-        onUpdate: cssTl ? null : function (self) { card.style.setProperty('--act', self.progress.toFixed(3)); },
-        onToggle: function (self) {
-          card.classList.toggle('is-on', self.isActive);
-          if (self.isActive) showReasonPhoto(idx);
-          if (!cnt) return;
-          if (self.isActive && !cntTween) {
-            var c = { v: 0 };
-            cntTween = gsap.to(c, {
-              v: parseInt(cnt.getAttribute('data-target'), 10), duration: 1.2, ease: 'power2.out',
-              onUpdate: function () { cnt.textContent = Math.round(c.v); }
-            });
-          } else if (!self.isActive && cntTween) {
-            cntTween.progress(1);   /* в погашенной строке всегда итоговое число */
-          }
-        }
-      });
-    });
-    ScrollTrigger.create({
-      trigger: rGrid, start: 'top bottom', end: 'bottom top',
-      onToggle: function (self) { root.classList.toggle('ed-no-hint', self.isActive); }
-    });
-    ScrollTrigger.create({
-      trigger: rGrid, start: 'top 58%', end: 'bottom 58%',
-      onToggle: function (self) { rGrid.classList.toggle('ed-spot', self.isActive); }
-    });
-  }
 
   /* ---------------------------------------------------------
      5. «О компании»: шторка фото, рамка, текст лесенкой
@@ -629,7 +549,7 @@
       dx(e.clientX); dy(e.clientY); rx(e.clientX); ry(e.clientY);
       var t = e.target;
       var media = t.closest && t.closest('.av-card, .ed-card, .consult-photo:not(.consult-photo-all)');
-      var link = !media && t.closest && t.closest('a, button, input, select, textarea, label, [role="button"], .reason-card, .consult-photo-all');
+      var link = !media && t.closest && t.closest('a, button, input, select, textarea, label, [role="button"], .consult-photo-all');
       var next = media ? (media.classList.contains('av-card') ? 'play' : 'zoom') : link ? 'link' : '';
       if (next !== mode) {
         mode = next;

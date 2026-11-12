@@ -1,0 +1,78 @@
+/* legal.css: юридические страницы (политика, соглашение) и 404. Подключается только на них, после base.css.
+   Колонка текста 740 px у левого края сетки сайта (под логотипом шапки), справа от 1280 px прилипающее оглавление.
+   Шапка и подвал общие, на всю ширину. Цвета и шрифты через токены base.css. */
+:root { --lg-top: 108px; }                 /* панель города 36 + шапка 72, как --sv-top у страниц услуг */
+@media (max-width: 480px)  { :root { --lg-top: 96px; } }
+@media (min-width: 1920px) { :root { --lg-top: 116px; } }
+
+.lg { padding: calc(var(--lg-top) + clamp(32px, 5vw, 64px)) 0 clamp(56px, 8vw, 96px); }
+.lg-grid { display: grid; grid-template-columns: minmax(0, 740px); gap: 0 64px; align-items: start; }
+.lg-doc { min-width: 0; color: var(--gray-light); font: 400 16px/1.7 var(--font-body); -webkit-font-smoothing: antialiased; }
+@media (min-width: 768px) { .lg-doc { font-size: 17px; } }
+
+.lg-doc .eyebrow { margin-bottom: 16px; font-size: 12px; font-weight: 600; letter-spacing: 5px; text-transform: uppercase; color: var(--red-text); }
+.lg-doc h1 {
+  margin-bottom: 18px; font-family: var(--font-display); font-weight: 600; text-transform: uppercase; color: var(--white);
+  font-size: clamp(24px, 6.6vw + 4px, 44px); line-height: 1.12;   /* до 44 px, как было: «КОНФИДЕНЦИАЛЬНОСТИ» на колонке 740 не переносится */
+  overflow-wrap: break-word; hyphens: auto; -webkit-hyphens: auto;
+}
+.lg-doc .updated { margin-bottom: 40px; font-size: 14px; color: var(--gray); }
+
+.lg-doc h2 {
+  display: flex; gap: 12px; align-items: baseline; margin: 44px 0 14px; scroll-margin-top: calc(var(--lg-top) + 16px);
+  font-family: var(--font-display); font-weight: 600; text-transform: uppercase; color: var(--white);
+  font-size: clamp(19px, 2.6vw, 26px); line-height: 1.25; overflow-wrap: break-word;
+}
+.lg-doc h2 .num { flex: none; font-size: .8em; color: var(--red-text); }
+.lg-doc h3 { margin: 26px 0 10px; font: 600 17px/1.4 var(--font-body); color: var(--white); }
+.lg-doc p { margin-bottom: 14px; }
+.lg-doc ul, .lg-doc ol { margin: 0 0 16px 22px; }
+.lg-doc ul { list-style: disc; }
+.lg-doc li { margin-bottom: 8px; }
+.lg-doc a { color: var(--red-text); text-decoration: underline; text-underline-offset: 3px; overflow-wrap: anywhere; }
+.lg-doc a:hover { color: var(--white); }
+.lg-doc strong { color: var(--white); font-weight: 600; }
+.lg-doc code { padding: 1px 6px; border-radius: 4px; background: var(--bg3); font-size: .92em; }
+
+/* Реквизитов пока нет: плашки «ВПИСАТЬ …» намеренно заметные, страница не должна уехать на прод, пока хоть одна осталась */
+.lg-doc .todo {
+  display: inline-block; padding: 1px 8px; border: 1px dashed var(--red-text); border-radius: var(--radius-sm);
+  background: rgba(232,32,26,.16); color: var(--red-text); font-weight: 600; font-size: .94em;
+}
+.lg-doc .note {
+  margin: 26px 0; padding: 18px 20px; border: 1px solid var(--border); border-left: 3px solid var(--red);
+  border-radius: 10px; background: var(--bg2); font-size: 15px;
+}
+.lg-doc .note p:last-child { margin-bottom: 0; }
+
+/* Оглавление: от 1280 px справа, прилипает под шапкой */
+.lg-toc { display: none; }
+@media (min-width: 1280px) {
+  .lg-grid { grid-template-columns: minmax(0, 740px) 260px; }
+  .lg-toc:not([hidden]) {
+    display: block; position: sticky; top: calc(var(--lg-top) + 24px); padding-left: 20px; border-left: 1px solid var(--border);
+    font-size: 14px; line-height: 1.4;
+  }
+  .lg-toc p { margin: 0 0 12px; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--gray); }
+  .lg-toc ol { display: grid; gap: 2px; list-style: none; margin: 0; padding: 0; }
+  .lg-toc a { display: flex; gap: 10px; padding: 6px 0; color: var(--gray-light); transition: color .2s; }
+  .lg-toc a b { flex: none; min-width: 1.4em; font-weight: 600; color: var(--gray); }
+  .lg-toc a:hover { color: var(--white); }
+  .lg-toc a[aria-current="true"] { color: var(--white); }
+  .lg-toc a[aria-current="true"] b { color: var(--red-text); }
+}
+
+/* 404 */
+.lg-404 { display: grid; place-items: center; min-height: 100svh; padding-bottom: clamp(56px, 8vw, 96px); text-align: center; }
+.lg-404 .wrapper { width: 100%; }
+.lg-404-box { max-width: 560px; margin: 0 auto; }
+.lg-404 .lg-404-n { margin: 0 0 8px; font-family: var(--font-display); font-weight: 700; font-size: clamp(88px, 22vw, 180px); line-height: 1; color: var(--bg3); }
+.lg-404 h1 { margin: 0 0 14px; font-family: var(--font-display); font-weight: 600; font-size: clamp(28px, 6vw, 44px); line-height: 1.12; text-transform: uppercase; color: var(--white); }
+.lg-404 p { margin: 0 0 28px; font-size: 17px; line-height: 1.6; color: var(--gray-light); }
+.lg-404-actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+
+/* Копия .btn-outline из home.css / service.css (в base.css его нет), нужна кнопке с телефоном на 404 */
+.btn-outline { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.4); }
+.btn-outline::after { content: ''; position: absolute; inset: 0; background: #fff; transform: translateY(101%); transition: transform .4s cubic-bezier(.2,.7,.1,1); z-index: -1; }
+.btn-outline:hover { border-color: #fff; color: #111; box-shadow: 0 10px 28px rgba(255,255,255,0.18); }
+.btn-outline:hover::after { transform: translateY(0); }

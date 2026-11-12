@@ -37,18 +37,6 @@ function toggleTech(btn) {
   items.forEach(li => li.classList.toggle('show', !isOpen));
   btn.querySelector('span').textContent = isOpen ? 'Показать полностью' : 'Свернуть';
 }
-(function initFlipCards() {
-  const isTouch = window.matchMedia('(hover: none)').matches;
-  if (!isTouch) return;
-  document.querySelectorAll('.reason-card').forEach(card => {
-    card.addEventListener('click', () => {
-      document.querySelectorAll('.reason-card.flipped').forEach(c => {
-        if (c !== card) c.classList.remove('flipped');
-      });
-      card.classList.toggle('flipped');
-    });
-  });
-})();
 (function initVideoReels() {
   var rail = document.getElementById('avRail');
   if (!rail) return;
@@ -444,7 +432,7 @@ function typeHeroTitle(redText, whiteText) {
   const rest  = sp === -1 ? ''        : whiteText.slice(sp);     
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduce) {
-    titleEl.innerHTML = '<em>' + redText + '</em><span class="white-line"><span class="word-white">' +
+    titleEl.innerHTML = '<em>' + redText + '</em> <span class="white-line"><span class="word-white">' +
       word1 + '</span><span class="rest-red">' + rest + '</span></span>';
     if (badges) badges.classList.add('show');
     if (ctas)   ctas.classList.add('show');
@@ -455,7 +443,7 @@ function typeHeroTitle(redText, whiteText) {
   if (badges) badges.classList.remove('show');
   if (ctas)   ctas.classList.remove('show');
   titleEl.innerHTML =
-    '<em><span class="red-text"></span><span class="type-caret" id="caretRed">&nbsp;</span></em>' +
+    '<em><span class="red-text"></span><span class="type-caret" id="caretRed">&nbsp;</span></em> ' +
     '<span class="white-line">' +
       '<span class="word-white"></span>' +
       '<span class="rest-red"></span>' +
