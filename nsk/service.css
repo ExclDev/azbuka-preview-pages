@@ -843,7 +843,7 @@ html.sv-motion { scroll-behavior: auto !important; }
    лента идёт, как шла бы на секции в 320svh. Панели лежат в прилипшем слое .vn-hz поверх кадра этапов и ездят по шкале --t-hz (.vn-tl2). Положение шкал: 0–28 % въезд «Отзывов»,
    28–55 % стоят, 55–83 % «Отзывы» уходят влево и въезжают «Вопросы», 83–100 % «Вопросы» стоят. Лента этапов здесь на CSS (как в макете), а не на GSAP, потому что нужна общая шкала с панелями;
    при выключенном CSS-режиме (нет view(), узкий экран) работает прежнее закрепление service.js, панели идут обычным потоком под этапами. */
-.vn-hzsec { position: relative; timeline-scope: --t-hz; }
+.vn-hzsec { position: relative; timeline-scope: --t-hz, --t-steps; }
 .vn-tl1, .vn-tl2 { display: none; }
 @keyframes vnHz { 0% { translate: 50% 0; } 28%, 55% { translate: 0 0; } 83%, 100% { translate: -50% 0; } }
 @keyframes vnTrack { 0%, 10% { translate: 0 0; } 100% { translate: -2000px 0; } }
