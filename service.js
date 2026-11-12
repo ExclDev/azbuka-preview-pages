@@ -39,7 +39,7 @@
         li.classList.remove('do', 'check', 'skip');
         li.classList.add(st);
         $('.sv-badge .sv-sr', li).textContent = B[st];
-        if (st !== 'skip') shown++;
+        shown++;  // «Не нужно» остаётся в списке зачёркнутым, поэтому входит в общее число
         if (st === 'do') done++;
         if (st === 'check') chk++;
       });

@@ -127,12 +127,17 @@
 <link rel="preload" as="font" type="font/woff2" href="../fonts/oswald-latin.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/inter-cyrillic-400.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/inter-latin-400.woff2" crossorigin />
-<link rel="stylesheet" href="../base.css?v=3b1d2c6957" />
-<link rel="stylesheet" href="../service.css?v=32d255bde0" />
-<!-- Яндекс.Метрика -->
+<link rel="stylesheet" href="../base.css?v=68f73f7520" />
+<link rel="stylesheet" href="../service.css?v=5b097040f8" />
+<!-- Яндекс.Метрика: грузится только после согласия (кнопка «Принять» в баннере cookie) -->
 <script>
    var YM_COUNTER_ID = 113581011;
-   if (YM_COUNTER_ID && YM_COUNTER_ID !== "YOUR_COUNTER_ID" && location.hostname === "azbuka-remonta.ru") {
+   /* Выбор лежит в localStorage['cookieAccepted']: accepted | declined; старое значение '1' (кто уже нажимал «Принять») считается согласием.
+      До согласия ym не определён, и цели (reachGoal в base.js) молча ничего не делают. */
+   window.azMetrikaLoad = function () {
+     if (window.azMetrikaLoaded) return;
+     if (!(YM_COUNTER_ID && YM_COUNTER_ID !== "YOUR_COUNTER_ID" && location.hostname === "azbuka-remonta.ru")) return;
+     window.azMetrikaLoaded = true;
      (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
      m[i].l=1*new Date();
      for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
@@ -150,13 +155,15 @@
             trackLinks:true
        });
      } catch (e) { /* счётчик не инициализирован */ }
-   }
+   };
+   try {
+     var azCookie = localStorage.getItem('cookieAccepted');
+     if (azCookie === 'accepted' || azCookie === '1') window.azMetrikaLoad();
+   } catch (e) { /* без localStorage считаем, что согласия нет */ }
 </script>
 <!-- /Яндекс.Метрика -->
 </head>
 <body class="city-bar-visible">
-
-
 <div class="city-bar" id="cityBar" role="navigation" aria-label="Выбор города">
   <div class="city-bar-inner">
     <span class="city-bar-label">
@@ -204,13 +211,13 @@
         <p class="nvx-group">Ремонт под ключ</p>
         <ul class="nvx-links">
           <li>
-            <a class="nvx-link" href="../remont-v-novostrojke/"><span class="nvx-link-t">Ремонт в новостройке<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span><span class="nvx-link-d">Без отделки, предчистовая или с отделкой застройщика</span></a>
+            <a class="nvx-link" href="../remont-v-novostrojke/"><span class="nvx-link-t">Ремонт в новостройке<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span><span class="nvx-link-d">Без отделки, предчистовая или с отделкой застройщика</span></a>
           </li>
           <li>
-            <span class="nvx-link is-soon" aria-disabled="true"><span class="nvx-link-t">Капремонт вторички <em class="nvx-soon">скоро</em></span><span class="nvx-link-d">Снимаем старую отделку и показываем, что под ней</span></span>
+            <span class="nvx-link is-soon" aria-disabled="true"><span class="nvx-link-t">Капремонт вторички <em class="nvx-soon">скоро</em></span><span class="nvx-link-d">Снимаем старую отделку и показываем, что под ней</span></span>
           </li>
           <li>
-            <a class="nvx-link" href="../vannaya-pod-klyuch/"><span class="nvx-link-t">Ванная под ключ<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span><span class="nvx-link-d">Трубы, гидроизоляцию и уклон показываем до плитки</span></a>
+            <a class="nvx-link" href="../vannaya-pod-klyuch/"><span class="nvx-link-t">Ванная под ключ<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span><span class="nvx-link-d">Трубы, гидроизоляцию и уклон показываем до плитки</span></a>
           </li>
         </ul>
       </div><a class="nvx-card" href="../#works"><img src="../images/portfolio/portfolio-06.webp" alt="Кухня-столовая после ремонта" loading="lazy"><span class="nvx-card-cap"><b>600 объектов<br>с 2010 года</b><span>Смотреть работы<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></span></a>
@@ -223,7 +230,7 @@
             <a class="nvx-link" href="../tehnicheskij-proekt/" aria-current="page"><span class="nvx-link-t">Технический проект<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span><span class="nvx-link-d">450 ₽/м² вместо 900, если ремонт делаем мы</span></a>
           </li>
           <li>
-            <a class="nvx-link" href="../priemka-kvartiry/"><span class="nvx-link-t">Приёмка квартиры<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span><span class="nvx-link-d">Проверяем квартиру от застройщика по чек-листу с инструментом</span></a>
+            <a class="nvx-link" href="../priemka-kvartiry/"><span class="nvx-link-t">Приёмка квартиры<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span><span class="nvx-link-d">Проверяем квартиру от застройщика по чек-листу с инструментом</span></a>
           </li>
         </ul>
       </div>
@@ -249,14 +256,14 @@
   <div class="mm-list">
     <button class="mm-row is-on" type="button" aria-expanded="true" aria-controls="mm-remont" data-acc="remont">Ремонт<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></button>
     <div class="mm-sub is-on" id="mm-remont" data-acc-body="remont"><div><ul>
-      <li><a href="../remont-v-novostrojke/" onclick="closeMobileMenu()"><b>Ремонт в новостройке</b><span>Без отделки, предчистовая или с отделкой застройщика</span></a></li>
-      <li><span class="mm-soon" aria-disabled="true"><b>Капремонт вторички <em class="nvx-soon">скоро</em></b><span>Снимаем старую отделку и показываем, что под ней</span></span></li>
-      <li><a href="../vannaya-pod-klyuch/" onclick="closeMobileMenu()"><b>Ванная под ключ</b><span>Трубы, гидроизоляцию и уклон показываем до плитки</span></a></li>
+      <li><a href="../remont-v-novostrojke/" onclick="closeMobileMenu()"><b>Ремонт в новостройке</b><span>Без отделки, предчистовая или с отделкой застройщика</span></a></li>
+      <li><span class="mm-soon" aria-disabled="true"><b>Капремонт вторички <em class="nvx-soon">скоро</em></b><span>Снимаем старую отделку и показываем, что под ней</span></span></li>
+      <li><a href="../vannaya-pod-klyuch/" onclick="closeMobileMenu()"><b>Ванная под ключ</b><span>Трубы, гидроизоляцию и уклон показываем до плитки</span></a></li>
     </ul></div></div>
     <button class="mm-row is-current" type="button" aria-expanded="false" aria-controls="mm-uslugi" data-acc="uslugi">Услуги<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></button>
     <div class="mm-sub" id="mm-uslugi" data-acc-body="uslugi"><div><ul><li class="mm-lbl">К ремонту</li>
       <li><a href="../tehnicheskij-proekt/" onclick="closeMobileMenu()" aria-current="page"><b>Технический проект</b><span>450 ₽/м² вместо 900, если ремонт делаем мы</span></a></li>
-      <li><a href="../priemka-kvartiry/" onclick="closeMobileMenu()"><b>Приёмка квартиры</b><span>Проверяем квартиру от застройщика по чек-листу с инструментом</span></a></li><li class="mm-lbl">Отдельные работы</li>
+      <li><a href="../priemka-kvartiry/" onclick="closeMobileMenu()"><b>Приёмка квартиры</b><span>Проверяем квартиру от застройщика по чек-листу с инструментом</span></a></li><li class="mm-lbl">Отдельные работы</li>
       <li><span class="mm-soon" aria-disabled="true"><b>Электромонтаж <em class="nvx-soon">скоро</em></b></span></li>
       <li><span class="mm-soon" aria-disabled="true"><b>Сантехника <em class="nvx-soon">скоро</em></b></span></li>
       <li><span class="mm-soon" aria-disabled="true"><b>Натяжные потолки <em class="nvx-soon">скоро</em></b></span></li>
@@ -357,9 +364,9 @@
         <h3>Технический проект</h3><p class="sv-price-v">900 ₽/м²</p>
         <ul><li>Обмеры, планировка, рабочие чертежи</li><li>Визуализации комнат</li></ul>
       </article>
-      <article class="sv-price sv-rv hit"><p class="sv-price-k">При заказе ремонта у нас</p>
-        <h3>Проект и ремонт</h3><p class="sv-price-v">450 ₽/м² <s class="sv-old">900 ₽</s></p>
-        <ul><li>Смета по проекту бесплатно</li><li>Ремонт строго по чертежам</li><li>Ход работ онлайн на платформе</li></ul>
+      <article class="sv-price sv-rv hit"><p class="sv-price-k">Со скидкой 50 %</p>
+        <h3>Проект, если ремонт у нас</h3><p class="sv-price-v">450 ₽/м² <s class="sv-old">900 ₽/м²</s></p>
+        <ul><li>Смета по проекту бесплатно</li><li>Ремонт строго по чертежам</li><li>Фото и видео с объекта</li></ul>
       </article>
     </div>
     <p class="sv-note">Есть проект от другой студии? Работаем по нему, точную смету считаем по вашим чертежам.</p>
@@ -377,7 +384,7 @@
       <li class="sv-step sv-rv"><span class="sv-step-n">3</span><h3>Визуализации</h3><p>Показываем комнаты такими, какими они будут.</p></li>
       <li class="sv-step sv-rv"><span class="sv-step-n">4</span><h3>Рабочие чертежи</h3><p>Готовим листы для мастеров: электрика, свет, развёртки.</p></li>
       <li class="sv-step sv-rv"><span class="sv-step-n">5</span><h3>Смета</h3><p>Считаем ремонт по проекту, бесплатно.</p></li>
-      <li class="sv-step sv-rv"><span class="sv-step-n">6</span><h3>Ремонт по проекту</h3><p>Мастера работают по чертежам, вы видите ход онлайн.</p></li>
+      <li class="sv-step sv-rv"><span class="sv-step-n">6</span><h3>Ремонт по проекту</h3><p>Мастера работают по чертежам, фото и видео с объекта присылаем вам.</p></li>
       <li class="sv-step sv-step-fin" aria-hidden="true"><span class="sv-step-n"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span><h3>Как на визуализации</h3><p>Квартира совпадает с проектом.</p></li>
     </ol>
   </div></div>
@@ -421,9 +428,9 @@
 <h2 class="section-title" id="reads-title"><span class="mo-line"><span class="mo-in">Перед <span class="sv-acc">проектом</span></span></span></h2>
 <div class="divider sv-div"><span></span><span></span></div>
     <div class="sv-reads">
-      <div class="sv-read sv-rv is-static"><div><p class="sv-read-k">Статья</p><h3>Сколько стоит технический проект</h3></div></div>
+      <div class="sv-read sv-rv is-static is-soon" aria-disabled="true"><div><p class="sv-read-k">Статья</p><h3>Сколько стоит технический проект</h3></div><span class="go sv-read-soon"><em class="nvx-soon">скоро</em> Страница готовится</span></div>
       <a class="sv-read sv-rv svc" href="../remont-v-novostrojke/"><div><p class="sv-read-k">Услуга</p><h3>Ремонт в новостройке</h3></div><span class="go">Подробнее →</span></a>
-      <div class="sv-read sv-rv svc is-static"><div><p class="sv-read-k">Услуга</p><h3>Капремонт вторички</h3></div></div>
+      <div class="sv-read sv-rv svc is-static is-soon" aria-disabled="true"><div><p class="sv-read-k">Услуга</p><h3>Капремонт вторички</h3></div><span class="go sv-read-soon"><em class="nvx-soon">скоро</em> Страница готовится</span></div>
     </div>
   </div>
 </section>
@@ -563,20 +570,9 @@
           <label class="form-label" for="p-complex">ЖК</label>
           <input class="form-input" type="text" id="p-complex" name="complex" placeholder="Название жилого комплекса" autocomplete="off" maxlength="100" />
         </div>
-        <div class="form-field" data-lead="full">
+        <div class="form-field form-field--wide" data-lead="full">
           <label class="form-label" for="p-area">Квадратура</label>
           <input class="form-input" type="number" id="p-area" name="area" placeholder="м²" min="1" />
-        </div>
-        <div class="form-field" data-lead="full">
-          <label class="form-label" for="p-type">Вид ремонта</label>
-          <select class="form-select" id="p-type" name="repair_type">
-            <option value="" selected>Не выбрано</option>
-              <option value="Косметический">Косметический</option>
-            <option value="Капитальный">Капитальный</option>
-            <option value="Комфорт-класс">Комфорт-класс</option>
-            <option value="Бизнес-класс">Бизнес-класс</option>
-            <option value="Премиум-класс">Премиум-класс</option>
-          </select>
         </div>
       </div>
       <div class="lead-hp" aria-hidden="true">
@@ -617,18 +613,21 @@
     <button class="btn btn-red form-submit" onclick="closeDevPopup()" style="margin-top:20px">Понятно</button>
   </div>
 </div>
-<div class="cookie-banner cookie-banner--hidden" id="cookieBanner" role="alert" aria-live="polite">
-  <span>Используем cookie. Продолжая пользоваться сайтом, вы соглашаетесь с <a href="../politika-konfidencialnosti/">политикой конфиденциальности</a>.</span>
-  <button class="cookie-banner__btn" id="cookieAccept">Принять</button>
+<div class="cookie-banner cookie-banner--hidden" id="cookieBanner" role="region" aria-label="Использование cookie">
+  <span class="cookie-banner__text">Используем cookie для статистики посещений. Подробнее — в <a href="../politika-konfidencialnosti/">политике конфиденциальности</a>.</span>
+  <div class="cookie-banner__actions">
+    <button class="cookie-banner__btn" id="cookieAccept" type="button">Принять</button>
+    <button class="cookie-banner__btn cookie-banner__btn--alt" id="cookieDecline" type="button">Отклонить</button>
+  </div>
 </div>
 <script>
 /* Город этого сайта: объект нужен base.js (заявки, сообщение об ошибке) и home.js (заголовок первого экрана) */
 window.AZ_CITY = {"key":"tomsk","name":"Томск","phone":"8 (3822) 97-99-49","phoneHref":"tel:+73822979949","heroLine2":"ремонт в Томске"};
 </script>
-<script src="../base.js?v=20d00de083"></script>
+<script src="../base.js?v=d3aeeb7558"></script>
 <script src="../vendor/gsap.min.js?v=2d26f4c060"></script>
 <script src="../vendor/ScrollTrigger.min.js?v=489bcf6d9c"></script>
 <script src="../vendor/lenis.min.js?v=44dcd10f2a"></script>
-<script src="../service.js?v=be16b36e48"></script>
+<script src="../service.js?v=9a27696ad4"></script>
 </body>
 </html>

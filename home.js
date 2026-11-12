@@ -108,6 +108,26 @@ function toggleTech(btn) {
     });
   }, { rootMargin: '400px 0px', threshold: 0 });
   cards.forEach(function (card) { posterObserver.observe(card); });
+  /* Первые три обложки (их видно сразу, когда секция доехала до экрана) грузим с высоким приоритетом и заранее:
+     у video.poster нет fetchpriority, поэтому прогреваем кэш картинкой с fetchPriority = high, когда секция в пределах четырёх экранов (примерно 3 тыс. пикселей до неё).
+     Секция далеко внизу страницы, раньше этого момента обложки не запрашиваем, чтобы не мешать первому экрану. Остальные остаются ленивыми. */
+  var sec = document.getElementById('video-reels');
+  if (sec && 'IntersectionObserver' in window) {
+    var warm = new IntersectionObserver(function (entries, obs) {
+      if (!entries[0].isIntersecting) return;
+      obs.disconnect();
+      cards.slice(0, 3).forEach(function (card) {
+        var v = card.querySelector('.av-video');
+        if (!v || !v.dataset.poster) return;
+        var img = new Image();
+        img.fetchPriority = 'high';
+        img.decoding = 'async';
+        img.src = v.dataset.poster;
+        v.poster = v.dataset.poster;
+      });
+    }, { rootMargin: '400% 0px', threshold: 0 });
+    warm.observe(sec);
+  }
   /* Ховер запускает видео карточки под курсором — только на устройствах
      с настоящим курсором, чтобы не мешать touch-автоплею по видимости. */
   var hoverCapable = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;

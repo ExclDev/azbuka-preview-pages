@@ -188,7 +188,7 @@ html.sv-motion .sv-plan path { stroke-dasharray: 1; stroke-dashoffset: 1; }
 .sv-price:hover { transform: translateY(-6px); border-color: var(--red-a50); }
 .sv-price.hit { background: var(--bg3); border-color: var(--red-a50); }
 .sv-price-k { margin: 0; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--gray); }
-.sv-price h3 { margin: 10px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 30px; line-height: 1.1; text-transform: uppercase; }
+.sv-price h3 { text-wrap: balance; margin: 10px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 30px; line-height: 1.1; text-transform: uppercase; }
 .sv-price-v { margin: 20px 0 0; font-family: var(--font-display); font-weight: 500; font-size: 22px; color: var(--red-text); }
 .sv-price ul { flex: 1; margin: 24px 0 0; padding: 0; list-style: none; display: grid; gap: 12px; align-content: start; }
 .sv-price li { position: relative; padding-left: 22px; font-size: 15px; line-height: 1.5; color: var(--gray-light); }
@@ -261,6 +261,10 @@ a.sv-read:hover { transform: translateY(-6px); color: var(--light-ink); }
 .sv-read span.go { margin-top: 24px; font-size: 15px; font-weight: 600; transition: transform .4s var(--sv-ease); }
 a.sv-read:hover .go { transform: translateX(6px); }
 .sv-read.svc { background: var(--bg); color: #fff; }
+.sv-read.is-soon { cursor: default; }
+.sv-read-soon { display: flex; align-items: center; gap: 0; font-weight: 400 !important; }
+.sv-read-soon .nvx-soon { margin: 0 8px 0 0; }
+.sv-read:not(.svc) .nvx-soon { color: #4d4640; border-color: rgba(0,0,0,.35); }
 a.sv-read.svc:hover { color: #fff; }
 
 /* Финальный призыв */
@@ -981,4 +985,22 @@ html.sv-motion { scroll-behavior: auto !important; }
 @supports not (animation-timeline: view()) {
   .sv-old { background: linear-gradient(var(--red), var(--red)) no-repeat 0 55% / 100% 2px; }
   .sv-old::after { display: none; }
+}
+
+/* ═══ Телефон: текст не уходит под плавающие кнопки (12.11.2026) ═══
+   У правого края на ≤480 px стоят две кнопки (виджет и «наверх», x от 309 до 367 при ширине 375 px). Тексту этапов, «Что входит», сводки и цен оставлен
+   отступ справа 56 px (строки кончаются на ≈ 303 px, левее кнопок). Этапы в одну колонку: в две текст при таком отступе выходил бы в 107 px.
+   Остальные блоки (отзывы, вопросы, лид) прокручиваются под кнопками как обычно. */
+@media (max-width: 480px) {
+  .sv-row-t, .sv-row-d { padding-right: 56px; }
+  .sv-steps { grid-template-columns: 1fr; row-gap: 40px; }
+  .sv-step { padding-right: 56px; }
+  .sv-price, .sv-dp > div, .sv-sum { padding-right: 56px; }
+  .sv-sec .sv-sub, .sv-note { padding-right: 56px; }
+  /* «Приёмка», «Ванная», «Технический проект»: описания пунктов и листов, главы видео */
+  /* приставка main.sv нужна: priemka.css подключается после service.css и иначе перебивает отступы */
+  main.sv .pk-get li, main.sv #check ol li, main.sv .pv-ch, main.sv .vw-ss li, main.sv .vw-hs li, main.sv .vw-under-t, main.sv .dp-item,
+  main.sv .pkB-under .sv-lead, main.sv .pk-total, main.sv .xr-note { padding-right: 56px; }
+  main.sv .pk-stamp { right: 64px; }
+  main.sv .pk-sheet th:last-child, main.sv .pk-sheet td:last-child { padding-right: 56px; }
 }

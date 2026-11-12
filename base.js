@@ -213,9 +213,10 @@ let footerOverlap = 0;
 function applyFloatPosition() {
   if (!floatCta) return;
   const baseGap = window.innerWidth <= 768 ? 20 : 30;
-  floatCta.style.bottom = (footerOverlap > 0 ? baseGap + footerOverlap + 8 : baseGap) + 'px';
+  // --cookie-h: высота баннера cookie, пока он на экране (ставит блок cookie ниже); кнопки стоят над ним
+  floatCta.style.bottom = 'calc(' + (footerOverlap > 0 ? baseGap + footerOverlap + 8 : baseGap) + 'px + var(--cookie-h, 0px))';
   if (qwWidgetEl) {
-    qwWidgetEl.style.bottom = footerOverlap > 0 ? (qwBaseBottom() + footerOverlap + 8) + 'px' : '';
+    qwWidgetEl.style.bottom = footerOverlap > 0 ? 'calc(' + (qwBaseBottom() + footerOverlap + 8) + 'px + var(--cookie-h, 0px))' : '';
   }
 }
 (function () {
@@ -530,7 +531,6 @@ function handleFormSubmit(e, formEl) {
   if (bad.length) { AZ_LEAD.highlight(bad); return; }
   if (!AZ_LEAD.consentOk(formEl)) return;
 
-  const typeEl = formEl.querySelector('[name="repair_type"]');
   const val = n => ((formEl.querySelector('[name="' + n + '"]') || {}).value || '').trim();
   const payload = formEl.dataset.mode === 'booking'
     // Запись: без площади и вида ремонта. Дата осмотра и ЖК идут отдельными полями, lead.php кладёт их в комментарий лида.
@@ -540,10 +540,8 @@ function handleFormSubmit(e, formEl) {
         form: formEl.id === 'mainForm' ? 'Консультация' : 'Всплывающее окно',
         name: nameEl.value.trim(),
         phone: phoneEl.value.trim(),
-        area: (formEl.querySelector('[name="area"]') || {}).value || '',
-        // Пустое значение — человек не открывал список. Так и передаём,
-        // иначе в CRM у всех был бы «Косметический» по умолчанию.
-        repair: (typeEl && typeEl.value) ? typeEl.value : 'Не выбрано'
+        // Выбора вида ремонта в формах больше нет (12.11.2026): ключ repair не отправляем, lead.php пропускает пустые значения
+        area: (formEl.querySelector('[name="area"]') || {}).value || ''
       };
   AZ_LEAD.send(formEl, payload, function () {
     if (!overlay.classList.contains('open')) openPopup(AZ_LEAD.trigger);
@@ -661,21 +659,30 @@ function openVideo(id) {
 })();
 (function () {
   var banner = document.getElementById('cookieBanner');
-  /* высота баннера в --cookie-h: нижняя панель мобильного меню поднимается над ним, кнопка заявки не прячется */
+  /* Выбор по cookie хранится в localStorage['cookieAccepted']: accepted | declined. Прежнее значение '1' — согласие.
+     Метрика грузится только после «Принять» (window.azMetrikaLoad из inline/metrika.njk, на сайте без счётчика его нет). */
+  function read() { try { return localStorage.getItem('cookieAccepted'); } catch (e) { return null; } }
+  function save(v) { try { localStorage.setItem('cookieAccepted', v); } catch (e) { /* приватный режим: выбор не запомнится */ } }
+  /* высота баннера в --cookie-h: нижняя панель мобильного меню и плавающие кнопки поднимаются над ним */
   function syncCookieH() {
     var h = banner.classList.contains('cookie-banner--hidden') ? 0 : banner.offsetHeight;
     document.documentElement.style.setProperty('--cookie-h', h + 'px');
   }
-  if (!localStorage.getItem('cookieAccepted')) {
+  function close() { banner.classList.add('cookie-banner--hidden'); syncCookieH(); }
+  if (!read()) {
     banner.classList.remove('cookie-banner--hidden');
     syncCookieH();
     if (window.ResizeObserver) new ResizeObserver(syncCookieH).observe(banner);
     window.addEventListener('resize', syncCookieH);
   }
   document.getElementById('cookieAccept').addEventListener('click', function () {
-    localStorage.setItem('cookieAccepted', '1');
-    banner.classList.add('cookie-banner--hidden');
-    syncCookieH();
+    save('accepted');
+    if (typeof window.azMetrikaLoad === 'function') window.azMetrikaLoad();
+    close();
+  });
+  document.getElementById('cookieDecline').addEventListener('click', function () {
+    save('declined');
+    close();
   });
 })();
 

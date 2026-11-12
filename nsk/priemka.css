@@ -184,9 +184,9 @@
 .pk-sheet table { width: 100%; border-collapse: collapse; font-size: 14px; line-height: 1.4; }
 .pk-sheet th { padding: 8px 8px 8px 0; border-bottom: 2px solid #1a1a1a; text-align: left; font-weight: 600; font-size: 12px; letter-spacing: .04em; text-transform: uppercase; color: #555; }
 .pk-sheet td { padding: 12px 8px 12px 0; border-bottom: 1px solid rgba(0,0,0,.12); vertical-align: top; }
-.pk-sheet td:first-child { font-weight: 600; color: #e8201a; }
+.pk-sheet td:first-child { font-weight: 600; color: var(--red-ink); }   /* светлый лист: #e8201a давал 4,15:1 */
 .pk-photo-ic { display: inline-block; width: 34px; height: 26px; border-radius: 4px; background: #d9d6d2 linear-gradient(135deg, transparent 55%, #bdb8b2 55%); }
-.pk-stamp { position: absolute; right: 26px; bottom: -22px; padding: 10px 18px; border: 3px solid #e8201a; border-radius: 8px; font: 600 20px/1 var(--font-display); letter-spacing: .06em; text-transform: uppercase; color: #e8201a; background: rgba(245,245,247,.9); rotate: -8deg; }
+.pk-stamp { position: absolute; right: 26px; bottom: -22px; padding: 10px 18px; border: 3px solid #e8201a; border-radius: 8px; font: 600 20px/1 var(--font-display); letter-spacing: .06em; text-transform: uppercase; color: var(--red-ink); background: rgba(245,245,247,.9); rotate: -8deg; }
 @media (max-width: 1100px) { .pk-act { grid-template-columns: minmax(0, 1fr); gap: 40px; } }   /* minmax(0, …): иначе таблица образца раздвигает колонку шире экрана на 320 px */
 @media (max-width: 640px) {
   .pk-sheet { padding: 28px 18px 36px; rotate: 0deg; }
