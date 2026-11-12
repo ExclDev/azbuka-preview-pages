@@ -104,15 +104,28 @@ let popupOpener = null;
 /* Форма записи: тот же попап и та же форма popupFormInner, меняются заголовок, подпись и набор полей.
    booking = { title, note, date, complex } приходит со страницы (window.AZ_PAGE.booking, front matter).
    Без booking попап обычный: «Оставить заявку», площадь и вид ремонта. */
-function setPopupMode(booking) {
+/* Обычный режим: заголовок и подпись выбираются по фрагменту строки-триггера (сами строки уходят в CRM
+   в поле «кнопка» и не меняются). Нет совпадения — вариант по умолчанию. */
+const POPUP_TEXTS = [
+  { match: 'Получить бесплатную смету', title: 'Посчитаем смету бесплатно', note: 'Приедем на замер и за 24 часа пришлём предварительную смету.' },
+  { match: 'Заказать по акции', title: 'Технический проект за полцены', note: 'Скидка 50% действует, если ремонт делаем мы.' },
+  { match: 'Обратный звонок', title: 'Перезвоним вам', note: 'Оставьте номер, перезвоним в рабочее время.' }
+];
+const POPUP_TEXT_DEFAULT = { title: 'Оставить заявку', note: 'Расскажем, из чего сложится цена, и договоримся о замере.' };
+function popupTextFor(trigger) {
+  const t = String(trigger || '');
+  return POPUP_TEXTS.find(x => t.indexOf(x.match) !== -1) || POPUP_TEXT_DEFAULT;
+}
+function setPopupMode(booking, trigger) {
   const form = document.getElementById('popupFormInner');
   const on = !!booking;
+  const txt = on ? { title: booking.title || 'Запись', note: booking.note || '' } : popupTextFor(trigger);
   form.dataset.mode = on ? 'booking' : '';
-  form.dataset.title = on ? (booking.title || 'Запись') : '';
-  document.getElementById('popup-heading').textContent = on ? (booking.title || 'Запись') : 'Оставить заявку';
+  form.dataset.title = on ? txt.title : '';
+  document.getElementById('popup-heading').textContent = txt.title;
   const note = document.getElementById('popupNote');
-  note.textContent = on ? (booking.note || '') : '';
-  note.hidden = !on || !booking.note;
+  note.textContent = txt.note;
+  note.hidden = !txt.note;
   document.getElementById('popupSubmit').textContent = on ? 'Записаться' : 'Отправить заявку';
   const show = { 'full': !on, 'booking-date': on && !!booking.date, 'booking-complex': on && !!booking.complex };
   form.querySelectorAll('[data-lead]').forEach(el => {
@@ -127,7 +140,7 @@ function setPopupMode(booking) {
 }
 function openPopup(trigger, booking) {
   popupOpener = document.activeElement;
-  setPopupMode(booking);
+  setPopupMode(booking, trigger);
   overlay.classList.add('open');
   document.documentElement.classList.add('scroll-locked');
   document.getElementById('popupFormBox').style.display = '';
@@ -355,6 +368,17 @@ function handleFormSubmit(e, formEl) {
       };
   AZ_LEAD.send(formEl, payload, function () {
     if (!overlay.classList.contains('open')) openPopup(AZ_LEAD.trigger);
+    const isBooking = formEl.dataset.mode === 'booking';
+    document.getElementById('popupSuccessText').textContent = isBooking
+      ? 'Перезвоним в рабочее время и договоримся о дате.'
+      : 'Перезвоним в рабочее время и договоримся о замере. Предварительную смету пришлём за 24 часа после него.';
+    const city = window.AZ_CITY || {};
+    const callEl = document.getElementById('popupSuccessCall');
+    if (callEl) {
+      callEl.hidden = !city.phone;
+      const a = callEl.querySelector('a');
+      if (a && city.phone) { a.textContent = city.phone; a.href = city.phoneHref || ('tel:' + city.phone.replace(/[^\d+]/g, '')); }
+    }
     document.getElementById('popupFormBox').style.display = 'none';
     document.getElementById('popupSuccess').style.display = '';
   }, formEl.id === 'mainForm' ? 'lead_form' : 'lead_popup');

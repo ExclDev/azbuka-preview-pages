@@ -166,7 +166,7 @@ html.sv-motion .sv-plan path { stroke-dasharray: 1; stroke-dashoffset: 1; }
 .sv-sum hr { margin: 24px 0; border: 0; border-top: 1px solid var(--border); }
 .sv-sum .btn { width: 100%; justify-content: center; margin-top: 24px; }
 
-/* Цены и дизайн-проект */
+/* Цены и технический проект */
 .sv-prices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 48px; }
 .sv-dp { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr) minmax(0, 1fr); gap: 1px; margin-top: 16px; border-radius: var(--radius-lg); overflow: hidden; background: var(--border); border: 1px solid var(--border); }
 .sv-dp > div { padding: 32px; background: var(--bg2); }
@@ -348,7 +348,7 @@ html.sv-motion { scroll-behavior: auto !important; }
   @supports selector(::details-content) { .sv-qa details::details-content { transition: none !important; } }
 }
 
-/* ═══ Страница «Дизайн-проект» ═══
+/* ═══ Страница «Технический проект» ═══
    Макет: brand/maket-uslugi-2026-11-09/design.html и design-nsk.html. Блоки: hero-deck.njk (первый экран «стопка листов»),
    sheets.njk («Листы проекта»), prices.njk с variant: big (две карточки). Движение веера при прокрутке — service.js, всё остальное на CSS. */
 
@@ -505,7 +505,7 @@ html.sv-motion { scroll-behavior: auto !important; }
   .sv-scr .sv-dp > div { padding: max(18px, 2.8svh) 28px; }
   .sv-scr #prices .sv-note { margin-top: max(10px, 1.6svh); }
 }
-/* невысокие окна (до 820 px): прячем описания этапов, подзаголовки scope и prices, «Если бюджет ограничен», описания вариантов дизайн-проекта и сноску */
+/* невысокие окна (до 820 px): прячем описания этапов, подзаголовки scope и prices, «Если бюджет ограничен», описания вариантов технического проекта и сноску */
 @media (min-width: 1101px) and (min-height: 700px) and (max-height: 820px) {
   .sv-scr { --scr-pad: 26px; }
   .sv-scr .sv-row-d { display: none; }
@@ -524,7 +524,7 @@ html.sv-motion { scroll-behavior: auto !important; }
   .sv-scr .sv-dp-opt h4 { margin-top: 8px; }
   .sv-scr .sv-dp-price { margin-top: 6px !important; font-size: 28px !important; }
 }
-/* 821–950 px по высоте (1440×900): на сайте секция ниже макетной на высоту шапки, «Цены» со всем текстом не помещаются. Прячем подзаголовок и описания вариантов дизайн-проекта (не из макета) */
+/* 821–950 px по высоте (1440×900): на сайте секция ниже макетной на высоту шапки, «Цены» со всем текстом не помещаются. Прячем подзаголовок и описания вариантов технического проекта (не из макета) */
 @media (min-width: 1101px) and (min-height: 821px) and (max-height: 950px) {
   .sv-scr #prices .sv-sub, .sv-scr .sv-dp-opt p:not(.sv-dp-price) { display: none; }
   .sv-scr .sv-price { padding: 24px 28px; }
@@ -570,7 +570,7 @@ html.sv-motion { scroll-behavior: auto !important; }
   .sv-scr .sv-sum .btn { margin-top: 14px; }
 }
 
-/* ═══ «Видео с объекта» на «Дизайн-проекте» (Новосибирск): blocks/video-stage.njk, плеер — dvideo.js ═══
+/* ═══ «Видео с объекта» на «Техническом проекте» (Новосибирск): blocks/video-stage.njk, плеер — dvideo.js ═══
    Перенесено из макета design-nsk.html (комментарии «Видео на объекте (варианты размещения)» и «Листы в экран, видео наезжает на листы»).
    Плеер 9:16 по центру, по три карточки-решения с тайм-кодом по бокам; активная карточка с красной рамкой и риской к плееру. */
 .dv-b { background: #1f1b17; }
@@ -800,7 +800,7 @@ html.sv-motion { scroll-behavior: auto !important; }
 }
 
 /* ── 3. Видео и цены ровно в экран на компьютере ──
-   «Видео» (#video, priemka.css) уже считается от --scr-h; здесь цены и плотность на невысоких окнах. Кнопка «Смотреть со звуком» — как на «Дизайн-проекте» (priemka.css, .pv-play). */
+   «Видео» (#video, priemka.css) уже считается от --scr-h; здесь цены и плотность на невысоких окнах. Кнопка «Смотреть со звуком» — как на «Техническом проекте» (priemka.css, .pv-play). */
 @media (min-width: 1101px) and (min-height: 700px) and (max-height: 1500px) {
   .vn { --scr-pad: clamp(28px, 6.5svh, 88px); --scr-h: calc(100svh - var(--header-h)); }
   .vn #prices { box-sizing: border-box; height: var(--scr-h); display: flex; flex-direction: column; justify-content: center; padding-top: var(--scr-pad); padding-bottom: var(--scr-pad); }

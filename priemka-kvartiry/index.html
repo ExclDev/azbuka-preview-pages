@@ -127,9 +127,9 @@
 <link rel="preload" as="font" type="font/woff2" href="../fonts/oswald-latin.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/inter-cyrillic-400.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/inter-latin-400.woff2" crossorigin />
-<link rel="stylesheet" href="../base.css?v=a7836a52ec" />
-<link rel="stylesheet" href="../service.css?v=1f6edd19b4" />
-<link rel="stylesheet" href="../priemka.css?v=5f3ce649aa" />
+<link rel="stylesheet" href="../base.css?v=8bf8d5229a" />
+<link rel="stylesheet" href="../service.css?v=3126eb3bc4" />
+<link rel="stylesheet" href="../priemka.css?v=71b1392e88" />
 <!-- Яндекс.Метрика -->
 <script>
    var YM_COUNTER_ID = 113581011;
@@ -180,7 +180,7 @@
         
 <a href="../remont-v-novostrojke/">Новостройка</a>
 <a href="../vannaya-pod-klyuch/">Ванная</a>
-<a href="../dizajn-proekt/">Дизайн-проект</a>
+<a href="../tehnicheskij-proekt/">Технический проект</a>
 <a href="../priemka-kvartiry/" aria-current="page">Приёмка</a>
 <a href="../#contacts">Контакты</a>
       </nav>
@@ -212,7 +212,7 @@
   
 <a href="../remont-v-novostrojke/" onclick="closeMobileMenu()">Новостройка</a>
 <a href="../vannaya-pod-klyuch/" onclick="closeMobileMenu()">Ванная</a>
-<a href="../dizajn-proekt/" onclick="closeMobileMenu()">Дизайн-проект</a>
+<a href="../tehnicheskij-proekt/" onclick="closeMobileMenu()">Технический проект</a>
 <a href="../priemka-kvartiry/" aria-current="page" onclick="closeMobileMenu()">Приёмка</a>
 <a href="../#contacts" onclick="closeMobileMenu()">Контакты</a>
   <div class="header-phone"><a href="tel:+73822979949">8 (3822) 97-99-49</a></div>
@@ -456,7 +456,7 @@
     <div class="sv-reads">
       <div class="sv-read sv-rv is-static"><div><p class="sv-read-k">Статья</p><h3>Как принять квартиру у застройщика</h3></div></div>
       <a class="sv-read sv-rv svc" href="../remont-v-novostrojke/"><div><p class="sv-read-k">Услуга</p><h3>Ремонт в новостройке</h3></div><span class="go">Подробнее →</span></a>
-      <a class="sv-read sv-rv svc" href="../dizajn-proekt/"><div><p class="sv-read-k">Услуга</p><h3>Дизайн-проект</h3></div><span class="go">Подробнее →</span></a>
+      <a class="sv-read sv-rv svc" href="../tehnicheskij-proekt/"><div><p class="sv-read-k">Услуга</p><h3>Технический проект</h3></div><span class="go">Подробнее →</span></a>
     </div>
   </div>
 </section>
@@ -609,13 +609,15 @@
 
       <p class="form-error" hidden></p>
       <button type="submit" class="btn btn-red form-submit" id="popupSubmit">Отправить заявку</button>
+      <p class="form-hours">Перезваниваем в рабочее время: пн–пт, 9:00–18:00</p>
     </form>
   </div>
   <div class="popup-box popup-success" id="popupSuccess" style="display:none">
     <button class="popup-close" onclick="closePopup()" aria-label="Закрыть">×</button>
     <div class="popup-success-icon">✓</div>
-    <p class="popup-success-title">Заявка принята!</p>
-    <p class="popup-success-text">Мы свяжемся с вами в ближайшее время</p>
+    <p class="popup-success-title">Заявка принята</p>
+    <p class="popup-success-text" id="popupSuccessText">Перезвоним в рабочее время и договоримся о замере. Предварительную смету пришлём за 24 часа после него.</p>
+    <p class="popup-success-call" id="popupSuccessCall">Если удобнее, позвоните сами: <a href="tel:+73822979949">8 (3822) 97-99-49</a></p>
   </div>
 </div>
 <div class="overlay" id="devOverlay" role="dialog" aria-modal="true" aria-labelledby="dev-popup-heading">
@@ -668,10 +670,9 @@
           <button class="quiz-card" onclick="quizSelect(this,'repair','Капитальный')">
             <img class="quiz-card-img" src="../images/quiz-kapitalniy.webp" alt="Капитальный" width="1448" height="1086" loading="lazy">
             <span class="quiz-card-label">Капитальный</span>
-          </button>
-          <button class="quiz-card" onclick="quizSelect(this,'repair','Эксклюзивный / дизайн-проект')">
-            <img class="quiz-card-img" src="../images/quiz-dizainersky.webp" alt="Эксклюзивный / дизайн-проект" width="1448" height="1086" loading="lazy">
-            <span class="quiz-card-label">Эксклюзивный / дизайн-проект</span>
+          </button><button class="quiz-card" onclick="quizSelect(this,'repair','Эксклюзивный / дизайн-проект')">
+            <img class="quiz-card-img" src="../images/quiz-dizainersky.webp" alt="Эксклюзивный / технический проект" width="1448" height="1086" loading="lazy">
+            <span class="quiz-card-label">Эксклюзивный / технический проект</span>
           </button>
         </div>
       </div>
@@ -773,24 +774,24 @@
     <div class="quiz-success" id="quizSuccess" style="display:none">
       <div class="quiz-success-icon">✓</div>
       <p class="quiz-success-title" id="quiz-heading">Спасибо! Расчёт готовим</p>
-      <p class="quiz-success-text">Наш менеджер свяжется с вами в течение 30 минут</p>
+      <p class="quiz-success-text">Перезвоним в рабочее время и обсудим расчёт.</p>
       <button class="btn btn-red" onclick="closeQuizModal()">Закрыть</button>
     </div>
   </div>
 </div>
 <div class="cookie-banner cookie-banner--hidden" id="cookieBanner" role="alert" aria-live="polite">
-  <span>Мы используем файлы cookie. Продолжая пользоваться сайтом, вы соглашаетесь с <a href="../politika-konfidencialnosti/">политикой конфиденциальности</a>.</span>
+  <span>Используем cookie. Продолжая пользоваться сайтом, вы соглашаетесь с <a href="../politika-konfidencialnosti/">политикой конфиденциальности</a>.</span>
   <button class="cookie-banner__btn" id="cookieAccept">Принять</button>
 </div>
 <script>
 /* Город этого сайта: объект нужен base.js (заявки, сообщение об ошибке) и home.js (заголовок первого экрана) */
 window.AZ_CITY = {"key":"tomsk","name":"Томск","phone":"8 (3822) 97-99-49","phoneHref":"tel:+73822979949","heroLine2":"ремонт в Томске"};
 </script>
-<script src="../base.js?v=9d6be2a1ca"></script>
+<script src="../base.js?v=5ca357dc8f"></script>
 <script src="../vendor/gsap.min.js?v=2d26f4c060"></script>
 <script src="../vendor/ScrollTrigger.min.js?v=489bcf6d9c"></script>
 <script src="../vendor/lenis.min.js?v=44dcd10f2a"></script>
-<script src="../service.js?v=7d1c63a16b"></script>
+<script src="../service.js?v=f09d3dc4e9"></script>
 <script src="../priemka.js?v=421b5d21c1"></script>
 </body>
 </html>
