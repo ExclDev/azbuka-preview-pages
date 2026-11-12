@@ -386,10 +386,9 @@ html.sv-motion { scroll-behavior: auto !important; }
 }
 .hv-card-1 { --r: -9; --dx: -34; --fr: -7; --fx: -26; --hr: -3; --hx: -12; background: var(--bg2); color: #fff; }
 .hv-card-2 { --r: 4;  --dx: -4;  --fr: 0;  --fx: 0;   --hr: 0;  --hx: 0;   background: var(--light-bg); color: var(--light-ink); }
-.hv-card-3 { --r: 12; --dx: 30;  --fr: 6;  --fx: 26;  --hr: 2;  --hx: 12;  background: var(--bg); }
-.hv-card-3 img { width: 100%; height: 100%; max-width: none; object-fit: cover; }
+.hv-card-3 { --r: 12; --dx: 30;  --fr: 6;  --fx: 26;  --hr: 2;  --hx: 12;  background: var(--light-bg); color: var(--light-ink); }
 .hv-c-svg { position: absolute; inset: 16% 8% 8%; width: 84%; height: 76%; max-width: none; }
-.hv-furn { color: var(--red); }
+.hv-furn, .hv-sock { color: var(--red); }
 @media (hover: hover) { .hv-c-deck:hover { --h: 1; } }
 /* при загрузке листы раздаются по очереди; fill-mode backwards: после показа положением снова управляют переменные */
 @media (prefers-reduced-motion: no-preference) {
@@ -410,7 +409,6 @@ html.sv-motion { scroll-behavior: auto !important; }
 .dp-txt span { display: block; margin-top: 6px; font-size: 15px; line-height: 1.5; color: var(--light-text); }
 .dp-plan { position: sticky; top: calc(var(--sv-top) + 12px); margin: 0; aspect-ratio: 640 / 560; border-radius: var(--radius-lg); overflow: hidden; background: var(--bg); color: #fff; }
 .dp-svg { position: absolute; inset: 6% 6% 12%; width: 88%; height: 82%; max-width: none; }
-.dp-render { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover; opacity: 0; }
 .dp-walls path { stroke-dasharray: 1; stroke-dashoffset: 0; }
 .lay { color: rgba(255,255,255,.55); }
 .lay path { stroke-dasharray: 1; stroke-dashoffset: 0; }
@@ -426,8 +424,6 @@ html.sv-motion { scroll-behavior: auto !important; }
   .dp-item:has(input:checked) .dp-txt span { max-height: 120px; opacity: 1; margin-top: 6px; }
   .dp-item:has(input:focus-visible) { outline: 2px solid var(--red); outline-offset: 4px; border-radius: 8px; }
   .dp-cap { display: block; }
-  .dp-render { transform: scale(1.04); transition: opacity .8s ease, transform 1.2s var(--sv-ease); }
-  .dp-svg { transition: opacity .6s ease; }
   .lay { opacity: 0; transition: opacity .45s ease, color .45s ease; }
   .lay path { stroke-dashoffset: 1; transition: stroke-dashoffset .9s cubic-bezier(.65,0,.35,1); }
   .lay circle { transform-box: fill-box; transform-origin: center; transform: scale(0); transition: transform .45s cubic-bezier(.34,1.56,.64,1); }
@@ -437,26 +433,30 @@ html.sv-motion { scroll-behavior: auto !important; }
   .dp-board:has(:is(#sh3,#sh4,#sh5,#sh6,#sh7):checked) .lay-3,
   .dp-board:has(:is(#sh4,#sh5,#sh6,#sh7):checked) .lay-4,
   .dp-board:has(:is(#sh5,#sh6,#sh7):checked) .lay-5,
-  .dp-board:has(:is(#sh6,#sh7):checked) .lay-6 { opacity: 1; }
+  .dp-board:has(:is(#sh6,#sh7):checked) .lay-6,
+  .dp-board:has(#sh7:checked) .lay-7 { opacity: 1; }
   .dp-board:has(:is(#sh1,#sh2,#sh3,#sh4,#sh5,#sh6,#sh7):checked) .lay-1 path,
   .dp-board:has(:is(#sh2,#sh3,#sh4,#sh5,#sh6,#sh7):checked) .lay-2 path,
   .dp-board:has(:is(#sh3,#sh4,#sh5,#sh6,#sh7):checked) .lay-3 path,
   .dp-board:has(:is(#sh4,#sh5,#sh6,#sh7):checked) .lay-4 path,
   .dp-board:has(:is(#sh5,#sh6,#sh7):checked) .lay-5 path,
-  .dp-board:has(:is(#sh6,#sh7):checked) .lay-6 path { stroke-dashoffset: 0; }
+  .dp-board:has(:is(#sh6,#sh7):checked) .lay-6 path,
+  .dp-board:has(#sh7:checked) .lay-7 path { stroke-dashoffset: 0; }
   .dp-board:has(:is(#sh1,#sh2,#sh3,#sh4,#sh5,#sh6,#sh7):checked) .lay-1 circle,
   .dp-board:has(:is(#sh2,#sh3,#sh4,#sh5,#sh6,#sh7):checked) .lay-2 circle,
   .dp-board:has(:is(#sh3,#sh4,#sh5,#sh6,#sh7):checked) .lay-3 circle,
   .dp-board:has(:is(#sh4,#sh5,#sh6,#sh7):checked) .lay-4 circle,
   .dp-board:has(:is(#sh5,#sh6,#sh7):checked) .lay-5 circle,
-  .dp-board:has(:is(#sh6,#sh7):checked) .lay-6 circle { transform: scale(1); }
+  .dp-board:has(:is(#sh6,#sh7):checked) .lay-6 circle,
+  .dp-board:has(#sh7:checked) .lay-7 circle { transform: scale(1); }
   /* текущий слой красный, пройденные белые */
   .dp-board:has(#sh1:checked) .lay-1,
   .dp-board:has(#sh2:checked) .lay-2,
   .dp-board:has(#sh3:checked) .lay-3,
   .dp-board:has(#sh4:checked) .lay-4,
   .dp-board:has(#sh5:checked) .lay-5,
-  .dp-board:has(#sh6:checked) .lay-6 { color: var(--red); }
+  .dp-board:has(#sh6:checked) .lay-6,
+  .dp-board:has(#sh7:checked) .lay-7 { color: var(--red); }
   .dp-board:has(#sh1:checked) .cap-1,
   .dp-board:has(#sh2:checked) .cap-2,
   .dp-board:has(#sh3:checked) .cap-3,
@@ -464,9 +464,6 @@ html.sv-motion { scroll-behavior: auto !important; }
   .dp-board:has(#sh5:checked) .cap-5,
   .dp-board:has(#sh6:checked) .cap-6,
   .dp-board:has(#sh7:checked) .cap-7 { display: inline; }
-  /* седьмой лист: план бледнеет, проявляется визуализация */
-  .dp-board:has(#sh7:checked) .dp-render { opacity: .9; transform: none; }
-  .dp-board:has(#sh7:checked) .dp-svg { opacity: .35; }
 }
 @media (prefers-reduced-motion: reduce) { .lay path { stroke-dashoffset: 0 !important; } }
 /* уже 1100 px: панель закреплена сверху над списком. Колонка flex, а не сетка: у элемента сетки область закрепления ограничена его ячейкой,
@@ -614,6 +611,8 @@ html.sv-motion { scroll-behavior: auto !important; }
 .dv-r .dv-card::after { right: 100%; transform-origin: right; }
 .dv-card.on::after { transform: scaleX(1); }
 @media (min-width: 1280px) { .dv-r { padding-right: 36px; } }
+/* плавающий виджет (.qw-widget: right 16px, ≈ 56 px) не должен наезжать на правую колонку карточек: на компьютере отступ справа 76 px (на 1920 поле окна всего 64 px, и виджет перекрывал карточки) */
+@media (min-width: 1101px) { .dv-r { padding-right: 76px; } }
 @media (max-width: 1100px) {
   .dv-stage { grid-template-columns: 1fr 1fr; gap: 16px; }
   .dv-b .dv-player { grid-column: 1 / -1; grid-row: 1; height: auto; width: min(100%, 400px); justify-self: center; margin-bottom: 16px; }
