@@ -521,28 +521,8 @@
   }
 
   /* ---------------------------------------------------------
-     10. Акция: цифры таймера перекатываются, цена «щёлкает»
+     10. Акция: цена «щёлкает»
      --------------------------------------------------------- */
-  $$('.timer-num').forEach(function (el) {
-    var last = el.textContent.trim();
-    var mo = new MutationObserver(function () {
-      var v = el.textContent.trim();
-      el.innerHTML = '<span class="mo-roll">' + v + '</span>';
-      mo.takeRecords(); // свои изменения не считаем
-      if (v !== last) {
-        gsap.fromTo(el.firstChild, { yPercent: -100, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 0.55, ease: 'expo.out' });
-      }
-      last = v;
-    });
-    mo.observe(el, { childList: true, characterData: true, subtree: true });
-  });
-  var saleTimer = $('.sale .timer');
-  if (saleTimer) {
-    gsap.from($$('.timer-block', saleTimer), {
-      y: 50, opacity: 0, duration: 1.1, ease: EXPO, stagger: 0.08,
-      scrollTrigger: { trigger: saleTimer, start: 'top 88%', once: true }
-    });
-  }
   var price = $('.sale-price');
   if (price) {
     gsap.from([price, $('.sale-price-old')], {

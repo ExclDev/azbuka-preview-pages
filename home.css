@@ -457,7 +457,6 @@ html.scroll-locked { overflow-y: hidden; }
   .tech-inner { gap: 120px; }
   .sale-title { font-size: 56px; }
   .sale-right { padding: 56px; }
-  .timer-num { width: 88px; height: 88px; font-size: 38px; }
   .sale-price { font-size: 48px; }
   .sale-price-old { font-size: 28px; }
   .contacts-info { padding: 80px; }
@@ -480,7 +479,6 @@ html.scroll-locked { overflow-y: hidden; }
   .tech-inner { gap: 100px; }
   .sale-title { font-size: 50px; }
   .sale-right { padding: 48px; }
-  .timer-num { width: 76px; height: 76px; font-size: 32px; }
   .sale-price { font-size: 42px; }
   .contacts-info { padding: 70px; }
 }
@@ -552,9 +550,6 @@ html.scroll-locked { overflow-y: hidden; }
   .sale-inner { gap: 32px; }
   .sale-right { padding: 24px 20px; }
   .sale-title { font-size: clamp(24px, 6vw, 36px); }
-  .timer { gap: 10px; }
-  .timer-num { width: 52px; height: 52px; font-size: 22px; }
-  .timer-label { font-size: 10px; }
   .sale-price { font-size: 32px; }
   .sale-price-old { font-size: 20px; }
   .contacts-info { padding: 36px 20px; }
@@ -570,8 +565,6 @@ html.scroll-locked { overflow-y: hidden; }
   .tech-img img { aspect-ratio: 16/9; max-height: 220px; }
   .consult-photos { height: 240px; }
   .consult-form-title { font-size: clamp(22px, 6vw, 28px); }
-  .timer { gap: 8px; flex-wrap: wrap; justify-content: center; }
-  .timer-num { width: 46px; height: 46px; font-size: 20px; }
   .sale-btn { font-size: 13px; padding: 14px; margin-bottom: 76px; }
   .btn { padding: 12px 18px; font-size: 13px; }
   .contacts-item-value { font-size: 14px; }
@@ -583,8 +576,6 @@ html.scroll-locked { overflow-y: hidden; }
   .hero-badge-text { font-size: 12px; }
   .reason-num { font-size: 48px; }
   .reason-name { font-size: 16px; }
-  .timer-num { width: 40px; height: 40px; font-size: 17px; }
-  .timer { gap: 6px; }
   .contacts-icon { width: 28px; height: 28px; }
 }
 .btn-cta::after {
@@ -779,17 +770,6 @@ html.scroll-locked { overflow-y: hidden; }
 }
 .sale-text { font-size: 14px; color: var(--gray); line-height: 1.7; }
 .sale-right { background: var(--bg3); padding: 40px; }
-.sale-timer-label { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--gray); margin-bottom: 16px; }
-.timer { display: flex; gap: 16px; margin-bottom: 32px; }
-.timer-block { text-align: center; }
-.timer-num {
-  display: flex; align-items: center; justify-content: center;
-  width: 64px; height: 64px;
-  background: var(--bg); border: 1px solid var(--border);
-  font-family: var(--font-display); font-size: 28px; font-weight: 700;
-  margin-bottom: 6px;
-}
-.timer-label { font-size: 11px; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; }
 .sale-prices { display: flex; align-items: baseline; gap: 16px; margin-bottom: 8px; }
 .sale-price { font-family: var(--font-display); font-size: 36px; font-weight: 700; color: var(--red); }
 .sale-price-old { font-family: var(--font-display); font-size: 22px; color: var(--gray); text-decoration: line-through; }

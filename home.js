@@ -20,38 +20,6 @@ document.getElementById('mainForm').addEventListener('focusin', function () {
   if (!AZ_LEAD.trigger) AZ_LEAD.trigger = 'Форма на странице — Отправить заявку';
 }, { once: true });
 }
-(function startTimer() {
-  if (!document.getElementById('t-secs')) return;
-  const KEY = 'azbuka_sale_timer_end';
-  let endTs = localStorage.getItem(KEY);
-  if (!endTs) {
-    const d = new Date();
-    d.setDate(d.getDate() + 3);
-    d.setHours(23, 59, 59, 0);
-    endTs = d.getTime();
-    localStorage.setItem(KEY, endTs);
-  }
-  const endTime = Number(endTs);
-  function update() {
-    const diff = endTime - Date.now();
-    if (diff <= 0) {
-      ['t-days','t-hours','t-mins','t-secs'].forEach(id => {
-        document.getElementById(id).textContent = '00';
-      });
-      return;
-    }
-    const days  = Math.floor(diff / 86400000);
-    const hours = Math.floor((diff % 86400000) / 3600000);
-    const mins  = Math.floor((diff % 3600000) / 60000);
-    const secs  = Math.floor((diff % 60000) / 1000);
-    document.getElementById('t-days').textContent  = String(days).padStart(2, '0');
-    document.getElementById('t-hours').textContent = String(hours).padStart(2, '0');
-    document.getElementById('t-mins').textContent  = String(mins).padStart(2, '0');
-    document.getElementById('t-secs').textContent  = String(secs).padStart(2, '0');
-  }
-  update();
-  setInterval(update, 1000);
-})();
 (function () {
   const aboutTop = document.querySelector('.about-top');
   if (!aboutTop) return;
@@ -761,7 +729,11 @@ typeHeroTitle('Профессиональный', AZ_CITY.heroLine2);
     var countEl = document.getElementById('arMetaCount');
     if (scoreEl) scoreEl.textContent = avg.toFixed(1);
     if (starsEl) starsEl.innerHTML   = starsSVG(Math.round(avg));
-    if (countEl) countEl.textContent = total + ' отзывов';
+    if (countEl) {
+      var m100 = total % 100, m10 = total % 10;
+      var word = m100 >= 11 && m100 <= 14 ? 'отзывов' : m10 === 1 ? 'отзыв' : (m10 >= 2 && m10 <= 4) ? 'отзыва' : 'отзывов';
+      countEl.textContent = total + ' ' + word;
+    }
   }
   /* ═══ Позиционирование карточек ═══ */
   function getCardStyle(index) {
@@ -967,7 +939,7 @@ typeHeroTitle('Профессиональный', AZ_CITY.heroLine2);
   /* ═══ Загрузка отзывов ═══ */
   function loadReviews(cityConfig) {
     var file  = cityConfig.reviewsFile  || 'reviews.json';
-    var total = cityConfig.reviewsTotal || 47;
+    var total = cityConfig.reviewsTotal;
     var avg   = cityConfig.reviewsAvg   || 4.9;
     var url   = cityConfig.reviewsUrl   || '';
     renderMeta(total, avg);
