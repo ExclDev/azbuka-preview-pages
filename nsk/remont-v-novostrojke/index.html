@@ -151,7 +151,7 @@
 <link rel="preload" as="font" type="font/woff2" href="../fonts/oswald-latin.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/inter-cyrillic-400.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/inter-latin-400.woff2" crossorigin />
-<link rel="stylesheet" href="../base.css?v=8bf8d5229a" />
+<link rel="stylesheet" href="../base.css?v=ac8f675390" />
 <link rel="stylesheet" href="../service.css?v=3126eb3bc4" />
 </head>
 <body class="city-bar-visible">
@@ -173,27 +173,19 @@
       <a class="header-logo" href="../" aria-label="Азбука Ремонта — главная">
         <img src="../images/logo.webp" alt="Азбука ремонта" width="126" height="44" loading="eager" fetchpriority="high" />
       </a>
-      <nav class="header-nav" aria-label="Основная навигация">
-        
-<a href="../remont-v-novostrojke/" aria-current="page">Новостройка</a>
-<a href="../vannaya-pod-klyuch/">Ванная</a>
-<a href="../tehnicheskij-proekt/">Технический проект</a>
-<a href="../priemka-kvartiry/">Приёмка</a>
-<a href="../#contacts">Контакты</a>
+      <nav class="header-nav nvx-nav" aria-label="Основная навигация">
+        <button class="nvx-top is-current" type="button" data-pane="remont" aria-expanded="false" aria-controls="nvxPanel">Ремонт<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></button>
+        <button class="nvx-top" type="button" data-pane="uslugi" aria-expanded="false" aria-controls="nvxPanel">Услуги<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></button>
+        <a class="nvx-top" href="../#works">Портфолио</a>
+        <span class="nvx-top is-soon" aria-disabled="true">Статьи <em class="nvx-soon">скоро</em></span>
+        <a class="nvx-top" href="../#contacts">Контакты</a>
       </nav>
       <div class="header-right">
         <div class="header-socials">
-          <a href="https://vk.com/azbukaremonta" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="24" height="24">
-              <path d="M13.162 18.994c-5.476 0-8.6-3.752-8.73-9.994h2.745c.09 4.582 2.11 6.522 3.71 6.922V9h2.582v3.953c1.58-.17 3.24-1.97 3.8-3.953h2.583c-.43 2.444-2.23 4.243-3.51 4.984 1.28.6 3.33 2.17 4.11 5.01h-2.84c-.61-1.9-2.13-3.37-4.14-3.57v3.57h-.31z"/>
-            </svg>
-          </a>
-          <a href="https://pin.it/457YkWf3e" target="_blank" rel="noopener noreferrer" aria-label="Pinterest">
-            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="24" height="24">
-              <path d="M12 2C6.477 2 2 6.477 2 12c0 4.237 2.636 7.855 6.356 9.312-.088-.79-.167-2.005.035-2.868.182-.78 1.172-4.97 1.172-4.97s-.299-.6-.299-1.486c0-1.39.806-2.428 1.81-2.428.852 0 1.264.64 1.264 1.408 0 .858-.546 2.14-.828 3.33-.236.995.5 1.807 1.48 1.807 1.778 0 3.144-1.874 3.144-4.58 0-2.393-1.72-4.068-4.177-4.068-2.845 0-4.515 2.135-4.515 4.34 0 .859.331 1.781.745 2.281a.3.3 0 01.069.288c-.076.315-.245.995-.277 1.134-.044.183-.145.222-.334.134-1.249-.581-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.473 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.965-.525-2.291-1.148l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446 5.523 0 10-4.477 10-10S17.523 2 12 2z"/>
-            </svg>
-          </a>
-        </div>
+  <a href="https://vk.com/azbukaremonta" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="24" height="24"><path d="M13.162 18.994c-5.476 0-8.6-3.752-8.73-9.994h2.745c.09 4.582 2.11 6.522 3.71 6.922V9h2.582v3.953c1.58-.17 3.24-1.97 3.8-3.953h2.583c-.43 2.444-2.23 4.243-3.51 4.984 1.28.6 3.33 2.17 4.11 5.01h-2.84c-.61-1.9-2.13-3.37-4.14-3.57v3.57h-.31z"/></svg></a>
+  <a href="https://pin.it/457YkWf3e" target="_blank" rel="noopener noreferrer" aria-label="Pinterest"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="24" height="24"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.237 2.636 7.855 6.356 9.312-.088-.79-.167-2.005.035-2.868.182-.78 1.172-4.97 1.172-4.97s-.299-.6-.299-1.486c0-1.39.806-2.428 1.81-2.428.852 0 1.264.64 1.264 1.408 0 .858-.546 2.14-.828 3.33-.236.995.5 1.807 1.48 1.807 1.778 0 3.144-1.874 3.144-4.58 0-2.393-1.72-4.068-4.177-4.068-2.845 0-4.515 2.135-4.515 4.34 0 .859.331 1.781.745 2.281a.3.3 0 01.069.288c-.076.315-.245.995-.277 1.134-.044.183-.145.222-.334.134-1.249-.581-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.473 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.965-.525-2.291-1.148l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446 5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg></a>
+</div>
+
         <div class="header-phone">
           <a href="tel:+79231410154">8 (923) 141-01-54</a>
         </div>
@@ -204,16 +196,85 @@
       </div>
     </div>
   </div>
+  <div class="nvx-panel" id="nvxPanel" aria-hidden="true">
+    <div class="nvx-pane" data-pane="remont">
+      <div class="nvx-col">
+        <p class="nvx-group">Ремонт под ключ</p>
+        <ul class="nvx-links">
+          <li>
+            <a class="nvx-link" href="../remont-v-novostrojke/" aria-current="page"><span class="nvx-link-t">Ремонт в новостройке<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span><span class="nvx-link-d">Без отделки, предчистовая или с отделкой застройщика</span></a>
+          </li>
+          <li>
+            <span class="nvx-link is-soon" aria-disabled="true"><span class="nvx-link-t">Ремонт вторички <em class="nvx-soon">скоро</em></span><span class="nvx-link-d">Обновим отделку или сделаем капремонт — поможем выбрать</span></span>
+          </li>
+          <li>
+            <span class="nvx-link is-soon" aria-disabled="true"><span class="nvx-link-t">Капитальный ремонт <em class="nvx-soon">скоро</em></span><span class="nvx-link-d">Стены, стяжка, электрика и сантехника заново</span></span>
+          </li>
+          <li>
+            <a class="nvx-link" href="../vannaya-pod-klyuch/"><span class="nvx-link-t">Ванная под ключ<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span><span class="nvx-link-d">Трубы, гидроизоляцию и уклон показываем до плитки</span></a>
+          </li>
+          <li>
+            <span class="nvx-link is-soon" aria-disabled="true"><span class="nvx-link-t">Дизайнерский ремонт <em class="nvx-soon">скоро</em></span><span class="nvx-link-d">Ремонт по проекту дизайнера</span></span>
+          </li>
+        </ul>
+      </div><a class="nvx-card" href="../#works"><img src="../images/portfolio/portfolio-06.webp" alt="Кухня-столовая после ремонта" loading="lazy"><span class="nvx-card-cap"><b>600 объектов<br>с 2010 года</b><span>Смотреть работы<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></span></a>
+    </div>
+    <div class="nvx-pane" data-pane="uslugi">
+      <div class="nvx-col">
+        <p class="nvx-group">К ремонту</p>
+        <ul class="nvx-links">
+          <li>
+            <a class="nvx-link" href="../tehnicheskij-proekt/"><span class="nvx-link-t">Технический проект<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span><span class="nvx-link-d">750 ₽/м² вместо 1 500, если ремонт делаем мы</span></a>
+          </li>
+          <li>
+            <a class="nvx-link" href="../priemka-kvartiry/"><span class="nvx-link-t">Приёмка квартиры<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span><span class="nvx-link-d">Проверяем квартиру от застройщика по чек-листу с инструментом</span></a>
+          </li>
+        </ul>
+      </div>
+      <div class="nvx-col">
+        <p class="nvx-group">Отдельные работы</p>
+        <ul class="nvx-links">
+          <li>
+            <span class="nvx-link is-soon nvx-link-s" aria-disabled="true"><span class="nvx-link-t">Электромонтаж <em class="nvx-soon">скоро</em></span></span>
+          </li>
+          <li>
+            <span class="nvx-link is-soon nvx-link-s" aria-disabled="true"><span class="nvx-link-t">Сантехника <em class="nvx-soon">скоро</em></span></span>
+          </li>
+          <li>
+            <span class="nvx-link is-soon nvx-link-s" aria-disabled="true"><span class="nvx-link-t">Натяжные потолки <em class="nvx-soon">скоро</em></span></span>
+          </li>
+        </ul>
+      </div><a class="nvx-card" href="../tehnicheskij-proekt/"><img src="../images/technical-project-concept.webp" alt="Чертёж технического проекта и готовая гостиная" loading="lazy"><span class="nvx-card-cap"><b>Технический проект<br>за полцены</b><span>Подробнее<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></span></a>
+    </div>
+  </div>
 </header>
+<div class="nvx-dim" id="nvxDim" aria-hidden="true"></div>
 <nav class="mobile-menu" id="mobileMenu" aria-label="Мобильная навигация">
-  
-<a href="../remont-v-novostrojke/" aria-current="page" onclick="closeMobileMenu()">Новостройка</a>
-<a href="../vannaya-pod-klyuch/" onclick="closeMobileMenu()">Ванная</a>
-<a href="../tehnicheskij-proekt/" onclick="closeMobileMenu()">Технический проект</a>
-<a href="../priemka-kvartiry/" onclick="closeMobileMenu()">Приёмка</a>
-<a href="../#contacts" onclick="closeMobileMenu()">Контакты</a>
-  <div class="header-phone"><a href="tel:+79231410154">8 (923) 141-01-54</a></div>
-  <button class="btn btn-red btn-cta" onclick="openPopup('Мобильное меню — Оставить заявку'); closeMobileMenu()">Оставить заявку</button>
+  <div class="mm-list">
+    <button class="mm-row is-on is-current" type="button" aria-expanded="true" aria-controls="mm-remont" data-acc="remont">Ремонт<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></button>
+    <div class="mm-sub is-on" id="mm-remont" data-acc-body="remont"><div><ul>
+      <li><a href="../remont-v-novostrojke/" onclick="closeMobileMenu()" aria-current="page"><b>Ремонт в новостройке</b><span>Без отделки, предчистовая или с отделкой застройщика</span></a></li>
+      <li><span class="mm-soon" aria-disabled="true"><b>Ремонт вторички <em class="nvx-soon">скоро</em></b><span>Обновим отделку или сделаем капремонт — поможем выбрать</span></span></li>
+      <li><span class="mm-soon" aria-disabled="true"><b>Капитальный ремонт <em class="nvx-soon">скоро</em></b><span>Стены, стяжка, электрика и сантехника заново</span></span></li>
+      <li><a href="../vannaya-pod-klyuch/" onclick="closeMobileMenu()"><b>Ванная под ключ</b><span>Трубы, гидроизоляцию и уклон показываем до плитки</span></a></li>
+      <li><span class="mm-soon" aria-disabled="true"><b>Дизайнерский ремонт <em class="nvx-soon">скоро</em></b><span>Ремонт по проекту дизайнера</span></span></li>
+    </ul></div></div>
+    <button class="mm-row" type="button" aria-expanded="false" aria-controls="mm-uslugi" data-acc="uslugi">Услуги<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></button>
+    <div class="mm-sub" id="mm-uslugi" data-acc-body="uslugi"><div><ul><li class="mm-lbl">К ремонту</li>
+      <li><a href="../tehnicheskij-proekt/" onclick="closeMobileMenu()"><b>Технический проект</b><span>750 ₽/м² вместо 1 500, если ремонт делаем мы</span></a></li>
+      <li><a href="../priemka-kvartiry/" onclick="closeMobileMenu()"><b>Приёмка квартиры</b><span>Проверяем квартиру от застройщика по чек-листу с инструментом</span></a></li><li class="mm-lbl">Отдельные работы</li>
+      <li><span class="mm-soon" aria-disabled="true"><b>Электромонтаж <em class="nvx-soon">скоро</em></b></span></li>
+      <li><span class="mm-soon" aria-disabled="true"><b>Сантехника <em class="nvx-soon">скоро</em></b></span></li>
+      <li><span class="mm-soon" aria-disabled="true"><b>Натяжные потолки <em class="nvx-soon">скоро</em></b></span></li>
+    </ul></div></div>
+    <a class="mm-row" href="../#works" onclick="closeMobileMenu()">Портфолио</a>
+    <span class="mm-row is-soon" aria-disabled="true">Статьи <em class="nvx-soon">скоро</em></span>
+    <a class="mm-row" href="../#contacts" onclick="closeMobileMenu()">Контакты</a>
+  </div>
+  <div class="mm-dock">
+    <a class="mm-ph" href="tel:+79231410154">8 (923) 141-01-54</a>
+    <button class="btn btn-red btn-cta" onclick="openPopup('Мобильное меню — Оставить заявку'); closeMobileMenu()">Оставить заявку</button>
+  </div>
 </nav>
 <div class="sv-progress" aria-hidden="true"><i></i></div>
 <nav class="sv-toc" aria-label="Разделы страницы"><a href="#scope" class="t-scope"><span class="tl">Что входит</span></a><a href="#prices" class="t-prices"><span class="tl">Цены</span></a><a href="#steps" class="t-steps"><span class="tl">Этапы</span></a><a href="#works" class="t-works"><span class="tl">Работы</span></a><a href="#reviews" class="t-reviews"><span class="tl">Отзывы</span></a><a href="#faq" class="t-faq"><span class="tl">Вопросы</span></a></nav>
@@ -554,41 +615,60 @@
 </main>
 <footer class="footer" role="contentinfo">
   <div class="wrapper">
-    <div class="footer-top">
-      <nav class="footer-nav" aria-label="Навигация в подвале">
-        <a href="../#about">О компании</a>
-        <a href="../#works">Наши работы</a>
-        <a href="../#video-reels">Смотрите в деталях</a>
-        <a href="../#process">Как мы работаем</a>
-        <a href="../#remote">Берём на себя</a>
-        <a href="../#reviews">Отзывы</a>
-        <a href="../#contacts">Контакты</a>
-        <a href="../politika-konfidencialnosti/">Политика конфиденциальности</a>
-        <a href="../polzovatelskoe-soglashenie/">Пользовательское соглашение</a>
+    <div class="footer-top nvx-foot-grid">
+      <nav class="nvx-fcol nvx-fcol-remont" aria-labelledby="nvx-f-remont">
+        <h3 id="nvx-f-remont">Ремонт</h3>
+        <ul>
+          <li><a href="../remont-v-novostrojke/" aria-current="page">Ремонт в новостройке</a></li>
+          <li><span class="nvx-f-soon" aria-disabled="true">Ремонт вторички <em class="nvx-soon">скоро</em></span></li>
+          <li><span class="nvx-f-soon" aria-disabled="true">Капитальный ремонт <em class="nvx-soon">скоро</em></span></li>
+          <li><a href="../vannaya-pod-klyuch/">Ванная под ключ</a></li>
+          <li><span class="nvx-f-soon" aria-disabled="true">Дизайнерский ремонт <em class="nvx-soon">скоро</em></span></li>
+        </ul>
       </nav>
-      <div class="footer-contact">
-        <div class="footer-phone"><a href="tel:+79231410154">8 (923) 141-01-54</a></div>
-        <div class="footer-actions">
-          <div class="footer-socials">
-            <a href="https://vk.com/azbukaremonta" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте">
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="20" height="20">
-                <path d="M13.162 18.994c-5.476 0-8.6-3.752-8.73-9.994h2.745c.09 4.582 2.11 6.522 3.71 6.922V9h2.582v3.953c1.58-.17 3.24-1.97 3.8-3.953h2.583c-.43 2.444-2.23 4.243-3.51 4.984 1.28.6 3.33 2.17 4.11 5.01h-2.84c-.61-1.9-2.13-3.37-4.14-3.57v3.57h-.31z"/>
-              </svg>
-            </a>
-            <a href="https://pin.it/457YkWf3e" target="_blank" rel="noopener noreferrer" aria-label="Pinterest">
-              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="20" height="20">
-                <path d="M12 2C6.477 2 2 6.477 2 12c0 4.237 2.636 7.855 6.356 9.312-.088-.79-.167-2.005.035-2.868.182-.78 1.172-4.97 1.172-4.97s-.299-.6-.299-1.486c0-1.39.806-2.428 1.81-2.428.852 0 1.264.64 1.264 1.408 0 .858-.546 2.14-.828 3.33-.236.995.5 1.807 1.48 1.807 1.778 0 3.144-1.874 3.144-4.58 0-2.393-1.72-4.068-4.177-4.068-2.845 0-4.515 2.135-4.515 4.34 0 .859.331 1.781.745 2.281a.3.3 0 01.069.288c-.076.315-.245.995-.277 1.134-.044.183-.145.222-.334.134-1.249-.581-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.473 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.965-.525-2.291-1.148l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446 5.523 0 10-4.477 10-10S17.523 2 12 2z"/>
-              </svg>
-            </a>
-          </div>
-          <button class="btn btn-red btn-cta" onclick="openPopup('Подвал — Оставить заявку')">Оставить заявку</button>
-        </div>
+      <nav class="nvx-fcol nvx-fcol-uslugi" aria-labelledby="nvx-f-uslugi">
+        <h3 id="nvx-f-uslugi">Услуги</h3>
+        <ul>
+          <li><a href="../tehnicheskij-proekt/">Технический проект</a></li>
+          <li><a href="../priemka-kvartiry/">Приёмка квартиры</a></li>
+          <li><span class="nvx-f-soon" aria-disabled="true">Электромонтаж <em class="nvx-soon">скоро</em></span></li>
+          <li><span class="nvx-f-soon" aria-disabled="true">Сантехника <em class="nvx-soon">скоро</em></span></li>
+          <li><span class="nvx-f-soon" aria-disabled="true">Натяжные потолки <em class="nvx-soon">скоро</em></span></li>
+        </ul>
+      </nav>
+      <nav class="nvx-fcol nvx-fcol-company" aria-labelledby="nvx-f-company">
+        <h3 id="nvx-f-company">Компания</h3>
+        <ul>
+          <li><a href="../#about">О компании</a></li>
+          <li><a href="../#works">Портфолио</a></li>
+          <li><a href="../#reviews">Отзывы</a></li>
+          <li><span class="nvx-f-soon" aria-disabled="true">Статьи <em class="nvx-soon">скоро</em></span></li>
+          <li><a href="../#contacts">Контакты</a></li>
+        </ul>
+      </nav>
+      <div class="nvx-contact">
+        <h3>Связаться</h3>
+        <a class="nvx-phone" href="tel:+79231410154">8 (923) 141-01-54</a>
+        <p>Новосибирск, ул. Семьи Шамшиных, 64, офис 412, 4 этаж<br><span class="nvx-hours">Пн–Пт, 9:00–18:00</span></p>
+        <p><a href="mailto:dir@azbuka-remonta-nsk.ru" class="nvx-mail">dir@azbuka-remonta-nsk.ru</a></p>
+        <div class="nvx-socials">
+  <a href="https://vk.com/azbukaremonta" target="_blank" rel="noopener noreferrer" aria-label="ВКонтакте"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="20" height="20"><path d="M13.162 18.994c-5.476 0-8.6-3.752-8.73-9.994h2.745c.09 4.582 2.11 6.522 3.71 6.922V9h2.582v3.953c1.58-.17 3.24-1.97 3.8-3.953h2.583c-.43 2.444-2.23 4.243-3.51 4.984 1.28.6 3.33 2.17 4.11 5.01h-2.84c-.61-1.9-2.13-3.37-4.14-3.57v3.57h-.31z"/></svg></a>
+  <a href="https://pin.it/457YkWf3e" target="_blank" rel="noopener noreferrer" aria-label="Pinterest"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="20" height="20"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.237 2.636 7.855 6.356 9.312-.088-.79-.167-2.005.035-2.868.182-.78 1.172-4.97 1.172-4.97s-.299-.6-.299-1.486c0-1.39.806-2.428 1.81-2.428.852 0 1.264.64 1.264 1.408 0 .858-.546 2.14-.828 3.33-.236.995.5 1.807 1.48 1.807 1.778 0 3.144-1.874 3.144-4.58 0-2.393-1.72-4.068-4.177-4.068-2.845 0-4.515 2.135-4.515 4.34 0 .859.331 1.781.745 2.281a.3.3 0 01.069.288c-.076.315-.245.995-.277 1.134-.044.183-.145.222-.334.134-1.249-.581-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.473 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.965-.525-2.291-1.148l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446 5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg></a>
+  <a href="https://t.me/azbukaremonta" target="_blank" rel="noopener noreferrer" aria-label="Telegram"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" width="20" height="20"><path d="M21.94 4.66 18.9 19.01c-.23 1.01-.83 1.26-1.68.79l-4.63-3.41-2.23 2.15c-.25.25-.45.45-.93.45l.33-4.71 8.58-7.75c.37-.33-.08-.52-.58-.19L7.16 13.02l-4.57-1.43c-.99-.31-1.01-.99.21-1.47L20.65 3.2c.83-.31 1.55.19 1.29 1.46z"/></svg></a>
+  <a href="https://max.ru/azbukaremonta" target="_blank" rel="noopener noreferrer" aria-label="MAX"><span class="nvx-max" aria-hidden="true">MAX</span></a>
+</div>
+
+        <button class="btn btn-red btn-cta" onclick="openPopup('Подвал — Оставить заявку')">Оставить заявку</button>
       </div>
     </div>
     <div class="ed-wordmark" aria-hidden="true"><span>Азбука</span> <span>Ремонта</span></div>
     <div class="footer-bottom">
       <span>© 2026. ООО «Азбука Ремонта». Все права защищены</span>
       <span>Ремонт квартир в Новосибирске</span>
+      <span class="footer-legal">
+        <a href="../politika-konfidencialnosti/">Политика конфиденциальности</a>
+        <a href="../polzovatelskoe-soglashenie/">Пользовательское соглашение</a>
+      </span>
       <a class="footer-dev-credit" href="https://exclusivedev.ru/landing/" target="_blank" rel="noopener noreferrer" aria-label="Разработка сайта — exc/dev">
         <span class="footer-dev-credit-text">Разработка сайта</span>
         <img src="../images/exclusivedev-logo.svg" alt="exc/dev" width="90" height="15" loading="lazy" />
@@ -688,7 +768,7 @@
 
       <p class="form-error" hidden></p>
       <button type="submit" class="btn btn-red form-submit" id="popupSubmit">Отправить заявку</button>
-      <p class="form-hours">Перезваниваем в рабочее время: пн–пт, 9:00–18:00</p>
+      <p class="form-hours">Перезваниваем в рабочее время: Пн–Пт, 9:00–18:00</p>
     </form>
   </div>
   <div class="popup-box popup-success" id="popupSuccess" style="display:none">
@@ -866,7 +946,7 @@
 /* Город этого сайта: объект нужен base.js (заявки, сообщение об ошибке) и home.js (заголовок первого экрана) */
 window.AZ_CITY = {"key":"novosibirsk","name":"Новосибирск","phone":"8 (923) 141-01-54","phoneHref":"tel:+79231410154","heroLine2":"ремонт в Новосибирске"};
 </script>
-<script src="../base.js?v=5ca357dc8f"></script>
+<script src="../base.js?v=fbf3632b31"></script>
 <script src="../vendor/gsap.min.js?v=2d26f4c060"></script>
 <script src="../vendor/ScrollTrigger.min.js?v=489bcf6d9c"></script>
 <script src="../vendor/lenis.min.js?v=44dcd10f2a"></script>

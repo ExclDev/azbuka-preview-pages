@@ -866,7 +866,6 @@ html.scroll-locked { overflow-y: hidden; }
 .contacts-item-value { font-size: 15px; color: var(--gray-light); }
 .contacts-item-value a { color: var(--gray-light); transition: color .2s; }
 .contacts-item-value a:hover { color: var(--red); }
-.footer-actions .btn { padding: 12px 22px; font-size: 13px; }
 @media (max-width: 600px) {
   #mainForm .form-grid { grid-template-columns: 1fr !important; }
 }
@@ -1468,4 +1467,63 @@ html.scroll-locked { overflow-y: hidden; }
   .sale-price { font-size: 28px; }
   .sale-price-old { font-size: 18px; }
   .sale-prices { gap: 12px; }
+}
+
+/* ═══ «Чем занимаемся» (12.11.2026): карточки услуг после первого экрана ═══
+   Шторка: верхнее фото уходит clip-path слева направо, за ним красный шов, открывается слой «под отделкой».
+   position: relative и z-index выше первого экрана нужны, иначе первый экран перекрывает фон и текст секции. */
+.nvx-svc { position: relative; z-index: 3; padding: var(--section-pad) 0 calc(var(--section-pad) + 16px); background: var(--bg); }
+.nvx-svc-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px; }
+.nvx-svc-sub { max-width: 440px; margin: 0 0 32px; font: 400 17px/1.55 var(--font-body); color: var(--gray-light); }
+.nvx-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 24px; margin-top: 8px; }
+.nvx-c { grid-column: span 2; display: flex; flex-direction: column; min-width: 0; border-radius: var(--radius-lg); overflow: hidden; background: var(--bg2); color: #fff; transition: transform .5s var(--nvx-ease); }
+a.nvx-c:hover { transform: translateY(-4px); }
+.nvx-c-wide { grid-column: span 3; }
+.nvx-media { position: relative; height: 260px; overflow: hidden; background: #0f0d0b; }
+.nvx-c-wide .nvx-media { height: 300px; }
+.nvx-media img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.nvx-under { position: absolute; inset: 0; }
+.nvx-under > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.nvx-under-wall { background: #1a1613; }
+.nvx-under-bath { background: #121a20; }
+.nvx-under-plan { background: #f5f5f7; }
+.nvx-top-img { position: absolute; inset: 0; clip-path: inset(0 0 0 0); transition: clip-path .7s cubic-bezier(.65,0,.35,1); }
+.nvx-seam { position: absolute; top: 0; bottom: 0; left: 100%; width: 2px; background: var(--red); transition: left .7s cubic-bezier(.65,0,.35,1); }
+@media (hover: hover) {
+  .nvx-c:hover .nvx-top-img, .nvx-c:focus-visible .nvx-top-img { clip-path: inset(0 0 0 100%); }
+  .nvx-c:hover .nvx-seam, .nvx-c:focus-visible .nvx-seam { left: 0; }
+}
+.nvx-c.is-revealed .nvx-top-img { clip-path: inset(0 0 0 100%); transition-duration: .9s; }
+.nvx-c.is-revealed .nvx-seam { left: 0; transition-duration: .9s; }
+.nvx-tag { position: absolute; left: 16px; bottom: 16px; z-index: 2; padding: 7px 12px; border-radius: var(--radius-pill); background: rgba(22,19,16,.8); font: 600 13px/1.2 var(--font-body); color: #fff; }
+.nvx-c-body { display: flex; flex-direction: column; gap: 10px; flex: 1; padding: 24px 24px 26px; }
+.nvx-c-body h3 { margin: 0; font: 600 30px/1.05 var(--font-display); text-transform: uppercase; color: #fff; text-wrap: balance; }
+.nvx-c-body p { margin: 0; font: 400 15px/1.55 var(--font-body); color: var(--nvx-soft); text-wrap: pretty; }
+.nvx-more { display: inline-flex; align-items: center; gap: 8px; margin-top: auto; padding-top: 8px; font: 600 14px/1 var(--font-body); color: #fff; }
+.nvx-more svg { color: var(--red); transition: transform .3s var(--nvx-ease); }
+a.nvx-c:hover .nvx-more svg { transform: translateX(4px); }
+.nvx-c.is-soon { cursor: default; }
+.nvx-c.is-soon .nvx-more { color: var(--nvx-mute); font-weight: 400; }
+.nvx-c.is-soon .nvx-more .nvx-soon { margin-left: 0; margin-right: 6px; }
+.nvx-chip-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-top: 32px; }
+.nvx-chip-row > span:first-child { margin-right: 8px; font: 400 15px/1.4 var(--font-body); color: var(--nvx-mute); }
+.nvx-chip { display: inline-flex; align-items: center; min-height: 44px; padding: 0 18px; border: 1px solid rgba(255,255,255,.16); border-radius: var(--radius-pill); font: 600 14px/1 var(--font-body); color: #fff; transition: border-color .2s ease, background-color .2s ease; }
+a.nvx-chip:hover { border-color: var(--red); background: rgba(232,32,26,.08); }
+.nvx-chip.is-soon { cursor: default; color: var(--nvx-soon); }
+@media (max-width: 1100px) {
+  .nvx-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .nvx-c, .nvx-c-wide { grid-column: span 1; }
+  .nvx-c-wide .nvx-media { height: 260px; }
+}
+@media (max-width: 640px) {
+  .nvx-svc { padding: var(--section-pad-mobile) 0; }
+  .nvx-grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .nvx-media, .nvx-c-wide .nvx-media { height: 200px; }
+  .nvx-c-body { padding: 18px 18px 20px; }
+  .nvx-c-body h3 { font-size: 24px; }
+  .nvx-svc-sub { font-size: 15px; margin-bottom: 20px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  /* на устройстве с наведением слой «под отделкой» открывается сразу, без шторки; на тач-экране остаётся верхнее фото */
+  .nvx-c, .nvx-top-img, .nvx-seam, .nvx-more svg { transition: none !important; }
 }

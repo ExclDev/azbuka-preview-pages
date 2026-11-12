@@ -962,3 +962,15 @@ typeHeroTitle('Профессиональный', AZ_CITY.heroLine2);
   /* Настройки отзывов своего города (файл, число, рейтинг, ссылка на 2ГИС) — из данных города */
   loadReviews(window.AZ_HOME.reviews);
 })();
+
+/* ═══ «Чем занимаемся»: шторка карточек на тач-экране (12.11.2026) ═══
+   С наведением шторку ведёт CSS (hover и фокус). На тач-экране карточка раскрывается один раз, когда доезжает до середины экрана,
+   обратно не играет. Под prefers-reduced-motion шторки нет: остаётся верхнее фото. */
+(function () {
+  var cards = document.querySelectorAll('.nvx-c');
+  if (!cards.length || matchMedia('(hover: hover)').matches || matchMedia('(prefers-reduced-motion: reduce)').matches || !('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function (es) {
+    es.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('is-revealed'); io.unobserve(en.target); } });
+  }, { rootMargin: '-45% 0px -45% 0px' });
+  [].forEach.call(cards, function (c) { io.observe(c); });
+})();

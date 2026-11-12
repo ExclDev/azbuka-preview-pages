@@ -6,13 +6,122 @@ burger.addEventListener('click', () => {
   burger.classList.toggle('open', isOpen);
   burger.setAttribute('aria-expanded', String(isOpen));
   document.documentElement.classList.toggle('scroll-locked', isOpen);
+  document.querySelector('.header').classList.toggle('nvx-solid', isOpen);
 });
 function closeMobileMenu() {
   mobileMenu.classList.remove('open');
   burger.classList.remove('open');
   burger.setAttribute('aria-expanded', 'false');
   document.documentElement.classList.remove('scroll-locked');
+  document.querySelector('.header').classList.remove('nvx-solid');
 }
+
+/* ═══ Навигация: панели шапки и группы мобильного меню (12.11.2026) ═══
+   Панель открывается наведением (только hover:hover), кликом и с клавиатуры; между пунктами перетекает: размер берётся из содержимого
+   панели, сдвиг по X к пункту. Закрытие: уход курсора с шапки (150 мс), Esc (фокус возвращается на пункт), клик по затемнению,
+   уход фокуса из шапки. Под prefers-reduced-motion панель меняется сразу (класс no-morph). */
+(function () {
+  var panel = document.getElementById('nvxPanel'), dim = document.getElementById('nvxDim');
+  var header = document.querySelector('.header');
+  var tops = [].slice.call(document.querySelectorAll('.nvx-top[data-pane]'));
+  var panes = panel ? [].slice.call(panel.querySelectorAll('.nvx-pane')) : [];
+  var reduceMq = matchMedia('(prefers-reduced-motion: reduce)');
+  var hoverMq = matchMedia('(hover: hover)');
+  var cur = '', closeT = 0;
+
+  function paneOf(name) { return panes.filter(function (p) { return p.dataset.pane === name; })[0]; }
+  function btnOf(name) { return tops.filter(function (b) { return b.dataset.pane === name; })[0]; }
+  function place(btn, pane) {
+    var hr = header.getBoundingClientRect(), br = btn.getBoundingClientRect();
+    var w = pane.offsetWidth, h = pane.offsetHeight;
+    var x = Math.max(16, Math.min(br.left - hr.left - 14, innerWidth - w - 16));
+    panel.style.width = w + 'px'; panel.style.height = h + 'px';
+    panel.style.setProperty('--nvx-x', x + 'px');
+    document.documentElement.style.setProperty('--nvx-top', hr.bottom + 'px');
+  }
+  function open(name) {
+    clearTimeout(closeT);
+    var btn = btnOf(name), pane = paneOf(name);
+    if (!btn || !pane) return;
+    var wasOpen = !!cur;
+    panel.classList.toggle('no-morph', !wasOpen || reduceMq.matches);
+    place(btn, pane);
+    panes.forEach(function (p) { p.classList.toggle('is-on', p === pane); });
+    tops.forEach(function (b) { var on = b === btn; b.classList.toggle('is-on', on); b.setAttribute('aria-expanded', String(on)); });
+    panel.classList.add('is-open'); panel.setAttribute('aria-hidden', 'false');
+    dim.classList.add('is-open');
+    header.classList.add('nvx-solid');
+    cur = name;
+    if (!wasOpen) requestAnimationFrame(function () { panel.classList.remove('no-morph'); });
+  }
+  function close() {
+    clearTimeout(closeT);
+    if (!cur) return;
+    panel.classList.remove('is-open'); panel.setAttribute('aria-hidden', 'true');
+    dim.classList.remove('is-open');
+    header.classList.remove('nvx-solid');
+    tops.forEach(function (b) { b.classList.remove('is-on'); b.setAttribute('aria-expanded', 'false'); });
+    cur = '';
+  }
+  function later() { clearTimeout(closeT); closeT = setTimeout(close, 150); }
+  function links(pane) { return [].slice.call(pane.querySelectorAll('a[href]')); }
+
+  if (panel && header && tops.length) {
+    tops.forEach(function (b) {
+      b.addEventListener('click', function () { cur === b.dataset.pane ? close() : open(b.dataset.pane); });
+      b.addEventListener('mouseenter', function () { if (hoverMq.matches) open(b.dataset.pane); });
+      /* Tab с открытого пункта идёт в ссылки панели: панель лежит в DOM после всей шапки */
+      b.addEventListener('keydown', function (e) {
+        if (e.key !== 'Tab' || e.shiftKey || cur !== b.dataset.pane) return;
+        var l = links(paneOf(cur));
+        if (l.length) { e.preventDefault(); l[0].focus(); }
+      });
+    });
+    [].forEach.call(document.querySelectorAll('.header-nav .nvx-top:not([data-pane])'), function (a) {
+      a.addEventListener('mouseenter', function () { if (hoverMq.matches) later(); });
+    });
+    panes.forEach(function (p) {
+      p.addEventListener('keydown', function (e) {
+        if (e.key !== 'Tab') return;
+        var l = links(p), i = l.indexOf(document.activeElement);
+        if (e.shiftKey && i === 0) { e.preventDefault(); btnOf(p.dataset.pane).focus(); }
+        else if (!e.shiftKey && i === l.length - 1) {
+          /* из последней ссылки панели фокус идёт к следующему пункту строки меню */
+          var b = btnOf(p.dataset.pane), next = b.nextElementSibling;
+          while (next && next.getAttribute('aria-disabled') === 'true') next = next.nextElementSibling;
+          close();
+          if (next) { e.preventDefault(); next.focus(); }
+        }
+      });
+      p.addEventListener('click', function (e) { if (e.target.closest && e.target.closest('a[href]')) close(); });
+    });
+    header.addEventListener('mouseleave', function () { if (hoverMq.matches) later(); });
+    header.addEventListener('mouseenter', function () { clearTimeout(closeT); });
+    dim.addEventListener('click', close);
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && cur) { var b = btnOf(cur); close(); if (b) b.focus(); }
+    });
+    header.addEventListener('focusout', function (e) { if (cur && e.relatedTarget && !header.contains(e.relatedTarget)) close(); });
+    addEventListener('resize', function () { if (cur) { if (innerWidth < 1366) close(); else open(cur); } });
+    addEventListener('scroll', function () {
+      if (cur) document.documentElement.style.setProperty('--nvx-top', header.getBoundingClientRect().bottom + 'px');
+    }, { passive: true });
+  }
+
+  /* мобильное меню: группы раскрываются аккордеоном, открыта одна */
+  [].forEach.call(document.querySelectorAll('.mm-row[data-acc]'), function (b) {
+    b.addEventListener('click', function () {
+      var on = !b.classList.contains('is-on');
+      [].forEach.call(document.querySelectorAll('.mm-row[data-acc]'), function (x) {
+        var me = x === b && on;
+        x.classList.toggle('is-on', me); x.setAttribute('aria-expanded', String(me));
+        var body = document.querySelector('[data-acc-body="' + x.dataset.acc + '"]');
+        if (body) body.classList.toggle('is-on', me);
+      });
+    });
+  });
+})();
+
 (function () {
   function getOffset() {
     var header = document.querySelector('.header');
