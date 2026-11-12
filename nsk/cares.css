@@ -2,17 +2,20 @@
    Макет: brand/maket-zaboty-2026-11-12. Слева двенадцать забот, справа то, что берёт «Азбука Ремонта»; прокрутка по очереди вычёркивает девять и переносит направо.
    Разметка и стили по умолчанию — КОНЕЧНОЕ состояние (без JS и при prefers-reduced-motion всё видно). cares.js ставит .is-live и сбрасывает блок в начало.
    Движутся только transform, opacity и stroke-dashoffset. На прилипшем кадре нет filter, backdrop-filter, размытых теней и затемнений. */
+/* Обёртка «О компании» + «Почему мы»: общий слой (isolation — выезжающий кадр не должен ложиться мимо прилипшего слоя в Safari),
+   overflow-x: clip — кадр до выезда стоит правее экрана и не даёт горизонтальной прокрутки (clip, не hidden: sticky не ломается).
+   z-index 3 — как у .about раньше (.motion-on .about), чтобы порядок относительно «Чем занимаемся» не изменился. */
+.why-stack { position: relative; z-index: 3; isolation: isolate; overflow-x: clip; --header-h: 109px; /* шапка 72 + панель города 36 + 1 рамка */ }
+@media (min-width: 1920px) { .why-stack { --header-h: 117px; } }
+@media (min-width: 2560px) { .why-stack { --header-h: 125px; } }
+@media (max-width: 768px) { .why-stack { --header-h: 109px; } }   /* панель города 44 + шапка 65 (измерено на 768) */
+@media (max-width: 480px) { .why-stack { --header-h: 105px; } }   /* панель города 44 + шапка 61 (измерено на 375) */
 .cares {
-  --header-h: 109px;                      /* шапка 72 + панель города 36 + 1 рамка: как на страницах услуг (service.css) */
   --c-line: rgba(255, 255, 255, .09); --c-line2: rgba(255, 255, 255, .16);
   --c-ease: cubic-bezier(.16, 1, .3, 1);
   position: relative; z-index: 2; background: var(--bg);
   scroll-margin-top: var(--city-bar-h, 36px);   /* по якорю шапка уезжает, кадр встаёт под панель города */
 }
-@media (min-width: 1920px) { .cares { --header-h: 117px; } }
-@media (min-width: 2560px) { .cares { --header-h: 125px; } }
-@media (max-width: 768px) { .cares { --header-h: 109px; } }   /* панель города 44 + шапка 65 (измерено на 768) */
-@media (max-width: 480px) { .cares { --header-h: 105px; } }   /* панель города 44 + шапка 61 (измерено на 375) */
 
 .cares-stage { padding-block: var(--section-pad); }
 .cares-head { display: grid; gap: 0; }
@@ -149,16 +152,40 @@ body:has(.header.mo-hide) .cares.is-live .cares-bar { top: var(--city-bar-h, 36p
   .cares-stage { padding-block: 32px; }
   .cares.is-live .cares-bar { display: none; }
   /* Дорожка и прилипание — только когда cares.js взял блок под управление */
-  .cares.is-live .cares-track { height: 330svh; }
+  .cares.is-live .cares-track { height: 430svh; }   /* 100svh выезда + прежние 330svh */
   /* Кадр стоит под панелью города, а не под шапкой: шапка то прячется, то показывается.
      Шапка видна: содержимое сдвинуто вниз на половину её высоты (кадр высотой «до низа окна» центрирует его, так оно занимает область под шапкой).
      Шапка спрятана (.mo-hide): сдвиг снимается, содержимое центрируется во всей области под панелью города. Сдвиг только transform, .3s ease, как у шапки;
      top и высота кадра не меняются, ScrollTrigger не пересчитывается. */
-  .cares.is-live .cares-stage { position: sticky; top: var(--city-bar-h, 36px); height: calc(100svh - var(--city-bar-h, 36px)); display: flex; flex-direction: column; justify-content: center; }
+  .cares.is-live .cares-stage { position: sticky; background: var(--bg); border-radius: 28px 0 0 28px; pointer-events: auto; top: var(--city-bar-h, 36px); height: calc(100svh - var(--city-bar-h, 36px)); display: flex; flex-direction: column; justify-content: center; }
   .cares.is-live .cares-stage > .wrapper { width: 100%; transform: translateY(calc((var(--header-h) - var(--city-bar-h, 36px)) / 2)); transition: transform .3s ease; }
   body:has(.header.mo-hide) .cares.is-live .cares-stage > .wrapper { transform: none; }
   .cares.is-live .stamp { opacity: 0; transform: rotate(-24deg) scale(1.5); transition: opacity .35s var(--c-ease), transform .5s cubic-bezier(.3, 1.6, .5, 1); }
   .cares.is-live.is-done .stamp { opacity: .92; transform: rotate(-12deg) scale(1); }
+  /* ── «О компании» прилипает, «Почему мы» выезжает справа налево и ложится сверху (cares.js ставит .ws-live на .why-stack) ──
+     О компании: sticky. Кадр высотой «до низа окна под панелью города»; выше экрана — прилипает нижним краем к низу окна
+     (top = 100svh − высота, высоту пишет cares.js при смене размера, не по кадрам), ниже — стоит под панелью города, содержимое по центру.
+     Шапка, как у кадра «Почему мы»: видна — содержимое сдвинуто на половину её высоты, спрятана — нет (только пока слой прилип, .ws-pinned). */
+  .why-stack.ws-live .about {
+    position: sticky; top: min(var(--city-bar-h, 36px), calc(100svh - var(--ab-h, 0px))); z-index: 1;
+    min-height: calc(100svh - var(--city-bar-h, 36px)); display: flex; flex-direction: column; justify-content: center;
+  }
+  .why-stack.ws-live .about > .wrapper { width: 100%; transition: transform .3s ease; }
+  .why-stack.ws-pinned:not(.ws-tall) .about > .wrapper { transform: translateY(calc((var(--header-h) - var(--city-bar-h, 36px)) / 2)); }
+  body:has(.header.mo-hide) .why-stack.ws-pinned:not(.ws-tall) .about > .wrapper { transform: none; }
+  /* «О компании» в этом режиме = «экран под панелью города», содержимое по центру. Отступы от высоты окна, фото 4:5 не выше доступной высоты
+     (object-fit: cover, top center, как в editorial.css), название и текст помещаются: кегль названия считается и от высоты окна. */
+  .why-stack.ws-live .about { --ab-pad: clamp(24px, 6svh, 64px); padding-block: var(--ab-pad); }
+  .why-stack.ws-live .about-top { margin-bottom: 0; min-height: 0; }
+  .why-stack.ws-live .about-img img { height: auto; aspect-ratio: 4 / 5; max-height: calc(100svh - var(--city-bar-h, 36px) - 2 * var(--ab-pad)); }
+  /* «Почему мы»: дорожка начинается там, где «О компании» прилипла: заходит на неё на высоту кадра, поэтому отрицательный отступ.
+     Кадр до выезда стоит правее экрана (translateX 100 %, ScrollTrigger), секция сама не перехватывает клики. */
+  .why-stack.ws-live .cares { z-index: 4; background: transparent; margin-top: calc(var(--city-bar-h, 36px) - 100svh); pointer-events: none; scroll-margin-top: calc(var(--city-bar-h, 36px) - 100svh); }
+  /* Тень выезжающего слоя у левого края: градиент 36 px, не размытая тень */
+  .why-stack.ws-live .cares-stage::before { content: ""; position: absolute; right: 100%; top: 0; bottom: 0; width: 36px; pointer-events: none; background: linear-gradient(to left, rgba(0, 0, 0, .45), rgba(0, 0, 0, 0)); }
+}
+@media (min-width: 1101px) and (min-height: 700px) and (max-height: 820px) {
+  .why-stack.ws-live #about-title { font-size: min(10.5vw, 12svh); }   /* невысокие окна: название ниже, как на страницах услуг */
 }
 @media (min-width: 1101px) and (min-height: 700px) and (max-height: 860px) {
   .cares-grid { --row: 38px; }

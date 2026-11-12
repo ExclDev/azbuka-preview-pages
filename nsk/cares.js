@@ -67,13 +67,48 @@
     sec.classList.add('is-live');
     resetStart();
     var kLast = ours.map(function () { return -1; });
+    var deskCleanup = null;
 
     if (ctx.conditions.desk) {
       /* Кадр стоит под панелью города (см. cares.css), поэтому дорожка начинается там же */
       var hh = function () { return parseFloat(getComputedStyle(sec).getPropertyValue('--city-bar-h')) || 36; };
+      var stack = document.getElementById('whyStack');
+      var about = stack && stack.querySelector('.about');
+      var stage = sec.querySelector('.cares-stage');
       var start = 0.06, span = 0.74, step = span / N, win = step * 1.35;
+
+      /* «О компании» прилипает (sticky, CSS), «Почему мы» выезжает на неё справа. Высоту «О компании» CSS берёт из --ab-h:
+         пишем при смене размера, а не по кадрам. ws-tall: секция выше экрана под панелью города, она прилипает нижним краем. */
+      var ro = null;
+      if (stack && about) {
+        var measure = function () {
+          var h = about.offsetHeight;
+          stack.style.setProperty('--ab-h', h + 'px');
+          stack.classList.toggle('ws-tall', h > window.innerHeight - hh() + 1);
+        };
+        stack.classList.add('ws-live');
+        measure();
+        if (window.ResizeObserver) { ro = new ResizeObserver(measure); ro.observe(about); }
+        window.addEventListener('resize', measure);
+      }
+
+      /* Отрезок 1: выезд, translateX 100 % → 0, scrub без сглаживания, длина 100svh прокрутки с момента, когда кадр встал под панель города.
+         Только transform (xPercent). Назад: сначала откатываются переносы (отрезок 2), потом блок уезжает вправо. */
+      var slide = gsap.fromTo(stage, { xPercent: 100, x: 40 }, {   /* +40 px: тень у левого края (36 px) до начала выезда остаётся за экраном */
+        xPercent: 0, x: 0, ease: 'none',
+        scrollTrigger: { trigger: track, start: function () { return 'top top+=' + hh(); }, end: function () { return '+=' + window.innerHeight; }, scrub: true, invalidateOnRefresh: true }
+      });
+      var slideST = slide.scrollTrigger;
+      /* Слой «О компании» прилип: включает сдвиг содержимого под показанную шапку */
+      if (stack) {
+        ScrollTrigger.create({
+          trigger: track, start: function () { return 'top top+=' + hh(); }, endTrigger: stack, end: 'bottom bottom', invalidateOnRefresh: true,
+          onToggle: function (self) { stack.classList.toggle('ws-pinned', self.isActive); }
+        });
+      }
+      /* Отрезок 2: прежняя анимация, доли и тайминги не менялись; начало сдвинуто на длину выезда */
       ScrollTrigger.create({
-        trigger: track, start: function () { return 'top top+=' + hh(); }, end: 'bottom bottom', scrub: true, invalidateOnRefresh: true,
+        trigger: track, start: function () { return slideST.end; }, end: 'bottom bottom', scrub: true, invalidateOnRefresh: true,
         onUpdate: function (self) {
           var p = self.progress, count = 0, latest = -1;
           for (var i = 0; i < N; i++) {
@@ -89,6 +124,11 @@
           setCount(count, p > start + span + 0.04);
         }
       });
+      deskCleanup = function () {
+        if (ro) ro.disconnect();
+        window.removeEventListener('resize', measure);
+        if (stack) { stack.classList.remove('ws-live', 'ws-pinned', 'ws-tall'); stack.style.removeProperty('--ab-h'); }
+      };
     } else {
       var line = 0.62;
       var upd = function () {
@@ -113,6 +153,7 @@
     ScrollTrigger.refresh();
     /* Откат (смена размера окна или режима): вернуть конечное состояние и убрать прилипание */
     return function () {
+      if (deskCleanup) deskCleanup();
       sec.classList.remove('is-live');
       resetEnd();
     };
