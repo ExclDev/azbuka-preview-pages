@@ -9,7 +9,7 @@ const mobileMenu = document.getElementById('mobileMenu');
 /* Пока меню открыто, остальная страница (кроме шапки с бургером и самого меню) недоступна для фокуса и скринридера: inert */
 function setPageInert(on) {
   Array.prototype.forEach.call(document.body.children, function (el) {
-    if (el === mobileMenu || el.classList.contains('header') || /^(SCRIPT|STYLE|NOSCRIPT|LINK)$/.test(el.tagName)) return;
+    if (el === mobileMenu || el.id === 'cookieBanner' || el.classList.contains('header') || /^(SCRIPT|STYLE|NOSCRIPT|LINK)$/.test(el.tagName)) return;
     if (on) el.setAttribute('inert', ''); else el.removeAttribute('inert');
   });
 }
@@ -34,10 +34,12 @@ document.addEventListener('keydown', (e) => {
   if (!mobileMenu.classList.contains('open')) return;
   if (e.key === 'Escape') { closeMobileMenu(); burger.focus(); return; }
   if (e.key !== 'Tab') return;
+  const cookieBtn = document.getElementById('cookieAccept');
   const items = [burger].concat(Array.prototype.filter.call(
     mobileMenu.querySelectorAll('a[href], button:not([disabled])'),
     (n) => n.offsetParent !== null || getComputedStyle(n).position === 'fixed'
   ));
+  if (cookieBtn && cookieBtn.offsetParent !== null) items.push(cookieBtn, ...document.querySelectorAll('#cookieBanner a[href]'));
   const i = items.indexOf(document.activeElement);
   if (e.shiftKey && (i <= 0)) { e.preventDefault(); items[items.length - 1].focus(); }
   else if (!e.shiftKey && (i === items.length - 1 || i === -1)) { e.preventDefault(); items[0].focus(); }
@@ -204,16 +206,32 @@ function qwBaseBottom() {
   if (w <= 768) return 140;
   return 220;
 }
-function updateFloatPosition() {
+/* Плавающие кнопки поднимаются над подвалом. Раньше положение подвала читалось на каждую прокрутку (getBoundingClientRect → принудительный layout).
+   Теперь высоту видимой части подвала отдаёт IntersectionObserver: пока подвал входит снизу, она равна прежнему «overlap».
+   Порогов 200, поэтому шаг сдвига — доли процента высоты подвала; сам обработчик геометрию не читает. */
+let footerOverlap = 0;
+function applyFloatPosition() {
   if (!floatCta) return;
-  const footer  = document.querySelector('.footer');
   const baseGap = window.innerWidth <= 768 ? 20 : 30;
-  const overlap = footer ? window.innerHeight - footer.getBoundingClientRect().top : 0;
-  floatCta.style.bottom = (overlap > 0 ? baseGap + overlap + 8 : baseGap) + 'px';
+  floatCta.style.bottom = (footerOverlap > 0 ? baseGap + footerOverlap + 8 : baseGap) + 'px';
   if (qwWidgetEl) {
-    qwWidgetEl.style.bottom = overlap > 0 ? (qwBaseBottom() + overlap + 8) + 'px' : '';
+    qwWidgetEl.style.bottom = footerOverlap > 0 ? (qwBaseBottom() + footerOverlap + 8) + 'px' : '';
   }
 }
+(function () {
+  const footer = document.querySelector('.footer');
+  if (!floatCta || !footer) return;
+  if (!('IntersectionObserver' in window)) { applyFloatPosition(); return; }
+  const thresholds = [];
+  for (let i = 0; i <= 200; i++) thresholds.push(i / 200);
+  new IntersectionObserver(function (entries) {
+    const e = entries[entries.length - 1];
+    const h = e.isIntersecting ? e.intersectionRect.height : 0;
+    if (Math.abs(h - footerOverlap) < 0.5 && (h > 0) === (footerOverlap > 0)) return;
+    footerOverlap = h;
+    applyFloatPosition();
+  }, { threshold: thresholds }).observe(footer);
+})();
 const siteHeader = document.querySelector('.header');
 function updateHeaderBg() {
   if (siteHeader) siteHeader.classList.toggle('scrolled', window.scrollY > 10);
@@ -226,9 +244,8 @@ window.addEventListener('scroll', () => {
   } else {
     scrollUpBtn.classList.remove('visible');
   }
-  updateFloatPosition();
 }, { passive: true });
-window.addEventListener('resize', updateFloatPosition, { passive: true });
+window.addEventListener('resize', applyFloatPosition, { passive: true });
 const overlay = document.getElementById('overlay');
 /* Фокус после закрытия окна возвращается на кнопку, которая его открыла.
    Кнопку запоминаем при открытии; если её уже нет на странице, фокус просто остаётся где был. */
@@ -769,11 +786,42 @@ function openVideo(id) {
   });
 })();
 (function () {
+  var banner = document.getElementById('cookieBanner');
+  /* высота баннера в --cookie-h: нижняя панель мобильного меню поднимается над ним, кнопка заявки не прячется */
+  function syncCookieH() {
+    var h = banner.classList.contains('cookie-banner--hidden') ? 0 : banner.offsetHeight;
+    document.documentElement.style.setProperty('--cookie-h', h + 'px');
+  }
   if (!localStorage.getItem('cookieAccepted')) {
-    document.getElementById('cookieBanner').classList.remove('cookie-banner--hidden');
+    banner.classList.remove('cookie-banner--hidden');
+    syncCookieH();
+    if (window.ResizeObserver) new ResizeObserver(syncCookieH).observe(banner);
+    window.addEventListener('resize', syncCookieH);
   }
   document.getElementById('cookieAccept').addEventListener('click', function () {
     localStorage.setItem('cookieAccepted', '1');
-    document.getElementById('cookieBanner').classList.add('cookie-banner--hidden');
+    banner.classList.add('cookie-banner--hidden');
+    syncCookieH();
+  });
+})();
+
+/* ═══ Бесконечные анимации идут только пока элемент на экране ═══
+   Свечение и блик кнопок, плашка акции, подсказка у карты, плашка «Рентгена», рамка карточки цены.
+   Класс .is-live ставит IntersectionObserver; анимации в css висят на этом классе (и только при prefers-reduced-motion: no-preference).
+   Без IntersectionObserver показываем всё как раньше, но сразу. */
+(function () {
+  var els = document.querySelectorAll('.btn-cta, .sale-badge, .map-reveal-btn, .xr-cap, .sv-frame .sale-right');
+  if (!els.length) return;
+  if (!('IntersectionObserver' in window)) {
+    Array.prototype.forEach.call(els, function (el) { el.classList.add('is-live'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) { e.target.classList.toggle('is-live', e.isIntersecting); });
+  }, { rootMargin: '60px 0px' });
+  Array.prototype.forEach.call(els, function (el) { io.observe(el); });
+  /* карточка цены получает класс .sv-frame позже (sale.js): подхватываем её, когда он появится */
+  window.addEventListener('load', function () {
+    Array.prototype.forEach.call(document.querySelectorAll('.sv-frame .sale-right'), function (el) { io.observe(el); });
   });
 })();

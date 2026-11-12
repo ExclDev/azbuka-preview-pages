@@ -571,6 +571,7 @@ html.scroll-locked { overflow-y: hidden; }
   .reason-name { font-size: 16px; }
   .contacts-icon { width: 28px; height: 28px; }
 }
+/* дубль .btn-cta::after из base.css; анимация подключается там на классе .is-live */
 .btn-cta::after {
   content: '';
   position: absolute;
@@ -578,13 +579,12 @@ html.scroll-locked { overflow-y: hidden; }
   width: 55%; height: 100%;
   background: linear-gradient(120deg, transparent, rgba(255,255,255,.38), transparent);
   transform: skewX(-22deg) translateX(-200%);
-  animation: cta-shine 2.6s ease-in-out infinite;
+  opacity: 0;
   z-index: 3; pointer-events: none;
 }
 @media (prefers-reduced-motion: reduce) {
   .anim { opacity: 1 !important; animation: none !important; }
   .consult-photo img { transition: none; }
-  .btn-cta, .btn-cta::after { animation: none; }
 }
 .consult-photo-count {
   position: absolute; z-index: 4;
@@ -735,26 +735,33 @@ html.scroll-locked { overflow-y: hidden; }
 @media (max-width: 960px) {
   .sale-inner { grid-template-columns: 1fr; gap: 40px; }
 }
+/* Плашка акции: пульс и блик на transform/opacity, пока плашка на экране (.is-live ставит base.js).
+   Ореол — ::before с готовой тенью; блик — ::after, прозрачность в keyframes доходит до нуля раньше, чем полоса выйдет за край. */
 .sale-badge {
   display: inline-block;
   background: var(--red); color: #fff;
   font-family: var(--font-display); font-size: 12px; font-weight: 600;
   letter-spacing: 2px; text-transform: uppercase;
   padding: 6px 14px; margin-bottom: 16px;
-  position: relative; overflow: hidden;
-  animation: badge-pulse 2s ease-in-out infinite;
+  position: relative; isolation: isolate;
+}
+.sale-badge::before {
+  content: ''; position: absolute; inset: 0; z-index: -1; pointer-events: none;
+  box-shadow: 0 0 12px 4px rgba(232,32,26,.35);
+  opacity: 0;
 }
 .sale-badge::after {
   content: '';
-  position: absolute; top: 0; left: -120%;
+  position: absolute; top: 0; left: 0;
   width: 60%; height: 100%;
   background: linear-gradient(120deg, transparent, rgba(255,255,255,.5), transparent);
-  transform: skewX(-20deg);
-  animation: badge-shine 2s ease-in-out infinite;
+  transform: skewX(-20deg) translateX(-200%);
+  opacity: 0;
   pointer-events: none;
 }
-@media (prefers-reduced-motion: reduce) {
-  .sale-badge, .sale-badge::after { animation: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .sale-badge.is-live::before { animation: badge-halo 2s ease-in-out infinite; }
+  .sale-badge.is-live::after { animation: badge-shine 2s ease-in-out infinite; }
 }
 .sale-title {
   font-family: var(--font-display);
@@ -818,7 +825,15 @@ html.scroll-locked { overflow-y: hidden; }
   text-align: left;
   cursor: pointer;
   transition: border-color .2s, background .2s, transform .2s;
-  animation: map-pulse-hint 2.6s ease-in-out infinite;
+}
+/* кольцо-подсказка: ::after с готовой тенью, меняются только opacity и scale (было: анимация box-shadow) */
+.map-reveal-btn::after {
+  content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+  box-shadow: 0 0 0 8px rgba(232,32,26,.35);
+  opacity: 0;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .map-reveal-btn.is-live::after { animation: map-pulse-hint 2.6s ease-in-out infinite; }
 }
 .map-reveal-btn:hover {
   border-color: var(--red);

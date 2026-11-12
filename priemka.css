@@ -87,7 +87,7 @@
 @keyframes pkPopS { from { transform: scale(0); } to { transform: scale(1); } }
 
 /* ═══ Наезд первого экрана ═══
-   Первый экран (.pkB) встаёт на месте, затемняется и уменьшается, поверх выезжает «Видео» (обёртка .pk-stack, z-index 2 над .pkB).
+   Первый экран (.pkB) встаёт на месте (сдвиг pkPin гасит прокрутку), без затемнения и уменьшения (правило для прилипших слоёв), поверх выезжает «Видео» (обёртка .pk-stack, z-index 2 над .pkB).
    Только там, где есть animation-timeline: view(), и не при reduced-motion; иначе обычная прокрутка.
    Диапазон contain 100% … exit 100%: старт = max(0, высота экрана − высота окна), путь = min(высота экрана, высота окна),
    поэтому сдвиг min(100%, 100svh) ровно гасит прокрутку при любой высоте первого экрана: и выше окна, и ниже. */
@@ -95,11 +95,9 @@
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
     .pkB { position: relative; z-index: 1; animation: pkPin linear both; animation-timeline: view(); animation-range: contain 100% exit 100%; }
-    .pkB > .wrapper { animation: pkDim linear both; animation-timeline: view(); animation-range: contain 100% exit 100%; }
   }
 }
 @keyframes pkPin { from { translate: 0 0; } to { translate: 0 min(100%, 100svh); } }
-@keyframes pkDim { to { opacity: .35; scale: .96; } }
 
 /* ═══ «Обход квартиры»: радиокнопки и :has, без скриптов ═══
    Базовые правила показывают все четыре списка (без :has выбор недоступен, кнопки скрыты); выбор комнаты — внутри @supports selector(:has(a)). */
@@ -299,10 +297,9 @@
     .pk-stack > #video, .pk-stack2 > #act { position: sticky; top: var(--header-h); }
     .pk-stack > #video { z-index: 2; }
   }
-  /* телефон, планшет и окна вне 700–1500 px по высоте: секции выше экрана, прежний приём как у первого экрана (сдвиг и затемнение по view()).
+  /* телефон, планшет и окна вне 700–1500 px по высоте: секции выше экрана, прежний приём как у первого экрана (сдвиг по view(), без затемнения).
      Условие списком через запятую: конструкция (not …) с and внутри в макете не сработала. */
   @media (prefers-reduced-motion: no-preference) and (max-width: 1100px), (prefers-reduced-motion: no-preference) and (max-height: 699px), (prefers-reduced-motion: no-preference) and (min-height: 1501px) {
     .pk-stack > #video, .pk-stack2 > #act { animation: pkPin linear both; animation-timeline: view(); animation-range: contain 100% exit 100%; }
-    .pk-stack > #video > .wrapper, .pk-stack2 > #act > .wrapper { animation: pkDim linear both; animation-timeline: view(); animation-range: contain 100% exit 100%; }
   }
 }

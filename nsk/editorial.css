@@ -190,15 +190,24 @@
   color: transparent;
   -webkit-text-stroke: 1px var(--border);
   background: linear-gradient(90deg, var(--white) 0 50%, transparent 50% 100%) no-repeat;
-  background-size: 200% 100%; background-position: var(--wm, 100%) 0;
+  background-size: 200% 100%; background-position: var(--wm, 0%) 0;
   -webkit-background-clip: text; background-clip: text;
   user-select: none;
 }
 .ed-wordmark span:last-child {
   background: linear-gradient(90deg, var(--red) 0 50%, transparent 50% 100%) no-repeat;
-  background-size: 200% 100%; background-position: var(--wm2, 100%) 0;
+  background-size: 200% 100%; background-position: var(--wm2, 0%) 0;
   -webkit-background-clip: text; background-clip: text;
   -webkit-text-stroke-color: rgba(232,32,26,0.35);
+}
+/* надпись въезжает слева по шкале самой надписи (раньше ScrollTrigger с --wm / --wm2): основная часть «top 98%» → две трети пути, хвост с трети пути до «bottom bottom».
+   Без animation-timeline и при prefers-reduced-motion заливка не появляется: слова остаются контуром, как до прокрутки. */
+@keyframes edWm { from { background-position: 100% 0; } to { background-position: 0% 0; } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .ed-wordmark { view-timeline-name: --edwm; animation: edWm linear both; animation-timeline: --edwm; animation-range: entry 2svh entry 66%; }
+    .ed-wordmark span:last-child { animation: edWm linear both; animation-timeline: --edwm; animation-range: entry 33% entry 100%; }
+  }
 }
 
 /* ---------- Порядок работы: светлая секция системы (ProcessStep) ---------- */
@@ -552,6 +561,14 @@
   content: ''; position: absolute; left: 0; right: 0; top: 0; height: 2px;
   background: var(--red); pointer-events: none;
   transform: scaleX(var(--act, 0)); transform-origin: 0 50%;
+}
+/* линия идёт по шкале строки (раньше ScrollTrigger писал --act на каждый кадр): «top 58%» → «bottom 58%» у строки = entry 42svh … entry 100% + 42svh */
+@keyframes edAct { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .ed .reason-card { view-timeline-name: --edact; }
+    .ed .reason-card::after { animation: edAct linear both; animation-timeline: --edact; animation-range: entry 42svh entry calc(100% + 42svh); }
+  }
 }
 
 /* --- 4 причины: пояснение загорается по словам, затем светлеет цитата --- */

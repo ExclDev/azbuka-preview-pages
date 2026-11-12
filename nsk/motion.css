@@ -65,6 +65,13 @@ html.lenis, html.lenis body { height: auto; }
   transform: scaleX(0); transform-origin: left center;
   pointer-events: none;
 }
+/* прогресс ведёт CSS (scroll()), а не обработчик прокрутки: без animation-timeline полоса не показывается */
+@keyframes moProg { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .mo-progress { animation: moProg linear both; animation-timeline: scroll(root block); }
+  }
+}
 
 /* --- Шапка прячется при прокрутке вниз --- */
 .motion-on .header.mo-hide { transform: translateY(-110%); }

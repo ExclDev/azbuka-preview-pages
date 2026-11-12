@@ -31,8 +31,9 @@
   background: conic-gradient(from var(--ang, 0deg), transparent 0 70%, rgba(232,32,26,0.9) 85%, transparent 100%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor; mask-composite: exclude;
-  animation: svSpin 5s linear infinite;
 }
+/* вращение рамки (меняется custom property, это главный поток): только пока карточка на экране, .is-live ставит base.js */
+@media (prefers-reduced-motion: no-preference) { .sv-frame .sale-right.is-live::before { animation: svSpin 5s linear infinite; } }
 @property --ang { syntax: '<angle>'; inherits: false; initial-value: 0deg; }
 @keyframes svSpin { to { --ang: 360deg; } }
 @media (prefers-reduced-motion: reduce) { .sv-frame .sale-right::before { animation: none; } }

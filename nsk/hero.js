@@ -44,19 +44,35 @@
     var b = e.target.closest('button');
     if (b && window.openPortfolioModal) window.openPortfolioModal(+b.getAttribute('data-i'));
   });
-  var sx = 0, paused = false, visible = true;
-  strip.addEventListener('mouseenter', function () { paused = true; });
-  strip.addEventListener('mouseleave', function () { paused = false; });
-  strip.addEventListener('focusin', function () { paused = true; });
-  strip.addEventListener('focusout', function () { paused = false; });
-  if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { visible = en[0].isIntersecting; }).observe(strip);
-  (function run() {
-    if (!paused && visible && !reduce) {
-      sx -= 0.5;
-      var half = sin.scrollWidth / 2;
-      if (half && -sx > half) sx += half;
-      sin.style.transform = 'translate3d(' + sx + 'px,0,0)';
+  /* Лента едет на Web Animations (transform на компоситоре), а не на requestAnimationFrame с записью стиля каждый кадр.
+     Скорость прежняя: 0,5 px за кадр при 60 Гц = 30 px/с. Стоит при наведении и фокусе, вне экрана и при prefers-reduced-motion. */
+  var paused = false, visible = true, stripAnim = null;
+  function syncStrip() {
+    if (!stripAnim) return;
+    if (!paused && visible) stripAnim.play(); else stripAnim.pause();
+  }
+  function startStrip() {
+    if (reduce || !sin.animate) return;
+    var half = sin.scrollWidth / 2;
+    if (!half) return;
+    var prev = 0;
+    if (stripAnim) {
+      var d = stripAnim.effect.getTiming().duration;
+      prev = ((stripAnim.currentTime || 0) % d) / d;
+      stripAnim.cancel();
     }
-    requestAnimationFrame(run);
-  })();
+    var dur = half / 30 * 1000;
+    stripAnim = sin.animate(
+      [{ transform: 'translate3d(0,0,0)' }, { transform: 'translate3d(' + (-half) + 'px,0,0)' }],
+      { duration: dur, iterations: Infinity, easing: 'linear' }
+    );
+    stripAnim.currentTime = prev * dur;
+    syncStrip();
+  }
+  strip.addEventListener('mouseenter', function () { paused = true; syncStrip(); });
+  strip.addEventListener('mouseleave', function () { paused = false; syncStrip(); });
+  strip.addEventListener('focusin', function () { paused = true; syncStrip(); });
+  strip.addEventListener('focusout', function () { paused = false; syncStrip(); });
+  if ('IntersectionObserver' in window) new IntersectionObserver(function (en) { visible = en[0].isIntersecting; syncStrip(); }).observe(strip);
+  if (window.ResizeObserver) new ResizeObserver(startStrip).observe(sin);
 })();

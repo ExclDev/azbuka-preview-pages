@@ -437,8 +437,26 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .popup-box { padding: 28px 16px; }
   .popup-title { font-size: 20px; }
 }
+/* ═══ Свечение и блик кнопок «призыва» ═══
+   Раньше: анимация box-shadow (перерисовка размытия и пересчёт стилей каждый кадр) и анимация без остановки вне экрана.
+   Теперь: ореол — отдельный ::before с готовой тенью, меняются только opacity и transform; блик — ::after, только transform и opacity.
+   Анимации висят на классе .is-live: его ставит IntersectionObserver в base.js, пока кнопка на экране.
+   Кнопка больше не режет содержимое (overflow: visible), иначе ореол не выйдет за её рамку; блик не вылезает за края сам:
+   прозрачность в keyframes доходит до нуля раньше, чем полоса пересечёт край кнопки. Блик при наведении (.btn::before) у этих кнопок заменён ореолом. */
 .btn-cta {
-  animation: cta-glow 2.6s ease-in-out infinite;
+  overflow: visible;
+  box-shadow: 0 6px 20px rgba(232,32,26,.35);
+}
+.btn-cta::before,
+.btn-cta:hover::before {
+  top: 0; left: 0; right: 0; bottom: 0; width: auto; height: auto;
+  border-radius: inherit;
+  background: none;
+  transform: none;
+  transition: none;
+  box-shadow: 0 6px 32px rgba(232,32,26,.55), 0 0 0 6px rgba(232,32,26,.1);
+  opacity: 0;
+  z-index: -1;
 }
 .btn-cta::after {
   content: '';
@@ -447,23 +465,29 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   width: 55%; height: 100%;
   background: linear-gradient(120deg, transparent, rgba(255,255,255,.38), transparent);
   transform: skewX(-22deg) translateX(-200%);
-  animation: cta-shine 2.6s ease-in-out infinite;
+  opacity: 0;
   z-index: 3; pointer-events: none;
 }
-@keyframes cta-glow {
-  0%, 100% { box-shadow: 0 6px 20px rgba(232,32,26,.35); }
-  50%       { box-shadow: 0 6px 32px rgba(232,32,26,.7), 0 0 0 6px rgba(232,32,26,.1); }
+@media (prefers-reduced-motion: no-preference) {
+  .btn-cta.is-live::before { animation: cta-halo 2.6s ease-in-out infinite; }
+  .btn-cta.is-live::after { animation: cta-shine 2.6s ease-in-out infinite; }
+}
+@keyframes cta-halo {
+  0%, 100% { opacity: 0; }
+  50%      { opacity: 1; }
 }
 @keyframes cta-shine {
   0%        { transform: skewX(-22deg) translateX(-200%); opacity: 0; }
   18%       { opacity: 1; }
+  28%       { opacity: .85; }
+  39%       { opacity: .37; }
+  41%       { opacity: 0; }
   55%       { transform: skewX(-22deg) translateX(236.3636%); opacity: 0; }
   100%      { transform: skewX(-22deg) translateX(236.3636%); opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .float-scroll-up { transition: opacity .1s; }
   .float-cta-btn:hover { transform: none; }
-  .btn-cta, .btn-cta::after { animation: none; }
   .qw-widget { transition: opacity .1s !important; }
   .qw-btn-calc .qw-btn-icon { animation: none !important; }
   .qw-btn-calc .qw-icon-chat { animation: none !important; }
@@ -506,7 +530,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .city-bar-auto span { color: var(--red); }
 body.city-bar-visible .header { transform: translateY(var(--city-bar-h, 36px)); }
 /* меню сдвинуто на высоту панели города, поэтому и низ поднимаем на неё: иначе нижняя панель с «Оставить заявку» уходила за край экрана */
-body.city-bar-visible .mobile-menu { transform: translateY(var(--city-bar-h, 36px)); bottom: var(--city-bar-h, 36px); }
+body.city-bar-visible .mobile-menu { transform: translateY(var(--city-bar-h, 36px)); bottom: calc(var(--city-bar-h, 36px) + var(--cookie-h, 0px)); }   /* --cookie-h: высота непринятого баннера куки (base.js), панель меню стоит над ним */
 .city-toast {
   position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%) translateY(20px);
   background: var(--bg2); border: 1px solid rgba(232,32,26,0.4);
@@ -639,15 +663,10 @@ body.city-bar-visible .mobile-menu { transform: translateY(var(--city-bar-h, 36p
   animation: qw-icon-pulse 1.6s ease-in-out infinite;
 }
 @keyframes qw-pulse {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 12px 32px rgba(232,32,26,.35), 0 0 12px 2px rgba(232,32,26,.15);
-  }
-  50% {
-    transform: scale(1.02);
-    box-shadow: 0 14px 34px rgba(232,32,26,.4), 0 0 16px 4px rgba(232,32,26,.22);
-  }
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.02); }
 }
+/* тень кнопки теперь статичная (как в середине прежнего цикла): анимировать box-shadow виджета, который всегда на экране, дорого */
 .qw-widget.qw-visible:not(.qw-expanded) .qw-btn-calc {
   animation: qw-pulse 3.8s ease-in-out infinite;
 }
@@ -754,19 +773,24 @@ body.city-bar-visible .mobile-menu { transform: translateY(var(--city-bar-h, 36p
 .form-error { margin-top: 12px; color: #ff6b66; font-size: 14px; line-height: 1.5; }
 .form-error a { color: #fff; text-decoration: underline; white-space: nowrap; }
 .form-submit[disabled] { opacity: .6; cursor: progress; }
-@keyframes badge-pulse {
-  0%, 100% { background: var(--red); box-shadow: 0 0 0 0 rgba(232,32,26,.5); }
-  50%       { background: #D91E18;   box-shadow: 0 0 12px 4px rgba(232,32,26,.35); }
+@keyframes badge-halo {
+  0%, 100% { opacity: 0; }
+  50%      { opacity: 1; }
 }
 @keyframes badge-shine {
-  0%   { left: -120%; opacity: 0; }
+  0%   { transform: skewX(-20deg) translateX(-200%); opacity: 0; }
   20%  { opacity: 1; }
-  60%  { left: 130%; opacity: 0; }
-  100% { left: 130%; opacity: 0; }
+  30%  { opacity: .85; }
+  43%  { opacity: .37; }
+  45%  { opacity: 0; }
+  60%  { transform: skewX(-20deg) translateX(216.6667%); opacity: 0; }
+  100% { transform: skewX(-20deg) translateX(216.6667%); opacity: 0; }
 }
 @keyframes map-pulse-hint {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(232, 32, 26, 0.35); }
-  50%      { box-shadow: 0 0 0 8px rgba(232, 32, 26, 0); }
+  0%, 100% { opacity: 0; transform: scale(.97); }
+  12%      { opacity: .9; }
+  50%      { opacity: 0; transform: scale(1.04); }
+}
 }
 .footer { background: #0A0A0A; border-top: 1px solid var(--border); padding: 36px 0 24px; }
 .footer-bottom {

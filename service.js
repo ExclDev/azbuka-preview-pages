@@ -126,7 +126,10 @@
 
     /* ── Lenis + синхронизация со ScrollTrigger (как на главной) ── */
     var lenis = null;
-    if (window.Lenis) {
+    /* Lenis только там, где есть мышь или трекпад. На сенсорных экранах прокрутка родная: инерция пальца у системы своя,
+       второй слой сглаживания поверх неё даёт рывки и лишнюю работу каждый кадр. */
+    var touchOnly = window.matchMedia('(pointer: coarse), (hover: none)').matches;
+    if (window.Lenis && !touchOnly) {
       lenis = new Lenis({
         lerp: 0.085, smoothWheel: true, wheelMultiplier: 1,
         prevent: function (node) {
@@ -201,16 +204,9 @@
     if (photo) intro.to(photo, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.2, ease: 'power3.inOut', clearProps: 'clipPath' }, .15);
 
     /* ── Прогресс прокрутки страницы ── */
-    var bar = $('.sv-progress i');
-    if (bar) scrub(bar, { scaleX: 0 }, { scaleX: 1, transformOrigin: 'left center' }, { trigger: document.body, start: 0, end: 'max' });
-
-    /* ── Дрейф H1: строки расходятся ── */
-    var lns = $$('.sv-h1 .ln');
-    if (lns[0]) scrub(lns[0], { x: 0 }, { x: '-7vw' }, { trigger: document.body, start: 0, end: 700 });
-    if (lns[1]) scrub(lns[1], { x: 0 }, { x: '9vw' }, { trigger: document.body, start: 0, end: 700 });
-
-    /* ── Фото первого экрана: медленный зум при уходе с экрана ── */
-    if (photo) scrub(imgs, { scale: 1 }, { scale: 1.12 }, { trigger: photo, start: 'center center', end: 'bottom top' });
+    /* Полоса прогресса, дрейф H1, зум фото первого экрана, зачёркивание старой цены, красные разделители, надпись в подвале, шторка и параллакс работ,
+       красная линия шагов на узких экранах и зум фона призыва ведёт CSS (service.css, конец файла: scroll() / view()). JS их не трогает:
+       без animation-timeline они стоят в конечном виде, при prefers-reduced-motion тоже. */
 
     /* ── Веер листов (страница «Технический проект»): при прокрутке крайние листы расходятся шире, назад сходятся ──
        Диапазон как у макета: cover 50 % … exit 80 %. --fan (0…1) читает service.css; наведение (--h) и раздача при загрузке работают на CSS. */
@@ -281,19 +277,6 @@
       });
     });
 
-    /* ── Красный разделитель: две черты прорисовываются слева ── */
-    $$('.sv-div').forEach(function (d) {
-      var a = $('span:first-child', d), b = $('span:last-child', d);
-      S([a, b], { transformOrigin: 'left center' });
-      scrub(a, { scaleX: 0 }, { scaleX: 1 }, { trigger: d, start: 'top 92%', end: 'top 80%' });
-      scrub(b, { scaleX: 0 }, { scaleX: 1 }, { trigger: d, start: 'top 88%', end: 'top 72%' });
-    });
-
-    /* ── Старая цена: красное зачёркивание прорисовывается ── */
-    $$('.sv-old').forEach(function (el) {
-      scrub(el, { backgroundSize: '0% 2px' }, { backgroundSize: '100% 2px' }, { trigger: el, start: 'top 85%', end: 'top 55%' });
-    });
-
     /* ── Этапы ── */
     var stepsSec = $('.sv-steps-sec');
     var pinST = null;
@@ -334,9 +317,9 @@
         });
         return function () { root.classList.remove('sv-pinned'); pinST = null; };
       });
-      mm.add('(max-width: 1099px)', function () {
-        // обычная сетка: шаги появляются карточками, красная линия идёт по шагам подряд
-        var list = $('.sv-steps', stepsSec);
+      // обычная сетка (телефон и планшет, где нет сцены «Ванной»): шаги появляются карточками; красную линию по шагам ведёт CSS (--svlist)
+      var flat = function () {
+        if (hzSec && viewCss) return;   // у «Ванной» с view() ленту и панели ведёт CSS
         stepCards.forEach(function (el, i) {
           var col = i % 3;
           gsap.set(el, { opacity: 0, y: 48 });
@@ -344,35 +327,12 @@
             trigger: el, start: 'top 90%', once: true,
             onEnter: function () { gsap.to(el, { opacity: 1, y: 0, duration: .9, delay: col * .1, ease: EXPO, clearProps: 'transform,opacity' }); }
           });
-          var a = i === 0 ? vr(list, 'entry', 70) : vr(list, 'cover', 34 + (i - 1) * 6);
-          var b = i === 0 ? vr(list, 'cover', 34) : vr(list, 'cover', 34 + i * 6);
-          scrub(el, { '--p': 0 }, { '--p': 1 }, { trigger: list, start: a, end: b });
         });
-      });
-    }
-
-    /* ── Портфолио: шторка, параллакс картинки внутри рамки ── */
-    $$('.sv-work-img').forEach(function (frame) {
-      scrub(frame, { clipPath: 'inset(18% 0% 0% 0% round 20px)' }, { clipPath: 'inset(0% 0% 0% 0% round 20px)' }, {
-        trigger: frame, start: 'top bottom', end: function () { return 'top bottom-=' + Math.round(frame.offsetHeight * .8); }
-      });
-      var im = $('img', frame);
-      if (im) scrub(im, { yPercent: -6, scale: 1.14 }, { yPercent: 6, scale: 1.14 }, { trigger: frame, start: 'top bottom', end: 'bottom top' });
-    });
-
-    /* ── Финальный призыв: фон медленно увеличивается ── */
-    var ctaImg = $('.sv-cta-bg img');
-    if (ctaImg) scrub(ctaImg, { scale: 1 }, { scale: 1.12 }, { trigger: '.sv-cta', start: 'top bottom', end: 'bottom top' });
-
-    /* ── Надпись в подвале: слова въезжают слева и проявляются ── */
-    var wm = $('.ed-wordmark');
-    if (wm) {
-      var tail = $('span:last-child', wm);
-      var wmEnd = 'bottom bottom';
-      scrub(wm, { '--wm': '100%' }, { '--wm': '0%' }, { trigger: wm, start: 'top bottom', end: wmEnd });
-      if (tail) scrub(tail, { '--wm2': '100%' }, { '--wm2': '0%' }, {
-        trigger: wm, start: function () { return 'top bottom-=' + Math.round(wm.offsetHeight * .25); }, end: wmEnd
-      });
+      };
+      // три условия вместо одного (max-width: 1099px): планшет в портрете (768–1099 × от 900) у «Ванной» с view() живёт на CSS
+      mm.add('(max-width: 1099px) and (max-height: 899px)', flat);
+      mm.add('(max-width: 767px)', flat);
+      mm.add('(min-width: 768px) and (max-width: 1099px) and (min-height: 900px)', flat);
     }
 
     /* ── Навигация по разделам: от 1280 px ── */

@@ -182,7 +182,8 @@ html.sv-motion .sv-plan path { stroke-dasharray: 1; stroke-dashoffset: 1; }
 .sv-dp-opt.is-hit { background: var(--bg3); }
 .sv-dp-opt .sv-dp-price { margin-top: 14px; font-family: var(--font-display); font-weight: 600; font-size: 34px; line-height: 1.1; color: #fff; }
 .sv-dp-price s { margin-left: 6px; font-size: .6em; font-weight: 500; color: var(--gray); }
-.sv-old { text-decoration: none; background: linear-gradient(var(--red), var(--red)) no-repeat 0 55% / 100% 2px; }
+.sv-old { position: relative; text-decoration: none; }
+.sv-old::after { content: ""; position: absolute; left: 0; right: 0; top: 55%; height: 2px; margin-top: -1px; background: var(--red); transform-origin: left center; }   /* зачёркивание: линия-псевдоэлемент, растёт transform (раньше background-size) */
 .sv-price { display: flex; flex-direction: column; padding: 32px; border-radius: var(--radius-lg); background: var(--bg2); border: 1px solid var(--border); transition: transform .4s cubic-bezier(.2,.7,.1,1), border-color .4s ease; }
 .sv-price:hover { transform: translateY(-6px); border-color: var(--red-a50); }
 .sv-price.hit { background: var(--bg3); border-color: var(--red-a50); }
@@ -688,8 +689,10 @@ html.sv-motion { scroll-behavior: auto !important; }
 .xr-cap-i { flex: none; width: 20px; height: 20px; max-width: none; }
 .xr-cap-m { display: none; }
 .xr-stage.is-used .xr-cap { opacity: 0; translate: 0 -8px; }   /* после первого касания подсказка плавно уходит */
-@keyframes xrPing { 0% { box-shadow: 0 0 0 0 rgba(232,32,26,.6); } 70%, 100% { box-shadow: 0 0 0 16px rgba(232,32,26,0); } }
-@media (prefers-reduced-motion: no-preference) { .xr-cap { animation: xrPing 2.2s ease-out infinite; } }   /* ореол плашки: размытия нет, расходится кольцо */
+/* ореол плашки: кольцо — ::before с готовой тенью, меняются только opacity и scale (было: анимация box-shadow). Идёт, пока плашка на экране (.is-live, base.js) */
+.xr-cap::before { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: -1; pointer-events: none; box-shadow: 0 0 0 16px rgba(232,32,26,.6); opacity: 0; }
+@keyframes xrPing { 0% { opacity: .75; transform: scale(.92); } 70%, 100% { opacity: 0; transform: scale(1.04); } }
+@media (prefers-reduced-motion: no-preference) { .xr-cap.is-live::before { animation: xrPing 2.2s ease-out infinite; } }
 .xr-chips { display: flex; flex-wrap: wrap; gap: 8px; }
 .xr-chip { padding: 9px 14px; border: 1px solid rgba(255,255,255,.14); border-radius: 999px; background: none; color: #cccccc; font: 500 14px/1.2 var(--font-body); cursor: pointer; transition: background .3s ease, color .3s ease, border-color .3s ease; }
 .xr-chip span { display: none; }   /* пояснение читает скринридер и строка .xr-note; на экране — только название */
@@ -776,7 +779,7 @@ html.sv-motion { scroll-behavior: auto !important; }
     .vw-h, .vw-s { animation: vnRise linear both; animation-timeline: view(); animation-range: entry calc(5% + var(--i) * 4%) entry calc(50% + var(--i) * 4%); }
   }
   /* компьютер: дорожка 230svh, кадр прилипает под шапкой, светлый слой уезжает вверх только через translate, тёмный проявляется */
-  @media (prefers-reduced-motion: no-preference) and (min-width: 1101px) and (min-height: 700px) and (max-height: 1500px) {
+  @media (prefers-reduced-motion: no-preference) and (min-width: 1101px) and (min-height: 700px) and (max-height: 1500px), (prefers-reduced-motion: no-preference) and (min-width: 768px) and (max-width: 1100px) and (min-height: 900px) {
     .vn { --scr-pad: clamp(28px, 6.5svh, 88px); --scr-h: calc(100svh - var(--header-h)); }
     #scope.vw-b { padding: 0; }
     .vw-d { display: inline; }
@@ -832,13 +835,15 @@ html.sv-motion { scroll-behavior: auto !important; }
 .vn-stack > #prices { position: relative; z-index: 1; }
 .vn-stack > #steps { position: relative; z-index: 2; border-radius: 28px 28px 0 0; }
 .vn-stack > #steps::before { content: ""; position: absolute; left: 0; right: 0; top: -36px; height: 36px; background: linear-gradient(to top, rgba(0,0,0,.32), transparent); pointer-events: none; z-index: -1; }
-@keyframes vnPin { from { translate: 0 0; } to { translate: 0 min(100%, 100svh); } }
+/* Сдвиг цен гасит прокрутку, пока этапы наезжают. Цены встают не на top: 0, а под шапкой: верхняя граница шкалы смещена на высоту шапки
+   (view(block var(--header-h) 0px)), путь сдвига сокращён на ту же высоту, иначе заголовок «Сколько стоит ванная» уходил под шапку. */
+@keyframes vnPin { from { translate: 0 0; } to { translate: 0 min(100%, calc(100svh - var(--header-h))); } }
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) and (min-width: 1101px) and (min-height: 700px) and (max-height: 1500px) {
     .vn-stack > #prices { position: sticky; top: var(--header-h); }
   }
   @media (prefers-reduced-motion: no-preference) and (max-width: 1100px), (prefers-reduced-motion: no-preference) and (max-height: 699px), (prefers-reduced-motion: no-preference) and (min-height: 1501px) {
-    .vn-stack > #prices { animation: vnPin linear both; animation-timeline: view(); animation-range: contain 100% exit 100%; }
+    .vn-stack > #prices { animation: vnPin linear both; animation-timeline: view(block var(--header-h) 0px); animation-range: contain 100% exit 100%; }
   }
 }
 
@@ -855,11 +860,13 @@ html.sv-motion { scroll-behavior: auto !important; }
 @keyframes vnNodeOn { 0%, 60% { background: #f5f5f7; color: #e8201a; } 100% { background: #e8201a; color: #ffffff; } }
 @keyframes vnScale { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) and (min-width: 1100px) {
-    .vn-hzsec { height: calc(320svh + 260svh); padding: 0; }
+  @media (prefers-reduced-motion: no-preference) and (min-width: 1100px), (prefers-reduced-motion: no-preference) and (min-width: 768px) and (min-height: 900px) {
+    /* Скорость выезда панелей: на 1 px прокрутки ≈ 1,2 px сдвига (было ≈ 1,83). Въезд «Отзывов» и выезд на «Вопросы» занимают по 28 % пути шкалы и двигают панель
+       на ширину кадра (100vw), поэтому путь шкалы = 100vw / (1,2 × 0,28) ≈ 2,976 × 100vw, а высота шкалы .vn-tl2 = путь + высота кадра. */
+    .vn-hzsec { --vn-hz: calc(100svh + 2.976 * 100vw); height: calc(220svh + var(--vn-hz)); padding: 0; }
     .vn-tl1, .vn-tl2 { display: block; position: absolute; left: 0; width: 1px; pointer-events: none; }
     .vn-tl1 { top: 0; height: 320svh; view-timeline-name: --t-steps; }
-    .vn-tl2 { top: 220svh; height: 360svh; view-timeline-name: --t-hz; }
+    .vn-tl2 { top: 220svh; height: var(--vn-hz); view-timeline-name: --t-hz; }
     /* лента этапов (в макете .sv-pin и ниже) */
     .vn-hzsec .sv-pin { position: sticky; top: 0; height: 100svh; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
     .vn-hzsec .sv-steps { display: flex; width: max-content; margin-top: 48px; animation: vnTrack linear both; animation-timeline: --t-steps; animation-range: contain 0% contain 100%; }
@@ -899,3 +906,61 @@ html.sv-motion { scroll-behavior: auto !important; }
 .xr-chip::before { content: ""; position: absolute; inset: -4px 0; }       /* 37 → 45 */
 .sv-cta-phone { position: relative; }
 .sv-cta-phone::before { content: ""; position: absolute; inset: -2px 0; }  /* 42 → 46 */
+
+/* ═══ Плавность прокрутки (12.11.2026): эффекты, привязанные к прокрутке, на CSS ═══
+   Раньше их считал ScrollTrigger: на каждый кадр трогал стили (--p, --wm, backgroundSize, transform). Теперь шкала scroll() / view(), без JS в обработчике прокрутки.
+   Где animation-timeline не поддерживается (@supports ниже не выполняется) или включено prefers-reduced-motion, анимации нет: у цены линия зачёркивания полная,
+   у разделителя две полные черты, у подвальной надписи заливка полная, у полосы прогресса нет вида (scaleX(0)), у заголовка слова стоят на месте.
+   Диапазоны перенесены с start/end ScrollTrigger: «top 85%» у элемента высотой h = entry 0 + (100 − 85)svh и т. д.; cover/entry/exit считаются так же, как в vr() service.js. */
+@keyframes svProg { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes svDriftA { from { translate: 0 0; } to { translate: -7vw 0; } }
+@keyframes svDriftB { from { translate: 0 0; } to { translate: 9vw 0; } }
+@keyframes svStrike { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes svDiv { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes svLine { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes svZoom { from { scale: 1; } to { scale: 1.12; } }
+@keyframes svWm { from { background-position: 100% 0; } to { background-position: 0% 0; } }
+@keyframes svWorkClip { from { clip-path: inset(18% 0% 0% 0% round 20px); } to { clip-path: inset(0% 0% 0% 0% round 20px); } }
+@keyframes svWorkPar { from { translate: 0 -6%; } to { translate: 0 6%; } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .sv-progress i { animation: svProg linear both; animation-timeline: scroll(root block); }
+    .sv-h1 .ln:nth-child(1) { animation: svDriftA linear both; animation-timeline: scroll(root block); animation-range: 0px 700px; }
+    .sv-h1 .ln:nth-child(2) { animation: svDriftB linear both; animation-timeline: scroll(root block); animation-range: 0px 700px; }
+    /* старая цена: «top 85%» → «top 55%» */
+    .sv-old::after { animation: svStrike linear both; animation-timeline: view(); animation-range: entry 15svh entry 45svh; }
+    /* красный разделитель: первая черта «top 92%» → «top 80%», вторая «top 88%» → «top 72%» */
+    .sv-div span { transform-origin: left center; animation: svDiv linear both; animation-timeline: view(); }
+    .sv-div span:first-child { animation-range: entry 8svh entry 20svh; }
+    .sv-div span:last-child { animation-range: entry 12svh entry 28svh; }
+    /* зум фото первого экрана: от «центр у центра» до «низ у верха окна» */
+    .sv-hero-photo img { animation: svZoom linear both; animation-timeline: view(); animation-range: cover 50% cover 100%; }
+    .sv-cta-bg img { animation: svZoom linear both; animation-timeline: view(); animation-range: cover 0% cover 100%; }
+    /* подвал: надпись въезжает слева (editorial.css), хвост стартует с 25 % высоты */
+    .ed-wordmark { view-timeline-name: --svwm; animation: svWm linear both; animation-timeline: --svwm; animation-range: entry 0% entry 100%; }
+    .ed-wordmark span:last-child { animation: svWm linear both; animation-timeline: --svwm; animation-range: entry 25% entry 100%; }
+    /* работы: шторка рамки и параллакс картинки */
+    .sv-work-img { view-timeline-name: --svwk; animation: svWorkClip linear both; animation-timeline: --svwk; animation-range: entry 0% entry 80%; }
+    .sv-work-img img { scale: 1.14; animation: svWorkPar linear both; animation-timeline: --svwk; animation-range: cover 0% cover 100%; }
+  }
+  /* узкие экраны, обычная сетка этапов: красная линия идёт по шагам подряд. Диапазоны шагов — по шкале списка: первый «entry 70 % → cover 34 %», дальше по 6 % */
+  /* кроме «Ванной» на планшете в портрете: там ленту ведёт --t-steps */
+  @media (prefers-reduced-motion: no-preference) and (max-width: 1099px) and (max-height: 899px), (prefers-reduced-motion: no-preference) and (max-width: 767px) {
+    .sv-steps { view-timeline-name: --svlist; }
+    .sv-step:not(.sv-step-fin)::before { animation: svLine linear both; animation-timeline: --svlist; }
+    .sv-step:nth-child(1)::before { animation-range: entry 70% cover 34%; }
+    .sv-step:nth-child(2)::before { animation-range: cover 34% cover 40%; }
+    .sv-step:nth-child(3)::before { animation-range: cover 40% cover 46%; }
+    .sv-step:nth-child(4)::before { animation-range: cover 46% cover 52%; }
+    .sv-step:nth-child(5)::before { animation-range: cover 52% cover 58%; }
+    .sv-step:nth-child(6)::before { animation-range: cover 58% cover 64%; }
+    .sv-step:nth-child(7)::before { animation-range: cover 64% cover 70%; }
+    .sv-step:nth-child(8)::before { animation-range: cover 70% cover 76%; }
+    .sv-step:nth-child(9)::before { animation-range: cover 76% cover 82%; }
+    .sv-step:nth-child(10)::before { animation-range: cover 82% cover 88%; }
+  }
+}
+/* «Ванная», планшет в портрете (768–1100 px по ширине, от 900 px по высоте): та же сцена со стеной и выездом, что на компьютере; работы в две колонки, текст не режется */
+@media (min-width: 768px) and (max-width: 1100px) and (min-height: 900px) {
+  .vw-ss { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

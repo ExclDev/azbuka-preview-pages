@@ -42,7 +42,10 @@
      1. Инерционный скролл (Lenis) + синхронизация со ScrollTrigger
      --------------------------------------------------------- */
   var lenis = null;
-  if (window.Lenis) {
+  /* Lenis только там, где есть мышь или трекпад. На сенсорных экранах прокрутка родная: инерция пальца у системы своя,
+     второй слой сглаживания поверх неё даёт рывки и лишнюю работу каждый кадр. */
+  var touchOnly = window.matchMedia('(pointer: coarse), (hover: none)').matches;
+  if (window.Lenis && !touchOnly) {
     lenis = new Lenis({
       lerp: 0.085,
       smoothWheel: true,
@@ -278,7 +281,6 @@
       var cntTween = null;
       ScrollTrigger.create({
         trigger: card, start: 'top 58%', end: 'bottom 58%',
-        onUpdate: function (self) { card.style.setProperty('--act', self.progress.toFixed(3)); },
         onToggle: function (self) {
           card.classList.toggle('is-on', self.isActive);
           if (self.isActive) showReasonPhoto(idx);
@@ -406,7 +408,9 @@
     return function () { reelsSec.classList.remove('ed-h'); gsap.set(rail, { clearProps: 'x' }); };
   });
   var skewProxy = { s: 0 };
+  /* перекос от скорости нужен только пока лента видео в кадре: без trigger он считался на каждую прокрутку страницы и писал стиль карточкам вне экрана */
   ScrollTrigger.create({
+    trigger: reelsSec || '#avRail', start: 'top bottom', end: 'bottom top',
     onUpdate: function (self) {
       var s = gsap.utils.clamp(-5, 5, self.getVelocity() / -350);
       if (Math.abs(s) > Math.abs(skewProxy.s)) {
@@ -587,7 +591,6 @@
   ScrollTrigger.create({
     start: 0, end: 'max',
     onUpdate: function (self) {
-      bar.style.transform = 'scaleX(' + self.progress.toFixed(4) + ')';
       if (!header) return;
       var y = self.scroll();
       var menuOpen = root.classList.contains('scroll-locked');
@@ -678,11 +681,7 @@
   fitWm();
   window.addEventListener('resize', fitWm);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { fitWm(); ScrollTrigger.refresh(); });
-  if (wm) {
-    var wmTl = gsap.timeline({ scrollTrigger: { trigger: wm, start: 'top 98%', end: 'bottom bottom', scrub: 1 } });
-    wmTl.fromTo(wm, { '--wm': '100%' }, { '--wm': '0%', ease: 'none' }, 0)
-        .fromTo(wm.lastElementChild, { '--wm2': '100%' }, { '--wm2': '0%', ease: 'none' }, 0.25);
-  }
+  /* заливку надписи ведёт CSS по шкале view() (editorial.css), JS её не трогает */
 
   /* ---------------------------------------------------------
      14. Пересчёт позиций, когда догружается контент
