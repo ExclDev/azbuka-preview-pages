@@ -1,4 +1,4 @@
-/* base.css: общие стили всех страниц (шапка, меню, формы, попапы, квиз, виджеты, подвал, cookie). Бывшие inline/style-main и style-below-fold, часть для base */
+/* base.css: общие стили всех страниц (шапка, меню, формы, попапы, виджеты, подвал, cookie). Бывшие inline/style-main и style-below-fold, часть для base */
 @font-face {
   font-family: 'Oswald';
   font-style: normal;
@@ -467,12 +467,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .float-scroll-up { transition: opacity .1s; }
   .float-cta-btn:hover { transform: none; }
   .qw-widget { transition: opacity .1s !important; }
-  .qw-btn-calc .qw-btn-icon { animation: none !important; }
-  .qw-btn-calc .qw-icon-chat { animation: none !important; }
-  .qw-btn-calc { animation: none !important; transition: none !important; }
+  .qw-toggle svg { animation: none !important; }
+  .qw-toggle { animation: none !important; transition: none !important; }
   .qw-btn-el, .qw-close { transition: none !important; }
-  .qw-hint { transition: opacity .2s ease !important; }
-  .quiz-step, .quiz-success { animation: none !important; }
 }
 .city-bar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 1100;
@@ -538,7 +535,7 @@ body.city-bar-visible .mobile-menu { transform: translateY(var(--city-bar-h, 36p
   display: flex; flex-direction: column-reverse; align-items: center;
 }
 .qw-widget:not(.qw-expanded) .qw-btn-el { pointer-events: none; }
-.qw-close, .qw-btn-el {
+.qw-close, .qw-btn-el, .qw-toggle {
   position: relative;
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
@@ -555,7 +552,8 @@ body.city-bar-visible .mobile-menu { transform: translateY(var(--city-bar-h, 36p
     transform .4s ease-in;
 }
 .qw-close:hover, .qw-btn-el:hover { filter: brightness(1.12); }
-.qw-btn-calc {
+/* Красная кнопка виджета только раскрывает и сворачивает его, калькулятора за ней нет */
+.qw-toggle {
   width: 56px; height: 56px; margin-bottom: 0; color: #fff; z-index: 2; order: 3;
   background: linear-gradient(135deg, #FF3B30 0%, var(--red) 55%, #8A0E0A 100%);
   background-size: 160% 160%;
@@ -572,14 +570,14 @@ body.city-bar-visible .mobile-menu { transform: translateY(var(--city-bar-h, 36p
     transform .35s cubic-bezier(.22,.61,.36,1),
     filter .15s ease;
 }
-.qw-widget.qw-visible:not(.qw-expanded) .qw-btn-calc:hover {
+.qw-widget.qw-visible:not(.qw-expanded) .qw-toggle:hover {
   background-position: 100% 50%;
   box-shadow: 0 14px 34px rgba(232,32,26,.4), 0 0 14px 3px rgba(232,32,26,.18);
 }
-.qw-widget:not(.qw-expanded) .qw-btn-calc {
+.qw-widget:not(.qw-expanded) .qw-toggle {
   overflow: hidden;
 }
-.qw-widget:not(.qw-expanded) .qw-btn-calc::after {
+.qw-widget:not(.qw-expanded) .qw-toggle::after {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; height: 60%;
@@ -608,11 +606,9 @@ body.city-bar-visible .mobile-menu { transform: translateY(var(--city-bar-h, 36p
     filter .3s ease-in,
     transform .3s ease-in;
 }
-.qw-widget.qw-expanded .qw-btn-calc {
+.qw-widget.qw-expanded .qw-toggle {
   margin-bottom: 12px;
   transform: translateY(-8px);
-  background: #fff;
-  border: 2px solid var(--red);
   box-shadow: 0 12px 32px rgba(232,32,26,.35), 0 0 12px 2px rgba(232,32,26,.15);
   transition:
     width .34s ease-in,
@@ -625,19 +621,11 @@ body.city-bar-visible .mobile-menu { transform: translateY(var(--city-bar-h, 36p
     transform .35s ease-in,
     filter .15s ease-in;
 }
-.qw-btn-calc svg, .qw-btn-calc img {
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%,-50%) scale(1);
-  transition: opacity .4s ease-in, transform .4s ease-in;
-}
-.qw-btn-calc .qw-icon-calc { opacity: 0; transform: translate(-50%,-50%) scale(.4); }
-.qw-widget.qw-expanded .qw-btn-calc .qw-icon-chat { opacity: 0; transform: translate(-50%,-50%) scale(.4); }
-.qw-widget.qw-expanded .qw-btn-calc .qw-icon-calc { opacity: 1; transform: translate(-50%,-50%) scale(1); }
 @keyframes qw-icon-pulse {
-  0%, 100% { transform: translate(-50%,-50%) scale(1); }
-  50%      { transform: translate(-50%,-50%) scale(1.15); }
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.15); }
 }
-.qw-widget.qw-visible:not(.qw-expanded) .qw-btn-calc .qw-icon-chat {
+.qw-widget.qw-visible:not(.qw-expanded) .qw-toggle svg {
   animation: qw-icon-pulse 1.6s ease-in-out infinite;
 }
 @keyframes qw-pulse {
@@ -645,41 +633,8 @@ body.city-bar-visible .mobile-menu { transform: translateY(var(--city-bar-h, 36p
   50%      { transform: scale(1.02); }
 }
 /* тень кнопки теперь статичная (как в середине прежнего цикла): анимировать box-shadow виджета, который всегда на экране, дорого */
-.qw-widget.qw-visible:not(.qw-expanded) .qw-btn-calc {
+.qw-widget.qw-visible:not(.qw-expanded) .qw-toggle {
   animation: qw-pulse 3.8s ease-in-out infinite;
-}
-.qw-hint {
-  position: fixed;
-  z-index: 9998;
-  white-space: nowrap;
-  background: var(--red);
-  color: #fff;
-  padding: 10px 16px;
-  border-radius: var(--radius-sm);
-  font-family: var(--font-body);
-  font-size: 14px; font-weight: 600;
-  opacity: 0;
-  transform: translate(10px, -50%);
-  pointer-events: none;
-  transition: opacity .4s ease, transform .4s ease;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
-}
-.qw-hint::after {
-  content: '';
-  position: absolute;
-  left: 100%; top: 50%;
-  transform: translateY(-50%);
-  border: 6px solid transparent;
-  border-left-color: var(--red);
-}
-.qw-hint.qw-hint--show {
-  opacity: 1;
-  transform: translate(0, -50%);
-  pointer-events: auto;
-  cursor: pointer;
-}
-@media (max-width: 768px) {
-  .qw-hint { display: none; }
 }
 .qw-close::before, .qw-btn-el::before {
   content: attr(data-tooltip);
@@ -703,27 +658,15 @@ body.city-bar-visible .mobile-menu { transform: translateY(var(--city-bar-h, 36p
   opacity: 1;
   transform: translate(0, -50%);
 }
-.qw-widget.qw-expanded .qw-btn-calc::before {
-  opacity: 1;
-  transform: translate(0, -50%);
-  transition-delay: .3s;
-  background: var(--red);
-  font-weight: 600;
-}
-.qw-widget.qw-expanded:has(.qw-btn-max:hover, .qw-btn-tg:hover, .qw-btn-call:hover, .qw-close:hover) .qw-btn-calc::before {
-  opacity: 0;
-  transition-delay: 0s;
-}
 @media (max-width: 768px) {
   .qw-widget { bottom: 140px; }
   .qw-widget.qw-visible { opacity: 1; }
-  .qw-close::before, .qw-btn-el::before, .qw-widget.qw-expanded .qw-btn-calc::before { display: none !important; }
+  .qw-close::before, .qw-btn-el::before { display: none !important; }
 }
 @media (max-width: 480px) {
   .qw-widget { bottom: 80px; right: 8px; }
-  .qw-btn-calc { width: 48px; height: 48px; margin-bottom: 0; }
-  .qw-btn-calc .qw-icon-calc { width: 24px; height: 24px; }
-  .qw-close, .qw-btn-el { width: 44px; height: 44px; margin-bottom: 10px; }
+  .qw-toggle { width: 48px; height: 48px; margin-bottom: 0; }
+    .qw-close, .qw-btn-el { width: 44px; height: 44px; margin-bottom: 10px; }
 }
 .cookie-banner {
   position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
@@ -847,126 +790,6 @@ body.city-bar-visible .mobile-menu { transform: translateY(var(--city-bar-h, 36p
   from { opacity: 0; transform: scale(.92); }
   to   { opacity: 1; transform: scale(1); }
 }
-.quiz-overlay {
-  display: none;
-  position: fixed; inset: 0; z-index: 10000;
-  background: rgba(0,0,0,.75);
-  align-items: center; justify-content: center;
-  padding: 16px;
-}
-.quiz-overlay.open { display: flex; }
-.quiz-box {
-  background: var(--bg2);
-  width: 100%; max-width: 900px;
-  border-radius: var(--radius-lg); border: 1px solid var(--border);
-  overflow: hidden; position: relative;
-  max-height: 90vh;
-  display: flex; flex-direction: column;
-  box-shadow: 0 24px 80px rgba(0,0,0,.65);
-}
-.quiz-progress { height: 4px; background: var(--bg3); flex-shrink: 0; }
-.quiz-progress-bar { height: 100%; background: var(--red); transition: width .4s ease; width: 20%; }
-.quiz-header {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 20px 24px 0; flex-shrink: 0;
-}
-.quiz-step-label {
-  font-size: 12px; color: var(--gray);
-  text-transform: uppercase; letter-spacing: 1px;
-  font-family: var(--font-display);
-}
-.quiz-close-btn {
-  font-size: 28px; color: var(--gray);
-  background: none; border: none; cursor: pointer;
-  line-height: 1; padding: 0 0 0 8px;
-  transition: color .15s;
-}
-.quiz-close-btn:hover { color: var(--white); }
-.quiz-body { padding: 0 24px 16px; overflow-y: auto; flex: 1; }
-.quiz-step { display: none; animation: quizFadeIn .25s ease; }
-.quiz-step.active { display: block; }
-@keyframes quizFadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-.quiz-question {
-  font-family: var(--font-display); font-size: 22px; font-weight: 600;
-  text-transform: uppercase; color: var(--white);
-  margin: 20px 0 18px; line-height: 1.2;
-}
-.quiz-question span { color: var(--red); }
-.quiz-cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(148px, 1fr));
-  gap: 10px;
-}
-.quiz-card {
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 10px; padding: 20px 12px;
-  background: var(--bg3);
-  border: 2px solid transparent; border-radius: var(--radius-input);
-  cursor: pointer;
-  transition: border-color .2s, background .2s;
-  color: var(--white); font-family: var(--font-body); text-align: center;
-}
-.quiz-card:hover { background: #2a2520; border-color: rgba(232,32,26,.4); }
-.quiz-card.selected { border-color: var(--red); background: rgba(232,32,26,.1); }
-.quiz-card-icon { font-size: 30px; line-height: 1; }
-.quiz-card-label { font-size: 14px; font-weight: 500; line-height: 1.3; }
-.quiz-icon {
-  width: 32px; height: 32px;
-  color: var(--red);
-  margin-bottom: 10px;
-  flex-shrink: 0;
-  transition: color .3s, transform .3s;
-}
-.quiz-card.selected .quiz-icon { transform: scale(1.1); }
-.quiz-card-img {
-  width: 100%; height: 160px;
-  object-fit: cover;
-  border-radius: var(--radius-md);
-  display: block;
-}
-.quiz-card:has(.quiz-card-img) { padding: 12px; gap: 12px; }
-.quiz-nav { padding: 0 24px 16px; flex-shrink: 0; }
-.quiz-back-btn {
-  background: none; border: none; color: var(--gray);
-  font-size: 13px; cursor: pointer; padding: 4px 0;
-  transition: color .15s; font-family: var(--font-body);
-}
-.quiz-back-btn:hover { color: var(--white); }
-.quiz-success {
-  padding: 52px 24px; text-align: center;
-  animation: quizFadeIn .3s ease;
-}
-.quiz-success-icon { font-size: 60px; margin-bottom: 16px; color: var(--red); }
-.quiz-success-title {
-  font-family: var(--font-display); font-size: 26px; font-weight: 600;
-  text-transform: uppercase; margin-bottom: 10px;
-}
-.quiz-success-text { font-size: 14px; color: var(--gray); margin-bottom: 24px; }
-@media (max-width: 768px) {
-  .quiz-box { max-width: 100%; }
-  .quiz-cards { grid-template-columns: 1fr; gap: 10px; }
-  .quiz-card:has(.quiz-card-img) { padding: 10px; gap: 10px; }
-  .quiz-card-img { height: 140px; }
-}
-@media (max-width: 480px) {
-  .quiz-box { border-radius: var(--radius-lg); }
-  .quiz-header { padding: 14px 16px 0; }
-  .quiz-body { padding: 0 16px 16px; }
-  .quiz-nav { padding: 0 16px 12px; }
-  .quiz-question { font-size: 18px; margin: 16px 0 14px; }
-  .quiz-cards { grid-template-columns: 1fr; gap: 8px; }
-  .quiz-card { padding: 14px 8px; gap: 6px; }
-  .quiz-card-icon { font-size: 22px; }
-  .quiz-card-label { font-size: 13px; }
-  .quiz-card-img { height: 120px; }
-  .quiz-success { padding: 36px 16px; }
-  .quiz-success-icon { font-size: 48px; }
-  .quiz-success-title { font-size: 22px; }
-}
 .header-nav a { white-space: nowrap; }
 @media (max-width: 1365px) {
   .header-nav { display: none; }
@@ -992,10 +815,10 @@ body.city-bar-visible .mobile-menu { transform: translateY(var(--city-bar-h, 36p
 .popup-success-call { margin-top: 14px; font-size: 14px; color: var(--gray); }
 .popup-success-call a { color: #fff; text-decoration: underline; text-underline-offset: 3px; white-space: nowrap; }
 .popup-success-call[hidden] { display: none; }
-/* Попап выше куки-баннера (как квиз), а если не помещается по высоте, прокручивается сам */
+/* Попап выше куки-баннера, а если не помещается по высоте, прокручивается сам */
 .overlay { z-index: 10000; }
 #popupFormBox, #popupSuccess { max-height: calc(100vh - 24px); max-height: calc(100dvh - 24px); overflow-y: auto; }
-.popup-box:focus, .quiz-box:focus { outline: none; }
+.popup-box:focus { outline: none; }
 .form-consent { margin-top: 4px; }
 .consent {
   position: relative; display: flex; align-items: center; gap: 12px;
@@ -1021,6 +844,9 @@ body.city-bar-visible .mobile-menu { transform: translateY(var(--city-bar-h, 36p
 .consent-input:focus-visible + .consent-box { outline: 2px solid #fff; outline-offset: 3px; }
 .consent-input[aria-invalid="true"] + .consent-box { border-color: #ff6b66; }
 .consent-text a { color: #fff; text-decoration: underline; }
+.form-input[aria-invalid="true"], .form-input[aria-invalid="true"]:focus { border-color: var(--red-text); }
+.field-error { margin: 0; color: var(--red-text); font-size: 13px; line-height: 1.4; }
+.field-error[hidden] { display: none; }
 .consent-error { margin: 2px 0 0; color: #ff6b66; font-size: 14px; line-height: 1.5; }
 @media (prefers-reduced-motion: reduce) {
   .consent-box, .consent-box::after { transition: none; }

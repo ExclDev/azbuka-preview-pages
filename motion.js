@@ -54,9 +54,9 @@
       smoothWheel: true,
       wheelMultiplier: 1,
       prevent: function (node) {
-        // Внутри модалок, квиза, мобильного меню — родной скролл
+        // Внутри модалок и мобильного меню — родной скролл
         return !!(node && node.closest && node.closest(
-          '.quiz-body, .mobile-menu, .portfolio-modal, .popup, .popup-overlay, .modal, .lightbox, [data-lenis-prevent]'
+          '.mobile-menu, .portfolio-modal, .popup, .popup-overlay, .modal, .lightbox, [data-lenis-prevent]'
         ));
       }
     });

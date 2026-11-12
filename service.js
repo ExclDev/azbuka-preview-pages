@@ -133,7 +133,7 @@
       lenis = new Lenis({
         lerp: 0.085, smoothWheel: true, wheelMultiplier: 1,
         prevent: function (node) {
-          return !!(node && node.closest && node.closest('.quiz-body, .mobile-menu, .portfolio-modal, .popup, .popup-overlay, .modal, .lightbox, [data-lenis-prevent]'));
+          return !!(node && node.closest && node.closest('.mobile-menu, .portfolio-modal, .popup, .popup-overlay, .modal, .lightbox, [data-lenis-prevent]'));
         }
       });
       lenis.on('scroll', ScrollTrigger.update);

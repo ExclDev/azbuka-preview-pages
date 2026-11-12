@@ -1,4 +1,4 @@
-/* ═══ base.js: общий код всех страниц (меню, попапы, заявки, квиз, виджеты, cookie). Собран из бывшего inline/script-app, script-cookie ═══ */
+/* ═══ base.js: общий код всех страниц (меню, попапы, заявки, виджеты, cookie). Собран из бывшего inline/script-app, script-cookie ═══ */
 /* Первая отрисовка уже была? Скрипты движения (service.js, motion.js, home.js) прячут текст первого экрана и выводят его заново только
    если успели раньше неё. Если нет (медленная сеть), текст и кнопки остаются на месте. */
 window.azPainted = function () {
@@ -261,6 +261,9 @@ let popupOpener = null;
    в поле «кнопка» и не меняются). Нет совпадения — вариант по умолчанию. */
 const POPUP_TEXTS = [
   { match: 'Получить бесплатную смету', title: 'Посчитаем смету бесплатно', note: 'Приедем на замер и за 24 часа пришлём предварительную смету.' },
+  { match: 'Получить смету за 24 часа', title: 'Смета за 24 часа', note: 'Приедем на замер и через 24 часа после него пришлём предварительную смету. Бесплатно.' },
+  { match: 'Заказать замер ванной', title: 'Замер ванной', note: 'Приедем, посмотрим трубы и расскажем, из чего сложится цена.' },
+  { match: 'Обсудить проект', title: 'Обсудим ваш проект', note: 'Расскажем, что входит в технический проект, и договоримся о замере.' },
   { match: 'Заказать по акции', title: 'Технический проект за полцены', note: 'Скидка 50% действует, если ремонт делаем мы.' },
   { match: 'Обратный звонок', title: 'Перезвоним вам', note: 'Оставьте номер, перезвоним в рабочее время.' }
 ];
@@ -314,7 +317,7 @@ function closePopup() {
 /* Кнопки «Записаться…» на страницах услуг. Источник тот же, что у openPopup. */
 function openBooking(trigger, booking) { openPopup(trigger, booking || { title: 'Запись', note: 'Перезвоним и договоримся о времени' }); }
 overlay.addEventListener('click', e => { if (e.target === overlay) closePopup(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { closePopup(); closeDevPopup(); closeQuizModal(); } });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closePopup(); closeDevPopup(); } });
 function openDevPopup() {
   document.getElementById('devOverlay').classList.add('open');
   document.documentElement.classList.add('scroll-locked');
@@ -335,7 +338,7 @@ document.getElementById('devOverlay').addEventListener('click', e => {
 window.AZ_LEAD = (function () {
   const ENDPOINT = '/api/lead.php';
 
-  // Какая кнопка открыла попап или калькулятор.
+  // Какая кнопка открыла попап.
   const state = { trigger: '' };
 
   // Метки рекламной кампании берём при первом заходе и держим на вкладке:
@@ -385,8 +388,29 @@ window.AZ_LEAD = (function () {
   function clearError(formEl) {
     const box = formEl && errorBox(formEl);
     if (box) { box.hidden = true; box.textContent = ''; }
+    if (formEl) formEl.querySelectorAll('.form-input[aria-invalid]').forEach(clearField);
     clearConsent(formEl);
   }
+
+  /* Ошибка поля: красная рамка (aria-invalid) и подпись под полем, как у галочки согласия.
+     Подпись лежит в разметке рядом с полем (id поля + «-err», role="alert", hidden), поле ссылается на неё
+     через aria-describedby. Рамка и подпись держатся, пока человек не начнёт вводить. */
+  function fieldErrorEl(el) { return el && el.id ? document.getElementById(el.id + '-err') : null; }
+  function clearField(el) {
+    if (!el) return;
+    el.removeAttribute('aria-invalid');
+    const err = fieldErrorEl(el);
+    if (err) err.hidden = true;
+  }
+  function markField(el) {
+    if (!el) return;
+    el.setAttribute('aria-invalid', 'true');
+    const err = fieldErrorEl(el);
+    if (err) err.hidden = false;
+  }
+  document.addEventListener('input', e => {
+    if (e.target.classList && e.target.classList.contains('form-input') && e.target.hasAttribute('aria-invalid')) clearField(e.target);
+  });
 
   /* Согласие на обработку ПДн. Галочка по умолчанию снята, без неё заявка не уходит.
      Ошибка стоит у самой галочки и пропадает, как только её отметили. */
@@ -419,11 +443,11 @@ window.AZ_LEAD = (function () {
     box.hidden = false;
   }
 
-  function highlight(el) {
-    if (!el) return;
-    el.focus();
-    el.style.borderColor = '#e8201a';
-    setTimeout(() => { el.style.borderColor = ''; }, 2000);
+  /* Помечает все неверные поля, фокус уходит на первое из них */
+  function highlight(els) {
+    const list = [].concat(els).filter(Boolean);
+    list.forEach(markField);
+    if (list[0]) list[0].focus();
   }
 
   /* Город задаёт сайт, на котором оставили заявку: у каждого города свой
@@ -500,8 +524,10 @@ function handleFormSubmit(e, formEl) {
   e.preventDefault();
   const nameEl  = formEl.querySelector('[autocomplete="given-name"], [name="name"]');
   const phoneEl = formEl.querySelector('[type="tel"]');
-  if (!nameEl || !nameEl.value.trim()) { AZ_LEAD.highlight(nameEl); return; }
-  if (!phoneEl || !AZ_LEAD.phoneValid(phoneEl.value)) { AZ_LEAD.highlight(phoneEl); return; }
+  const bad = [];
+  if (!nameEl || !nameEl.value.trim()) bad.push(nameEl);
+  if (!phoneEl || !AZ_LEAD.phoneValid(phoneEl.value)) bad.push(phoneEl);
+  if (bad.length) { AZ_LEAD.highlight(bad); return; }
   if (!AZ_LEAD.consentOk(formEl)) return;
 
   const typeEl = formEl.querySelector('[name="repair_type"]');
@@ -594,6 +620,7 @@ function openVideo(id) {
     clearTimeout(closeTimer);
     widget.classList.add('qw-closing');
     widget.classList.remove('qw-expanded');
+    setExpanded(false);
     closeTimer = setTimeout(function () {
       widget.classList.remove('qw-closing');
     }, 320);
@@ -610,11 +637,16 @@ function openVideo(id) {
   }
   window.addEventListener('scroll', updateVisibility, { passive: true });
   updateVisibility();
-  widget.addEventListener('click', function () {
+  var toggle = document.getElementById('qwToggle');
+  function setExpanded(on) { if (toggle) toggle.setAttribute('aria-expanded', on ? 'true' : 'false'); }
+  widget.addEventListener('click', function (ev) {
     if (!widget.classList.contains('qw-expanded')) {
       clearTimeout(closeTimer);
       widget.classList.remove('qw-closing');
       widget.classList.add('qw-expanded');
+      setExpanded(true);
+    } else if (toggle && toggle.contains(ev.target)) {
+      collapse();
     }
   });
   document.getElementById('qwClose').addEventListener('click', function (e) {
@@ -625,164 +657,6 @@ function openVideo(id) {
     if (widget.classList.contains('qw-expanded') && !widget.contains(e.target)) {
       collapse();
     }
-  });
-})();
-(function () {
-  if (window.matchMedia('(max-width: 768px)').matches) return;
-  var hint   = document.getElementById('qwHint');
-  var widget = document.getElementById('quickWidget');
-  var calc   = widget && widget.querySelector('.qw-btn-calc');
-  if (!hint || !widget || !calc) return;
-  if (sessionStorage.getItem('qwHintShown')) return;
-  var done = false, armed = false;
-  function place() {
-    var r = calc.getBoundingClientRect();
-    hint.style.top   = (r.top + r.height / 2) + 'px';
-    hint.style.right = (window.innerWidth - r.left + 12) + 'px';
-  }
-  function isShown() { return hint.classList.contains('qw-hint--show'); }
-  function hide() {
-    hint.classList.remove('qw-hint--show');
-    widget.classList.remove('qw-attention'); 
-  }
-  function show() {
-    if (done) return;
-    if (!widget.classList.contains('qw-visible')) { armed = true; return; }
-    done = true; armed = false;
-    sessionStorage.setItem('qwHintShown', '1');
-    place();
-    hint.classList.add('qw-hint--show');
-    widget.classList.add('qw-attention'); 
-    setTimeout(hide, 5000);
-  }
-  setTimeout(show, 3000);
-  window.addEventListener('scroll', function () {
-    if (armed) show();
-    if (isShown()) place();
-  }, { passive: true });
-  window.addEventListener('resize', function () { if (isShown()) place(); });
-  widget.addEventListener('mouseenter', hide, { once: true });
-  widget.addEventListener('click', hide, { once: true });
-  hint.addEventListener('click', function () {
-    hide();
-    if (window.openQuizModal) window.openQuizModal('Подсказка — Рассчитать стоимость');
-  });
-})();
-(function () {
-  /* Квиз: пять экранов, последний с контактами. Страница может передать готовый ответ:
-     openQuizModal(trigger, { object: 'Новостройка' }). Ответ отмечается, экран с вопросом пропускается,
-     счётчик считает только оставшиеся вопросы. Ключи: object (экран 1), repair (2), area (3), when (4).
-     Значение должно совпадать с подписью карточки; незнакомое значение игнорируется, вопрос остаётся. */
-  var PRESET_STEP = { object: 1, repair: 2, area: 3, when: 4 };
-  var PRESET_KEY  = { object: 'type', repair: 'repair', area: 'area', when: 'when' };
-  var CONTACT = 5;
-  var seq   = [1, 2, 3, 4, CONTACT]; // показанные экраны по порядку
-  var pos   = 0;
-  var ans   = {};
-  var quizOpener = null;
-  function openQuizModal(trigger, preset) {
-    quizOpener = document.activeElement;
-    document.getElementById('quiz-modal').classList.add('open');
-    document.documentElement.classList.add('scroll-locked');
-    window.AZ_LEAD.trigger = trigger || 'Калькулятор ремонта';
-    resetQuiz(preset);
-    window.AZ_LEAD.markOpened(document.getElementById('quizContactForm'));
-    window.AZ_LEAD.clearError(document.getElementById('quizContactForm'));
-    document.querySelector('#quiz-modal .quiz-box').focus({ preventScroll: true });
-  }
-  window.openQuizModal = openQuizModal;
-  function closeQuizModal() {
-    var el = document.getElementById('quiz-modal');
-    var was = el && el.classList.contains('open');
-    if (el) el.classList.remove('open');
-    document.documentElement.classList.remove('scroll-locked');
-    if (was) restoreFocus(quizOpener);
-  }
-  window.closeQuizModal = closeQuizModal;
-  function resetQuiz(preset) {
-    pos = 0;
-    seq = [1, 2, 3, 4, CONTACT];
-    for (var k in ans) delete ans[k];
-    document.querySelectorAll('.quiz-card').forEach(function (c) { c.classList.remove('selected'); });
-    var nameEl  = document.getElementById('quiz-name');
-    var phoneEl = document.getElementById('quiz-phone');
-    var consent = document.querySelector('#quizContactForm .consent-input');
-    if (nameEl)  nameEl.value  = '';
-    if (phoneEl) phoneEl.value = '';
-    if (consent) consent.checked = false;
-    Object.keys(preset || {}).forEach(function (name) {
-      var n = PRESET_STEP[name];
-      if (!n) return;
-      var cards = document.querySelectorAll('#quizStep' + n + ' .quiz-card');
-      for (var i = 0; i < cards.length; i++) {
-        var label = cards[i].querySelector('.quiz-card-label');
-        if (label && label.textContent.trim() === preset[name]) {
-          cards[i].classList.add('selected');
-          ans[PRESET_KEY[name]] = preset[name];
-          seq = seq.filter(function (x) { return x !== n; });
-          break;
-        }
-      }
-    });
-    showQuizPanel(true);
-    showStep();
-  }
-  function showQuizPanel(visible) {
-    var show   = visible ? '' : 'none';
-    var hide   = visible ? 'none' : '';
-    document.querySelector('#quiz-modal .quiz-progress').style.display = show;
-    document.querySelector('#quiz-modal .quiz-header').style.display   = show;
-    document.querySelector('#quiz-modal .quiz-body').style.display     = show;
-    document.querySelector('#quiz-modal .quiz-nav').style.display      = show;
-    document.getElementById('quizSuccess').style.display               = hide;
-  }
-  function showStep() {
-    var n = seq[pos];
-    document.querySelectorAll('.quiz-step').forEach(function (s) { s.classList.remove('active'); });
-    var el = document.getElementById('quizStep' + n);
-    if (el) el.classList.add('active');
-    document.getElementById('quizProgressBar').style.width = ((pos + 1) / seq.length * 100) + '%';
-    document.getElementById('quizStepLabel').textContent   = 'Вопрос ' + (pos + 1) + ' из ' + seq.length;
-    document.getElementById('quizBackBtn').style.visibility = pos > 0 ? 'visible' : 'hidden';
-  }
-  window.quizSelect = function (btn, key, value) {
-    btn.closest('.quiz-cards').querySelectorAll('.quiz-card').forEach(function (c) { c.classList.remove('selected'); });
-    btn.classList.add('selected');
-    ans[key] = value;
-    setTimeout(function () {
-      if (pos < seq.length - 1) pos++;
-      showStep();
-    }, 400);
-  };
-  window.quizBack = function () {
-    if (pos > 0) { pos--; showStep(); }
-  };
-  document.getElementById('quizContactForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-    var formEl  = e.target;
-    var nameEl  = document.getElementById('quiz-name');
-    var phoneEl = document.getElementById('quiz-phone');
-    if (!nameEl.value.trim())                     { window.AZ_LEAD.highlight(nameEl);  return; }
-    if (!window.AZ_LEAD.phoneValid(phoneEl.value)) { window.AZ_LEAD.highlight(phoneEl); return; }
-    if (!window.AZ_LEAD.consentOk(formEl))         return;
-    ans.name  = nameEl.value.trim();
-    ans.phone = phoneEl.value.trim();
-    // Ответы на пять вопросов живут в `ans` и до этого момента никуда не
-    // уходили. Теперь уезжают вместе с контактами.
-    window.AZ_LEAD.send(formEl, {
-      form: 'Калькулятор',
-      name: ans.name,
-      phone: ans.phone,
-      object_type: ans.type   || '',
-      repair:      ans.repair || '',
-      area_range:  ans.area   || '',
-      start_when:  ans.when   || ''
-    }, function () {
-      showQuizPanel(false);
-    }, 'lead_quiz');
-  });
-  document.getElementById('quiz-modal').addEventListener('click', function (e) {
-    if (e.target === this) closeQuizModal();
   });
 })();
 (function () {

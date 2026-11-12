@@ -127,7 +127,7 @@
 <link rel="preload" as="font" type="font/woff2" href="../fonts/oswald-latin.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/inter-cyrillic-400.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="../fonts/inter-latin-400.woff2" crossorigin />
-<link rel="stylesheet" href="../base.css?v=aeefe77751" />
+<link rel="stylesheet" href="../base.css?v=3b1d2c6957" />
 <link rel="stylesheet" href="../service.css?v=32d255bde0" />
 <link rel="stylesheet" href="../priemka.css?v=e5ac369579" />
 </head>
@@ -274,7 +274,7 @@
           <li><b>Трубы в стене</b><span>новая разводка и канализация</span></li>
           <li><b>24 месяца</b><span>гарантии на работы</span></li>
         </ul>
-        <div class="sv-ctas"><button class="btn btn-red btn-cta" type="button" onclick="openQuizModal('Ванная под ключ — Первый экран — Рассчитать ванную', AZ_PAGE.quiz)">Рассчитать ванную</button><a class="btn btn-outline" href="#scope">Что входит</a>
+        <div class="sv-ctas"><button class="btn btn-red btn-cta" type="button" onclick="openPopup('Ванная под ключ — Первый экран — Заказать замер ванной')">Заказать замер ванной</button><a class="btn btn-outline" href="#scope">Что входит</a>
         </div>
       </div>
       <figure class="xr" data-xr>
@@ -411,7 +411,7 @@
         <li><button class="pv-ch" type="button" data-t="49" style="--i:4"><span class="pv-t">0:49</span><span><b>Подвесной унитаз</b><small>Инсталляция спрятана в стене</small></span></button></li>
         <li><button class="pv-ch" type="button" data-t="56" style="--i:5"><span class="pv-t">0:56</span><span><b>Аксессуары</b><small>Дозаторы в цвет отделки</small></span></button></li>
       </ol>
-      <div class="sv-ctas pv-ctas"><button class="btn btn-red btn-cta" type="button" onclick="openQuizModal('Ванная под ключ — Видео — Рассчитать ванную', AZ_PAGE.quiz)">Рассчитать ванную</button></div>
+      <div class="sv-ctas pv-ctas"><button class="btn btn-red btn-cta" type="button" onclick="openPopup('Ванная под ключ — Видео — Заказать замер ванной')">Заказать замер ванной</button></div>
     </div>
   </div>
 </section>
@@ -509,7 +509,7 @@
   <div class="wrapper">
     <h2 id="cta-title"><span class="ln"><span>Посчитаем ванную</span></span><span class="ln"><span class="red">по вашим размерам</span></span></h2>
     <p>Приедем на замер, посмотрим трубы и назовём цену, которую зафиксируем в договоре.</p>
-    <div class="sv-cta-row"><button class="btn btn-red btn-cta" type="button" onclick="openQuizModal('Ванная под ключ — Финальный призыв — Рассчитать ванную', AZ_PAGE.quiz)">Рассчитать ванную</button><button class="btn btn-outline" type="button" onclick="openPopup('Ванная под ключ — Финальный призыв — Обратный звонок')">Обратный звонок</button>
+    <div class="sv-cta-row"><button class="btn btn-red btn-cta" type="button" onclick="openPopup('Ванная под ключ — Финальный призыв — Заказать замер ванной')">Заказать замер ванной</button><button class="btn btn-outline" type="button" onclick="openPopup('Ванная под ключ — Финальный призыв — Обратный звонок')">Обратный звонок</button>
       <a class="sv-cta-phone" href="tel:+79231410154">8 (923) 141-01-54</a>
     </div>
   </div>
@@ -591,11 +591,10 @@
 </div>
 <div class="qw-widget" id="quickWidget" role="complementary" aria-label="Быстрые контакты">
   <div class="qw-inner">
-    <button class="qw-btn-el qw-btn-calc" onclick="openQuizModal('Виджет — Калькулятор ремонта')" aria-label="Онлайн расчёт стоимости" data-tooltip="Калькулятор ремонта">
-      <svg class="qw-icon-chat" width="22.68" height="22.68" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <button class="qw-toggle" id="qwToggle" type="button" aria-label="Связаться с нами" aria-expanded="false">
+      <svg width="22.68" height="22.68" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
       </svg>
-      <img src="../images/icon-calc-app.svg" class="qw-icon-calc" width="28" height="28" alt="" aria-hidden="true">
     </button>
     <a class="qw-btn-el qw-btn-max" href="https://max.ru/azbukaremonta" target="_blank" rel="noopener noreferrer" aria-label="Написать в MAX" data-tooltip="MAX">
       <svg width="27" height="27" viewBox="0 0 720 720" fill="currentColor" fill-rule="evenodd" aria-hidden="true">
@@ -615,7 +614,6 @@
     <button class="qw-close" id="qwClose" aria-label="Свернуть" data-tooltip="Закрыть">×</button>
   </div>
 </div>
-<div class="qw-hint" id="qwHint">Рассчитать стоимость за 2 минуты →</div>
 <div class="overlay" id="overlay" role="dialog" aria-modal="true" aria-labelledby="popup-heading">
   <div class="popup-box" id="popupFormBox" tabindex="-1">
     <button class="popup-close" onclick="closePopup()" aria-label="Закрыть">×</button>
@@ -626,12 +624,14 @@
         <div class="form-field">
           <label class="form-label" for="p-name">Имя</label>
           <input class="form-input" type="text" id="p-name" name="contact_name"
-                 placeholder="Имя" autocomplete="given-name" required />
+                 placeholder="Имя" autocomplete="given-name" required aria-describedby="p-name-err" />
+          <p class="field-error" id="p-name-err" role="alert" hidden>Как к вам обращаться?</p>
         </div>
         <div class="form-field">
           <label class="form-label" for="p-phone">Телефон</label>
           <input class="form-input" type="tel" id="p-phone" name="phone"
-                 placeholder="+7 (___) ___-__-__" autocomplete="tel" required />
+                 placeholder="+7 (___) ___-__-__" autocomplete="tel" required aria-describedby="p-phone-err" />
+          <p class="field-error" id="p-phone-err" role="alert" hidden>Проверьте номер: нужно 11 цифр</p>
         </div>
         <div class="form-field" data-lead="booking-date" hidden>
           <label class="form-label" for="p-date">Дата осмотра у застройщика</label>
@@ -695,152 +695,6 @@
     <button class="btn btn-red form-submit" onclick="closeDevPopup()" style="margin-top:20px">Понятно</button>
   </div>
 </div>
-<div class="quiz-overlay" id="quiz-modal" role="dialog" aria-modal="true" aria-labelledby="quiz-heading">
-  <div class="quiz-box" tabindex="-1">
-    <div class="quiz-progress">
-      <div class="quiz-progress-bar" id="quizProgressBar"></div>
-    </div>
-    <div class="quiz-header">
-      <span class="quiz-step-label" id="quizStepLabel">Вопрос 1 из 5</span>
-      <button class="quiz-close-btn" onclick="closeQuizModal()" aria-label="Закрыть квиз">×</button>
-    </div>
-    <div class="quiz-body">
-      <div class="quiz-step active" id="quizStep1">
-        <p class="quiz-question">Где планируется <span>ремонт?</span></p>
-        <div class="quiz-cards">
-          <button class="quiz-card" onclick="quizSelect(this,'type','Новостройка')">
-            <img class="quiz-card-img" src="../images/quiz-novostroyka.webp" alt="Новостройка" width="1448" height="1086" loading="lazy">
-            <span class="quiz-card-label">Новостройка</span>
-          </button>
-          <button class="quiz-card" onclick="quizSelect(this,'type','Вторичное жильё')">
-            <img class="quiz-card-img" src="../images/quiz-vtorichka.webp" alt="Вторичное жильё" width="1448" height="1086" loading="lazy">
-            <span class="quiz-card-label">Вторичное жильё</span>
-          </button>
-          <button class="quiz-card" onclick="quizSelect(this,'type','Частный дом')">
-            <img class="quiz-card-img" src="../images/quiz-dom.webp" alt="Частный дом" width="1448" height="1086" loading="lazy">
-            <span class="quiz-card-label">Частный дом</span>
-          </button>
-        </div>
-      </div>
-      <div class="quiz-step" id="quizStep2">
-        <p class="quiz-question">Какой вид <span>ремонта</span> вас интересует?</p>
-        <div class="quiz-cards">
-          <button class="quiz-card" onclick="quizSelect(this,'repair','Косметический')">
-            <img class="quiz-card-img" src="../images/quiz-kosmetichesky.webp" alt="Косметический" width="1448" height="1086" loading="lazy">
-            <span class="quiz-card-label">Косметический</span>
-          </button>
-          <button class="quiz-card" onclick="quizSelect(this,'repair','Капитальный')">
-            <img class="quiz-card-img" src="../images/quiz-kapitalniy.webp" alt="Капитальный" width="1448" height="1086" loading="lazy">
-            <span class="quiz-card-label">Капитальный</span>
-          </button><button class="quiz-card" onclick="quizSelect(this,'repair','Эксклюзивный / дизайн-проект')">
-            <img class="quiz-card-img" src="../images/quiz-dizainersky.webp" alt="Эксклюзивный / технический проект" width="1448" height="1086" loading="lazy">
-            <span class="quiz-card-label">Эксклюзивный / технический проект</span>
-          </button>
-        </div>
-      </div>
-      <div class="quiz-step" id="quizStep3">
-        <p class="quiz-question">Какая <span>площадь</span> помещения?</p>
-        <div class="quiz-cards">
-          <button class="quiz-card" onclick="quizSelect(this,'area','До 30 м²')">
-            <img class="quiz-card-img" src="../images/quiz-area-s.webp" alt="До 30 м²" width="1448" height="1086" loading="lazy">
-            <span class="quiz-card-label">До 30 м²</span>
-          </button>
-          <button class="quiz-card" onclick="quizSelect(this,'area','30–50 м²')">
-            <img class="quiz-card-img" src="../images/quiz-area-m.webp" alt="30–50 м²" width="1448" height="1086" loading="lazy">
-            <span class="quiz-card-label">30–50 м²</span>
-          </button>
-          <button class="quiz-card" onclick="quizSelect(this,'area','50–80 м² и более')">
-            <img class="quiz-card-img" src="../images/quiz-area-l.webp" alt="50–80 м² и более" width="1448" height="1086" loading="lazy">
-            <span class="quiz-card-label">50–80 м² и более</span>
-          </button>
-        </div>
-      </div>
-      <div class="quiz-step" id="quizStep4">
-        <p class="quiz-question">Когда планируете <span>начать?</span></p>
-        <div class="quiz-cards">
-          <button class="quiz-card" onclick="quizSelect(this,'when','Как можно скорее')">
-            <svg class="quiz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
-            </svg>
-            <span class="quiz-card-label">Как можно скорее</span>
-          </button>
-          <button class="quiz-card" onclick="quizSelect(this,'when','В течение месяца')">
-            <svg class="quiz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="3" y="4" width="18" height="18" rx="2"/>
-              <line x1="16" y1="2" x2="16" y2="6"/>
-              <line x1="8" y1="2" x2="8" y2="6"/>
-              <line x1="3" y1="10" x2="21" y2="10"/>
-            </svg>
-            <span class="quiz-card-label">В течение месяца</span>
-          </button>
-          <button class="quiz-card" onclick="quizSelect(this,'when','Через 2–3 месяца')">
-            <svg class="quiz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M5 22h14"/>
-              <path d="M5 2h14"/>
-              <path d="M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22"/>
-              <path d="M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/>
-            </svg>
-            <span class="quiz-card-label">Через 2–3 месяца</span>
-          </button>
-          <button class="quiz-card" onclick="quizSelect(this,'when','Пока только считаю')">
-            <svg class="quiz-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <rect x="4" y="2" width="16" height="20" rx="2"/>
-              <line x1="8" y1="6" x2="16" y2="6"/>
-              <line x1="8" y1="10" x2="8" y2="10"/>
-              <line x1="12" y1="10" x2="12" y2="10"/>
-              <line x1="16" y1="10" x2="16" y2="10"/>
-              <line x1="8" y1="14" x2="8" y2="14"/>
-              <line x1="12" y1="14" x2="12" y2="14"/>
-              <line x1="16" y1="14" x2="16" y2="18"/>
-              <line x1="8" y1="18" x2="12" y2="18"/>
-            </svg>
-            <span class="quiz-card-label">Пока только считаю</span>
-          </button>
-        </div>
-      </div>
-      <div class="quiz-step" id="quizStep5">
-        <p class="quiz-question">Куда отправить <span>расчёт?</span></p>
-        <form id="quizContactForm" method="post" novalidate>
-          <div class="form-field" style="margin-bottom:14px">
-            <label class="form-label" for="quiz-name">Имя</label>
-            <input class="form-input" type="text" id="quiz-name" name="name"
-                   placeholder="Ваше имя" autocomplete="given-name" required />
-          </div>
-          <div class="form-field" style="margin-bottom:20px">
-            <label class="form-label" for="quiz-phone">Телефон</label>
-            <input class="form-input" type="tel" id="quiz-phone" name="phone"
-                   placeholder="+7 (___) ___-__-__" autocomplete="tel" required />
-          </div>
-          <div class="lead-hp" aria-hidden="true">
-                <label>Компания<input type="text" name="company" tabindex="-1" autocomplete="off" /></label>
-          </div>
-          <div class="form-consent">
-  <label class="consent" for="quiz-consent">
-    <input class="consent-input" type="checkbox" id="quiz-consent" name="consent" value="1" required aria-describedby="quiz-consent-err" />
-    <span class="consent-box" aria-hidden="true"></span>
-    <span class="consent-text">Согласен на обработку <a href="../politika-konfidencialnosti/" target="_blank" rel="noopener">персональных данных</a></span>
-  </label>
-  <p class="consent-error" id="quiz-consent-err" role="alert" hidden>Отметьте согласие, иначе мы не сможем принять заявку.</p>
-</div>
-
-          <p class="form-error" hidden></p>
-          <button type="submit" class="btn btn-red form-submit">Получить расчёт</button>
-        </form>
-      </div>
-    </div>
-    <div class="quiz-nav">
-      <button class="quiz-back-btn" id="quizBackBtn" onclick="quizBack()" style="visibility:hidden">
-        ← Назад
-      </button>
-    </div>
-    <div class="quiz-success" id="quizSuccess" style="display:none">
-      <div class="quiz-success-icon">✓</div>
-      <p class="quiz-success-title" id="quiz-heading">Спасибо! Расчёт готовим</p>
-      <p class="quiz-success-text">Перезвоним в рабочее время и обсудим расчёт.</p>
-      <button class="btn btn-red" onclick="closeQuizModal()">Закрыть</button>
-    </div>
-  </div>
-</div>
 <div class="cookie-banner cookie-banner--hidden" id="cookieBanner" role="alert" aria-live="polite">
   <span>Используем cookie. Продолжая пользоваться сайтом, вы соглашаетесь с <a href="../politika-konfidencialnosti/">политикой конфиденциальности</a>.</span>
   <button class="cookie-banner__btn" id="cookieAccept">Принять</button>
@@ -849,11 +703,11 @@
 /* Город этого сайта: объект нужен base.js (заявки, сообщение об ошибке) и home.js (заголовок первого экрана) */
 window.AZ_CITY = {"key":"novosibirsk","name":"Новосибирск","phone":"8 (923) 141-01-54","phoneHref":"tel:+79231410154","heroLine2":"ремонт в Новосибирске"};
 </script>
-<script src="../base.js?v=f47136e914"></script>
+<script src="../base.js?v=20d00de083"></script>
 <script src="../vendor/gsap.min.js?v=2d26f4c060"></script>
 <script src="../vendor/ScrollTrigger.min.js?v=489bcf6d9c"></script>
 <script src="../vendor/lenis.min.js?v=44dcd10f2a"></script>
-<script src="../service.js?v=b51f4a4197"></script>
+<script src="../service.js?v=be16b36e48"></script>
 <script src="../priemka.js?v=421b5d21c1"></script>
 <script src="../vannaya.js?v=3d9f715dc3"></script>
 </body>
