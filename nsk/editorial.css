@@ -180,7 +180,7 @@
 }
 
 /* ---------- Подвал: название компании во всю ширину ---------- */
-.ed .footer { overflow: hidden; }
+.ed .footer { overflow: clip; }   /* clip, не hidden: hidden делает подвал контейнером прокрутки, и view() подвальной надписи считается внутри него (шкала стоит в конце) */
 .ed-wordmark {
   display: inline-block;
   font-family: var(--font-display); font-weight: 700; text-transform: uppercase;
@@ -205,7 +205,7 @@
 @keyframes edWm { from { background-position: 100% 0; } to { background-position: 0% 0; } }
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .ed-wordmark { view-timeline-name: --edwm; animation: edWm linear both; animation-timeline: --edwm; animation-range: entry 2svh entry 66%; }
+    .ed-wordmark { view-timeline-name: --edwm; animation: edWm linear both; animation-timeline: view(); animation-range: entry 2svh entry 66%; }
     .ed-wordmark span:last-child { animation: edWm linear both; animation-timeline: --edwm; animation-range: entry 33% entry 100%; }
   }
 }
@@ -566,8 +566,23 @@
 @keyframes edAct { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @supports (animation-timeline: view()) {
   @media (prefers-reduced-motion: no-preference) {
-    .ed .reason-card { view-timeline-name: --edact; }
-    .ed .reason-card::after { animation: edAct linear both; animation-timeline: --edact; animation-range: entry 42svh entry calc(100% + 42svh); }
+    /* псевдоэлемент не видит шкалу, объявленную на его же элементе (шкала стоит в конце): у каждой строки своё имя, общий предок .reasons-grid поднимает их в timeline-scope */
+    /* .about режет содержимое overflow: hidden и тем становится контейнером прокрутки для view() строк: clip режет так же, но контейнером не делает */
+    .ed .about { overflow: clip; }
+    .ed .reasons-grid { timeline-scope: --edact1, --edact2, --edact3, --edact4, --edact5, --edact6; }
+    .ed .reason-card:nth-child(1) { view-timeline-name: --edact1; }
+    .ed .reason-card:nth-child(2) { view-timeline-name: --edact2; }
+    .ed .reason-card:nth-child(3) { view-timeline-name: --edact3; }
+    .ed .reason-card:nth-child(4) { view-timeline-name: --edact4; }
+    .ed .reason-card:nth-child(5) { view-timeline-name: --edact5; }
+    .ed .reason-card:nth-child(6) { view-timeline-name: --edact6; }
+    .ed .reason-card::after { animation: edAct linear both; animation-range: entry 42svh entry calc(100% + 42svh); }
+    .ed .reason-card:nth-child(1)::after { animation-timeline: --edact1; }
+    .ed .reason-card:nth-child(2)::after { animation-timeline: --edact2; }
+    .ed .reason-card:nth-child(3)::after { animation-timeline: --edact3; }
+    .ed .reason-card:nth-child(4)::after { animation-timeline: --edact4; }
+    .ed .reason-card:nth-child(5)::after { animation-timeline: --edact5; }
+    .ed .reason-card:nth-child(6)::after { animation-timeline: --edact6; }
   }
 }
 

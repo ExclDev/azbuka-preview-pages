@@ -29,3 +29,5 @@
    В колонке на всю ширину сдвиг карточек на ±60–105% их ширины выводил правый край на 1200–1700px.
    clip, а не hidden: по вертикали ничего не режется (тень, подъём карточки при наведении, поворот веера). */
 .remote { overflow-x: clip; }
+/* при prefers-reduced-motion значки не прорисовываются: остаются целыми */
+@media (prefers-reduced-motion: reduce) { .rv-glow .remote-card.rv-draw .remote-icon svg * { animation: none; } }

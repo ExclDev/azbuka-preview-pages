@@ -72,3 +72,5 @@
 @media (max-width: 760px) {
   .ed .contacts-item-value a { white-space: normal; overflow-wrap: anywhere; }
 }
+/* при prefers-reduced-motion иконки контактов не прорисовываются: остаются целыми */
+@media (prefers-reduced-motion: reduce) { .ed .contacts-item.ct-draw .contacts-icon svg * { animation: none; } }

@@ -28,6 +28,9 @@
     bail(); return;
   }
 
+  /* Прогресс, подсветка «4 причин» и надпись в подвале: где есть animation-timeline, их ведёт CSS (motion.css, editorial.css),
+     где нет (Safari до 26, Firefox) — ScrollTrigger, как раньше. */
+  var cssTl = !!(window.CSS && CSS.supports && CSS.supports('animation-timeline: view()'));
   clearTimeout(window.__moFailsafe);
   gsap.registerPlugin(ScrollTrigger);
   root.classList.add('motion-on');
@@ -281,6 +284,7 @@
       var cntTween = null;
       ScrollTrigger.create({
         trigger: card, start: 'top 58%', end: 'bottom 58%',
+        onUpdate: cssTl ? null : function (self) { card.style.setProperty('--act', self.progress.toFixed(3)); },
         onToggle: function (self) {
           card.classList.toggle('is-on', self.isActive);
           if (self.isActive) showReasonPhoto(idx);
@@ -591,6 +595,7 @@
   ScrollTrigger.create({
     start: 0, end: 'max',
     onUpdate: function (self) {
+      if (!cssTl) bar.style.transform = 'scaleX(' + self.progress.toFixed(4) + ')';
       if (!header) return;
       var y = self.scroll();
       var menuOpen = root.classList.contains('scroll-locked');
@@ -681,7 +686,12 @@
   fitWm();
   window.addEventListener('resize', fitWm);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { fitWm(); ScrollTrigger.refresh(); });
-  /* заливку надписи ведёт CSS по шкале view() (editorial.css), JS её не трогает */
+  /* заливку надписи ведёт CSS по шкале view() (editorial.css); без animation-timeline — ScrollTrigger, как раньше */
+  if (wm && !cssTl) {
+    var wmTl = gsap.timeline({ scrollTrigger: { trigger: wm, start: 'top 98%', end: 'bottom bottom', scrub: 1 } });
+    wmTl.fromTo(wm, { '--wm': '100%' }, { '--wm': '0%', ease: 'none' }, 0)
+        .fromTo(wm.lastElementChild, { '--wm2': '100%' }, { '--wm2': '0%', ease: 'none' }, 0.25);
+  }
 
   /* ---------------------------------------------------------
      14. Пересчёт позиций, когда догружается контент

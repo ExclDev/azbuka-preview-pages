@@ -52,7 +52,7 @@ html.scroll-locked { overflow-y: hidden; }
 .mo-line { display: block; overflow: hidden; padding: .08em .12em .06em 0; margin: -.08em -.12em -.06em 0; }  /* справа запас, чтобы маска не срезала последнюю букву; ширина текста прежняя */
 .mo-line > .mo-in { display: block; }
 /* подвал: название компании во всю ширину (editorial.css). Залито без JS; хвост «У» не режется копирайтом: отступ снизу */
-.ed .footer { overflow: hidden; }
+.ed .footer { overflow: clip; }   /* clip, не hidden: hidden делает подвал контейнером прокрутки, и view() подвальной надписи считается внутри него (шкала стоит в конце) */
 .ed-wordmark {
   display: inline-block; font-family: var(--font-display); font-weight: 700; text-transform: uppercase;
   font-size: 12vw; line-height: 1; white-space: nowrap; margin: clamp(8px, 2vw, 40px) 0 0;
@@ -831,9 +831,9 @@ html.sv-motion { scroll-behavior: auto !important; }
 /* ── 4. «Как идёт ремонт ванной» наезжает на «Цены» ──
    Компьютер: цены прилипают под шапкой, этапы со скруглением 28px наезжают поверх, тень края — градиент в ::before.
    Телефон, планшет и окна вне 700–1500 px по высоте: сдвиг цен по view() (vnPin, как pkPin на «Приёмке»). Без view() и при reduced-motion обычная прокрутка. */
-.vn-stack { position: relative; }
+.vn-stack { position: relative; isolation: isolate; }   /* свой контекст наложения: порядок цен и этапов не зависит от слоёв вне блока */
 .vn-stack > #prices { position: relative; z-index: 1; }
-.vn-stack > #steps { position: relative; z-index: 2; border-radius: 28px 28px 0 0; }
+.vn-stack > #steps { position: relative; z-index: 2; border-radius: 28px 28px 0 0; background-color: #f5f5f7; }   /* сплошной фон: цены под этапами не просвечивают */
 .vn-stack > #steps::before { content: ""; position: absolute; left: 0; right: 0; top: -36px; height: 36px; background: linear-gradient(to top, rgba(0,0,0,.32), transparent); pointer-events: none; z-index: -1; }
 /* Сдвиг цен гасит прокрутку, пока этапы наезжают. Цены встают не на top: 0, а под шапкой: верхняя граница шкалы смещена на высоту шапки
    (view(block var(--header-h) 0px)), путь сдвига сокращён на ту же высоту, иначе заголовок «Сколько стоит ванная» уходил под шапку. */
@@ -842,7 +842,13 @@ html.sv-motion { scroll-behavior: auto !important; }
   @media (prefers-reduced-motion: no-preference) and (min-width: 1101px) and (min-height: 700px) and (max-height: 1500px) {
     .vn-stack > #prices { position: sticky; top: var(--header-h); }
   }
-  @media (prefers-reduced-motion: no-preference) and (max-width: 1100px), (prefers-reduced-motion: no-preference) and (max-height: 699px), (prefers-reduced-motion: no-preference) and (min-height: 1501px) {
+  /* планшет в портрете (768–1100 × 900–1500): цены помещаются в экран, поэтому, как на компьютере, обычное прилипание под шапкой, без анимированного слоя.
+     Safari (iPad) при сдвиге по view() выносил анимированные цены поверх наезжающих этапов; у sticky анимированного слоя нет. */
+  @media (prefers-reduced-motion: no-preference) and (min-width: 768px) and (max-width: 1100px) and (min-height: 900px) and (max-height: 1500px) {
+    .vn-stack > #prices { position: sticky; top: var(--header-h); }
+  }
+  /* телефон и окна вне планшетного диапазона: сдвиг по view() с учётом шапки */
+  @media (prefers-reduced-motion: no-preference) and (max-width: 767px), (prefers-reduced-motion: no-preference) and (max-width: 1100px) and (max-height: 899px), (prefers-reduced-motion: no-preference) and (max-width: 1100px) and (min-height: 1501px), (prefers-reduced-motion: no-preference) and (max-height: 699px), (prefers-reduced-motion: no-preference) and (min-height: 1501px) {
     .vn-stack > #prices { animation: vnPin linear both; animation-timeline: view(block var(--header-h) 0px); animation-range: contain 100% exit 100%; }
   }
 }
@@ -934,13 +940,16 @@ html.sv-motion { scroll-behavior: auto !important; }
     .sv-div span:first-child { animation-range: entry 8svh entry 20svh; }
     .sv-div span:last-child { animation-range: entry 12svh entry 28svh; }
     /* зум фото первого экрана: от «центр у центра» до «низ у верха окна» */
-    .sv-hero-photo img { animation: svZoom linear both; animation-timeline: view(); animation-range: cover 50% cover 100%; }
-    .sv-cta-bg img { animation: svZoom linear both; animation-timeline: view(); animation-range: cover 0% cover 100%; }
+    /* у рамки фото и призыва overflow: hidden: рамка сама контейнер прокрутки, поэтому view() картинки внутри неё стояла бы в конце. Шкала объявлена на рамке, картинка идёт по ней */
+    .sv-hero-photo { view-timeline-name: --svph; }
+    .sv-hero-photo img { animation: svZoom linear both; animation-timeline: --svph; animation-range: cover 50% cover 100%; }
+    .sv-cta { view-timeline-name: --svcta; }
+    .sv-cta-bg img { animation: svZoom linear both; animation-timeline: --svcta; animation-range: cover 0% cover 100%; }
     /* подвал: надпись въезжает слева (editorial.css), хвост стартует с 25 % высоты */
-    .ed-wordmark { view-timeline-name: --svwm; animation: svWm linear both; animation-timeline: --svwm; animation-range: entry 0% entry 100%; }
+    .ed-wordmark { view-timeline-name: --svwm; animation: svWm linear both; animation-timeline: view(); animation-range: entry 0% entry 100%; }   /* свою шкалу элемент не видит: сам идёт по анонимной view(), хвост (потомок) по именованной */
     .ed-wordmark span:last-child { animation: svWm linear both; animation-timeline: --svwm; animation-range: entry 25% entry 100%; }
     /* работы: шторка рамки и параллакс картинки */
-    .sv-work-img { view-timeline-name: --svwk; animation: svWorkClip linear both; animation-timeline: --svwk; animation-range: entry 0% entry 80%; }
+    .sv-work-img { view-timeline-name: --svwk; animation: svWorkClip linear both; animation-timeline: view(); animation-range: entry 0% entry 80%; }
     .sv-work-img img { scale: 1.14; animation: svWorkPar linear both; animation-timeline: --svwk; animation-range: cover 0% cover 100%; }
   }
   /* узкие экраны, обычная сетка этапов: красная линия идёт по шагам подряд. Диапазоны шагов — по шкале списка: первый «entry 70 % → cover 34 %», дальше по 6 % */
@@ -963,4 +972,13 @@ html.sv-motion { scroll-behavior: auto !important; }
 /* «Ванная», планшет в портрете (768–1100 px по ширине, от 900 px по высоте): та же сцена со стеной и выездом, что на компьютере; работы в две колонки, текст не режется */
 @media (min-width: 768px) and (max-width: 1100px) and (min-height: 900px) {
   .vw-ss { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+/* Safari: порядок наезжающих слоёв не зависит от соседей. Обёртка «Листов проекта» и «Видео» получает собственный контекст наложения (у «Приёмки» обёртки уже position + z-index) */
+.dp-stack { position: relative; isolation: isolate; }
+
+/* Без animation-timeline (Safari до 26, Firefox) зачёркивание старой цены рисует ScrollTrigger через background-size, как раньше */
+@supports not (animation-timeline: view()) {
+  .sv-old { background: linear-gradient(var(--red), var(--red)) no-repeat 0 55% / 100% 2px; }
+  .sv-old::after { display: none; }
 }

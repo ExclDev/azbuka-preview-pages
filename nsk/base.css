@@ -438,26 +438,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   .popup-title { font-size: 20px; }
 }
 /* ═══ Свечение и блик кнопок «призыва» ═══
-   Раньше: анимация box-shadow (перерисовка размытия и пересчёт стилей каждый кадр) и анимация без остановки вне экрана.
-   Теперь: ореол — отдельный ::before с готовой тенью, меняются только opacity и transform; блик — ::after, только transform и opacity.
-   Анимации висят на классе .is-live: его ставит IntersectionObserver в base.js, пока кнопка на экране.
-   Кнопка больше не режет содержимое (overflow: visible), иначе ореол не выйдет за её рамку; блик не вылезает за края сам:
-   прозрачность в keyframes доходит до нуля раньше, чем полоса пересечёт край кнопки. Блик при наведении (.btn::before) у этих кнопок заменён ореолом. */
-.btn-cta {
-  overflow: visible;
-  box-shadow: 0 6px 20px rgba(232,32,26,.35);
-}
-.btn-cta::before,
-.btn-cta:hover::before {
-  top: 0; left: 0; right: 0; bottom: 0; width: auto; height: auto;
-  border-radius: inherit;
-  background: none;
-  transform: none;
-  transition: none;
-  box-shadow: 0 6px 32px rgba(232,32,26,.55), 0 0 0 6px rgba(232,32,26,.1);
-  opacity: 0;
-  z-index: -1;
-}
+   Вид прежний (как до f265da1): свечение — анимация box-shadow, блик — ::after, при наведении у кнопки работает блик .btn::before, кнопка режет содержимое (overflow: hidden).
+   Новое одно: анимации идут только пока кнопка на экране — их включает класс .is-live (IntersectionObserver в base.js), вне экрана они стоят. */
 .btn-cta::after {
   content: '';
   position: absolute;
@@ -465,23 +447,19 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   width: 55%; height: 100%;
   background: linear-gradient(120deg, transparent, rgba(255,255,255,.38), transparent);
   transform: skewX(-22deg) translateX(-200%);
-  opacity: 0;
   z-index: 3; pointer-events: none;
 }
 @media (prefers-reduced-motion: no-preference) {
-  .btn-cta.is-live::before { animation: cta-halo 2.6s ease-in-out infinite; }
+  .btn-cta.is-live { animation: cta-glow 2.6s ease-in-out infinite; }
   .btn-cta.is-live::after { animation: cta-shine 2.6s ease-in-out infinite; }
 }
-@keyframes cta-halo {
-  0%, 100% { opacity: 0; }
-  50%      { opacity: 1; }
+@keyframes cta-glow {
+  0%, 100% { box-shadow: 0 6px 20px rgba(232,32,26,.35); }
+  50%       { box-shadow: 0 6px 32px rgba(232,32,26,.7), 0 0 0 6px rgba(232,32,26,.1); }
 }
 @keyframes cta-shine {
   0%        { transform: skewX(-22deg) translateX(-200%); opacity: 0; }
   18%       { opacity: 1; }
-  28%       { opacity: .85; }
-  39%       { opacity: .37; }
-  41%       { opacity: 0; }
   55%       { transform: skewX(-22deg) translateX(236.3636%); opacity: 0; }
   100%      { transform: skewX(-22deg) translateX(236.3636%); opacity: 0; }
 }
