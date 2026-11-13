@@ -948,9 +948,9 @@ html.sv-motion { scroll-behavior: auto !important; }
     .sv-hero-photo img { animation: svZoom linear both; animation-timeline: --svph; animation-range: cover 50% cover 100%; }
     .sv-cta { view-timeline-name: --svcta; }
     .sv-cta-bg img { animation: svZoom linear both; animation-timeline: --svcta; animation-range: cover 0% cover 100%; }
-    /* подвал: надпись въезжает слева (editorial.css), хвост стартует с 25 % высоты */
-    .ed-wordmark { view-timeline-name: --svwm; animation: svWm linear both; animation-timeline: view(); animation-range: entry 0% entry 100%; }   /* свою шкалу элемент не видит: сам идёт по анонимной view(), хвост (потомок) по именованной */
-    .ed-wordmark span:last-child { animation: svWm linear both; animation-timeline: --svwm; animation-range: entry 25% entry 100%; }
+    /* подвал: надпись въезжает слева, диапазоны те же, что на главной (editorial.css): основная часть «entry 2svh → entry 66 %», хвост «entry 33 % → entry 100 %», белая успевает пройти по «Ремонта» раньше красной */
+    .ed-wordmark { view-timeline-name: --svwm; animation: svWm linear both; animation-timeline: view(); animation-range: entry 2svh entry 66%; }   /* свою шкалу элемент не видит: сам идёт по анонимной view(), хвост (потомок) по именованной */
+    .ed-wordmark span:last-child { animation: svWm linear both; animation-timeline: --svwm; animation-range: entry 33% entry 100%; }
     /* работы: шторка рамки и параллакс картинки */
     .sv-work-img { view-timeline-name: --svwk; animation: svWorkClip linear both; animation-timeline: view(); animation-range: entry 0% entry 80%; }
     .sv-work-img img { scale: 1.14; animation: svWorkPar linear both; animation-timeline: --svwk; animation-range: cover 0% cover 100%; }

@@ -388,14 +388,12 @@
       if (ctaImg) scrub(ctaImg, { scale: 1 }, { scale: 1.12 }, { trigger: '.sv-cta', start: 'top bottom', end: 'bottom top' });
 
       /* ── Надпись в подвале: слова въезжают слева и проявляются ── */
+      /* тайминг как на главной (motion.js): общая заливка «top 98%» → «bottom bottom», красный хвост стартует на 0,25 позже: белая успевает пройти по «Ремонта» раньше красной */
       var wm = $('.ed-wordmark');
       if (wm) {
-        var tail = $('span:last-child', wm);
-        var wmEnd = 'bottom bottom';
-        scrub(wm, { '--wm': '100%' }, { '--wm': '0%' }, { trigger: wm, start: 'top bottom', end: wmEnd });
-        if (tail) scrub(tail, { '--wm2': '100%' }, { '--wm2': '0%' }, {
-          trigger: wm, start: function () { return 'top bottom-=' + Math.round(wm.offsetHeight * .25); }, end: wmEnd
-        });
+        var wmTl = gsap.timeline({ scrollTrigger: { trigger: wm, start: 'top 98%', end: 'bottom bottom', scrub: true, invalidateOnRefresh: true } });
+        wmTl.fromTo(wm, { '--wm': '100%' }, { '--wm': '0%', ease: 'none' }, 0);
+        if (wm.lastElementChild) wmTl.fromTo(wm.lastElementChild, { '--wm2': '100%' }, { '--wm2': '0%', ease: 'none' }, 0.25);
       }
 
     }

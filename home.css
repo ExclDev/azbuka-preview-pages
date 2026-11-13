@@ -107,13 +107,6 @@ html.scroll-locked { overflow-y: hidden; }
     }
 }
 .hero-content { position: relative; z-index: 2; width: 100%; }
-.hero-eyebrow {
-  font-size: 12px; letter-spacing: 5px; text-transform: uppercase;
-  color: var(--red-text); margin-bottom: 18px; font-weight: 600;
-  /* Оверлей ослаблен ради читаемости интерьера, а красный на светлом кадре
-     держит контраст хуже белого — подстраховываем тенью, а не затемнением. */
-  text-shadow: 0 1px 12px rgba(0,0,0,0.6);
-}
 .hero-title {
   font-family: var(--font-display);
   font-size: clamp(42px, 7vw, 90px);
@@ -328,10 +321,10 @@ html.scroll-locked { overflow-y: hidden; }
 .anim-d1 { animation-delay: .1s; }
 .anim-d2 { animation-delay: .2s; }
 .anim-d3 { animation-delay: .3s; }
-.hero-eyebrow {
-  animation: heroEyebrowIn .6s ease .1s backwards;   /* подпись видна сразу, въезжает сдвигом */
-}
 .hero-title { min-height: 1.0em; }
+/* над заголовком был красный город (строка 12 px × 1,6 + отступ 18 px). Блок первого экрана на компьютере по центру: без этого отступа он стал бы ниже на столько же, и заголовок прыгнул бы вверх на половину. На телефоне блок прижат к низу, заголовок не двигается */
+@media (min-width: 769px) { .hero-title { margin-top: 37.2px; } }
+@media (min-width: 2560px) { .hero-title { margin-top: 40.4px; } }
 .hero-title em { display: block; white-space: nowrap; }
 .hero-title .white-line { display: block; margin-top: -0.02em; white-space: nowrap; }
 .hero-title .red-text { display: inline; }
@@ -356,7 +349,6 @@ html.scroll-locked { overflow-y: hidden; }
 .hero-seq .hero-after:not(.show) { transform: translateY(24px); }
 @media (min-width: 2560px) {
   .hero-title { font-size: 120px; }
-  .hero-eyebrow { font-size: 14px; letter-spacing: 6px; }
   .hero-badge { padding: 16px 24px; }
   .hero-badge img { width: 48px; height: 48px; }
   .hero-badge-text { font-size: 16px; }
@@ -436,7 +428,6 @@ html.scroll-locked { overflow-y: hidden; }
 @media (max-width: 768px) {
   .hero { padding-top: 64px; padding-bottom: 48px; align-items: flex-end; }
   .hero-title { font-size: clamp(30px, 7.2vw, 52px); margin-bottom: 28px; }
-  .hero-eyebrow { font-size: 12px; letter-spacing: 3px; margin-bottom: 12px; }
   .hero-badges { flex-direction: column; gap: 10px; margin-bottom: 28px; }
   .hero-badge { padding: 10px 14px; }
   .hero-badge img { width: 30px; height: 30px; }
