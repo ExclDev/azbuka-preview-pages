@@ -213,7 +213,7 @@
       if (bar) scrub(bar, { scaleX: 0 }, { scaleX: 1, transformOrigin: 'left center' }, { trigger: document.body, start: 0, end: 'max' });
 
       /* ── Дрейф H1: строки расходятся ── */
-      var lns = $$('.sv-h1 .ln');
+      var lns = $('.vI') ? [] : $$('.sv-h1 .ln');   // «Было — стало»: дрейф H1 отключён
       if (lns[0]) scrub(lns[0], { x: 0 }, { x: '-7vw' }, { trigger: document.body, start: 0, end: 700 });
       if (lns[1]) scrub(lns[1], { x: 0 }, { x: '9vw' }, { trigger: document.body, start: 0, end: 700 });
 
@@ -313,14 +313,16 @@
     // «Ванная под ключ»: секция этапов вместе с отзывами и вопросами (.vn-hzsec). Где работает view(), ленту и выезд панелей ведёт CSS (service.css, раздел 5),
     // а закрепление GSAP здесь не нужно. Где view() нет, прежнее закрепление ставится на .sv-pin, а панели идут обычным потоком под этапами.
     var hzSec = stepsSec && stepsSec.classList.contains('vn-hzsec');
+    // «Капремонт вторички»: портфолио наезжает на этапы (.vo-sec, vtorichka.css). Лента и наезд на CSS при view(); без view() этапы закрепляются на .sv-pin, портфолио идёт ниже обычным блоком
+    var voSec = stepsSec && stepsSec.classList.contains('vo-sec');
     var viewCss = !!(window.CSS && CSS.supports && CSS.supports('animation-timeline: view()'));
     if (stepsSec) {
       var track = $('.sv-steps', stepsSec);
       mm.add('(min-width: 1100px)', function () {
-        if (hzSec && viewCss) return;
+        if ((hzSec || voSec) && viewCss) return;
         // секция закреплена, лента из шагов едет влево; каждый шаг загорается и тянет свою красную линию
         root.classList.add('sv-pinned');
-        var pinEl = hzSec ? $('.sv-pin', stepsSec) : stepsSec;
+        var pinEl = (hzSec || voSec) ? $('.sv-pin', stepsSec) : stepsSec;
         var tl =gsap.timeline({
           defaults: { ease: 'none' },
           scrollTrigger: {
@@ -410,6 +412,15 @@
         if (!sec) return;
         // «Ванная»: отзывы и вопросы выезжают в прилипшем слое, их собственное положение на странице не годится. Границы считаем по шкале выезда (.vn-tl2):
         // этапы — до середины въезда «Отзывов» (14 % шкалы), «Отзывы» — до середины въезда «Вопросов» (69 %), «Вопросы» — до конца секции.
+        // «Капремонт вторички»: портфолио въезжает в прилипшем слое (.vo-tl2, шкала --t-over). Этапы идут до середины въезда (40 % шкалы), «Работы» — после, до конца секции.
+        var vtl2 = $('.vo-tl2');
+        if (vtl2 && getComputedStyle(vtl2).display !== 'none' && (id === 'steps' || id === 'works')) {
+          var VT = function () { return vtl2.getBoundingClientRect().top + window.pageYOffset + .4 * (vtl2.offsetHeight - H()); };
+          var vFrom = id === 'steps' ? function () { return $('#steps').getBoundingClientRect().top + window.pageYOffset - H() * .55; } : VT;
+          var vTo = id === 'steps' ? VT : function () { return $('#steps').getBoundingClientRect().bottom + window.pageYOffset - H() * .55; };
+          ScrollTrigger.create({ start: vFrom, end: vTo, invalidateOnRefresh: true, onToggle: function (self) { a.classList.toggle('is-on', self.isActive); } });
+          return;
+        }
         var tl2 = $('.vn-tl2');
         var hzMode = tl2 && getComputedStyle(tl2).display !== 'none' && (id === 'steps' || id === 'reviews' || id === 'faq');
         if (hzMode) {

@@ -1,0 +1,295 @@
+/* ═══ «Капремонт вторички»: первый экран «Было — стало», «Под старой отделкой», «Что входит» списком, портфолио на парах ═══
+   Перенесено из макета brand/maket-vtorichki-2026-11-13. Подключается после service.css, только когда страница задаёт hero.compare,
+   finds, scope.variant: list или works.variant: pairs (layouts/service.njk). Движение под prefers-reduced-motion не включается. */
+
+/* ── Первый экран ── */
+@property --x { syntax: "<percentage>"; inherits: true; initial-value: 50%; }
+.sv-hero.vI { padding: var(--sv-top) 0 0; isolation: isolate; overflow: hidden; }
+.vI-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); grid-template-rows: auto 1fr; gap: 24px 56px; align-items: center; box-sizing: border-box; min-height: max(680px, calc(100svh - var(--sv-top))); padding-top: 28px; padding-bottom: 48px; }
+.vI-copy { display: flex; flex-direction: column; gap: 26px; justify-content: center; }
+.vI-copy > * { flex-shrink: 0; }
+.vI .sv-crumbs { grid-column: 1 / -1; padding-top: 0; margin: 0; }
+.vI .sv-h1 { margin: 0; font-size: clamp(36px, 4.6vw, 78px); line-height: .92; letter-spacing: -.015em; }
+.vI .sv-h1 .ln { animation: none !important; translate: none !important; }   /* дрейф H1 здесь отключён */
+.vI .sv-lead, .vI .sv-facts, .vI .sv-ctas { margin: 0; }
+.vI .sv-lead { max-width: 34em; }
+.vI .sv-facts b { font-size: clamp(19px, 1.6vw, 26px); }
+.vI-view { display: flex; flex-direction: column; gap: 14px; }
+.vI-cmp { --x: 50%; position: relative; aspect-ratio: 838 / 810; max-height: calc(100svh - var(--sv-top) - 260px); margin-left: auto; width: 100%; border-radius: var(--radius-lg); overflow: hidden; background: #0e0c0a; touch-action: pan-y; }
+.vI-cmp img { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover; user-select: none; -webkit-user-drag: none; }
+.vI-do { clip-path: inset(0 calc(100% - var(--x)) 0 0); }
+.vI-line { position: absolute; top: 0; bottom: 0; left: var(--x); width: 3px; margin-left: -1.5px; background: #fff; box-shadow: 0 0 0 1px rgba(22,19,16,.25); pointer-events: none; }
+.vI-knob { position: absolute; top: 50%; left: var(--x); width: 60px; height: 60px; margin: -30px 0 0 -30px; border-radius: 50%; background: var(--red); color: #fff; display: grid; place-items: center; box-shadow: 0 10px 28px rgba(0,0,0,.45); pointer-events: none; transition: transform .3s cubic-bezier(.16,1,.3,1); }
+.vI-knob svg { width: 28px; height: 28px; }
+.vI-cmp:hover .vI-knob { transform: scale(1.08); }
+.vI-lb { position: absolute; top: 18px; padding: 9px 14px 8px; border-radius: var(--radius-pill); font: 600 15px/1 var(--font-display); letter-spacing: .06em; text-transform: uppercase; pointer-events: none; transition: opacity .3s; }
+.vI-lb-do { left: 18px; background: var(--bg); color: #fff; opacity: clamp(0, calc((var(--x) - 14%) * 10), 1); }
+.vI-lb-po { right: 18px; background: var(--red); color: #fff; opacity: clamp(0, calc((86% - var(--x)) * 10), 1); }
+.vI-range { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: ew-resize; }
+.vI-range:focus-visible ~ .vI-knob { outline: 3px solid #fff; outline-offset: 4px; }
+.vI-fade { position: absolute; inset: 0; background: #0e0c0a; opacity: 0; pointer-events: none; transition: opacity .28s ease; }
+.vI-cmp.is-swap .vI-fade { opacity: 1; }
+.vI-tabs { display: flex; gap: 10px; }
+.vI-tab { flex: 1 1 0; min-width: 0; display: flex; align-items: center; gap: 12px; padding: 8px 14px 8px 8px; border: 1px solid rgba(255,255,255,.12); border-radius: var(--radius-md); background: var(--bg2); color: var(--gray-light); font: 600 16px/1 var(--font-display); text-transform: uppercase; letter-spacing: .03em; cursor: pointer; transition: border-color .3s, background .3s, color .3s; }
+.vI-tab img { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; flex: none; filter: grayscale(.4); }
+.vI-tab:hover { color: #fff; border-color: rgba(255,255,255,.3); }
+.vI-tab[aria-pressed="true"] { background: #28231e; border-color: var(--red); color: #fff; }
+.vI-tab[aria-pressed="true"] img { filter: none; }
+.vI-tab:focus-visible { outline: 3px solid var(--red); outline-offset: 3px; }
+.vI-note { margin: 0; font-size: 13px; color: var(--gray); }
+@media (max-width: 1100px) {
+  /* телефон и планшет: крошки, H1, кнопки, шторка, помещения, лид, факты */
+  .vI-grid { grid-template-columns: minmax(0, 1fr); grid-template-rows: none; min-height: 0; gap: 28px; align-items: start; }
+  .vI-copy { display: contents; }
+  .vI .sv-crumbs { order: 1; }
+  .vI .sv-h1 { order: 2; }
+  .vI .sv-ctas { order: 3; }
+  .vI-view { order: 4; }
+  .vI .sv-lead { order: 5; }
+  .vI .sv-facts { order: 6; }
+  .vI-cmp { max-height: none; }
+}
+@media (max-width: 640px) {
+  .vI-grid { gap: 22px; padding-bottom: 40px; }
+  .vI .sv-h1 { font-size: clamp(34px, 10.4vw, 52px); }
+  .vI-cmp { border-radius: var(--radius-md); }
+  .vI-knob { width: 50px; height: 50px; margin: -25px 0 0 -25px; }
+  .vI-tab { flex-direction: column; gap: 6px; padding: 6px 6px 10px; font-size: 13px; }
+  .vI-tab img { width: 100%; height: auto; aspect-ratio: 4 / 3; }
+  .vI .sv-facts li > span { margin: 0; }
+  .vI .sv-facts b { font-size: 22px; }
+}
+@media (prefers-reduced-motion: no-preference) { .vI-cmp.is-intro { transition: --x 1.8s cubic-bezier(.16,1,.3,1); } }
+
+/* ── «Под старой отделкой» ── */
+.vt-finds { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 48px; }
+.vt-find { position: relative; padding: 32px 28px 30px; border-radius: var(--radius-lg); background: #211d19; overflow: hidden; transition: background .4s ease; }
+.vt-find::before { content: ""; position: absolute; left: 28px; right: 28px; top: 0; height: 3px; background: var(--red); transform: scaleX(.18); transform-origin: left; transition: transform .6s cubic-bezier(.16,1,.3,1); }
+.vt-find:hover { background: #2a2520; }
+.vt-find:hover::before { transform: scaleX(1); }
+.vt-find-n { display: block; font: 600 15px/1 var(--font-display); color: var(--red-text); }
+.vt-find h3 { margin: 14px 0 18px; font: 500 28px/1.1 var(--font-display); text-transform: uppercase; color: #fff; }
+.vt-find p { margin: 0; font-size: 16px; line-height: 1.5; color: var(--gray-light); }
+.vt-find .vt-find-k { margin: 0 0 4px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--gray); }
+.vt-find .vt-find-k.vt-do { margin-top: 16px; color: var(--red-text); }
+@media (max-width: 1100px) { .vt-finds { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 640px) { .vt-finds { grid-template-columns: 1fr; } .vt-find h3 { font-size: 24px; } }
+@media (max-width: 480px) { .vt-find { padding-right: 56px; } }
+
+/* ── «Что входит в капремонт» ── */
+.vt-rows { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; column-gap: 32px; align-content: start; border-top: 1px solid rgba(0,0,0,.1); }
+.vt-row { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 14px; padding: 20px 0; border-bottom: 1px solid rgba(0,0,0,.1); }
+.vt-row-n { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--red-ink); font: 600 15px/1 var(--font-display); color: #fff; }
+.vt-row h3 { margin: 3px 0 4px; font: 500 22px/1.15 var(--font-display); text-transform: uppercase; color: var(--light-ink); }
+.vt-row p { margin: 0; font-size: 15px; line-height: 1.5; color: #555; }
+.sv-sum .vt-sum-n { font: 600 64px/1 var(--font-display); color: var(--red-text); }
+@media (max-width: 640px) { .vt-rows { grid-template-columns: 1fr; } }
+@media (max-width: 480px) { .vt-row p { padding-right: 56px; } }
+
+/* ── Портфолио: пары до и после ── */
+.vw { display: block; width: 100%; padding: 0; border: 0; background: none; color: #fff; font: inherit; text-align: left; cursor: pointer; }
+.vw .sv-work-img img { transition: opacity .6s cubic-bezier(.16,1,.3,1), scale 1.2s cubic-bezier(.2,.7,.1,1); }
+.vw .vw-po { opacity: 0; }
+.vw-lb { position: absolute; left: 16px; top: 16px; z-index: 1; display: grid; padding: 8px 12px 7px; border-radius: var(--radius-pill); background: var(--bg); font: 600 13px/1 var(--font-display); letter-spacing: .06em; text-transform: uppercase; transition: background .4s; }
+.vw-lb > span { grid-area: 1 / 1; transition: opacity .4s; }
+.vw-lb .p { opacity: 0; }
+.vw[aria-pressed="true"] .vw-po { opacity: 1; }
+.vw[aria-pressed="true"] .vw-lb { background: var(--red); }
+.vw[aria-pressed="true"] .vw-lb .d { opacity: 0; }
+.vw[aria-pressed="true"] .vw-lb .p { opacity: 1; }
+@media (hover: hover) and (pointer: fine) {
+  .vw:hover .vw-po { opacity: 1; }
+  .vw:hover .vw-lb { background: var(--red); }
+  .vw:hover .vw-lb .d { opacity: 0; }
+  .vw:hover .vw-lb .p { opacity: 1; }
+}
+.vw:focus-visible { outline: 3px solid var(--red); outline-offset: 4px; border-radius: var(--radius-lg); }
+.sv-work.vw .vp-hint { font-size: 14px; color: var(--gray); }
+.vw-sub { margin-top: 16px; color: var(--gray-light); }
+.sv-works:has(.vw) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 1100px) { .sv-works:has(.vw) { grid-template-columns: 1fr 1fr; } .sv-works:has(.vw) .sv-work:first-child { grid-column: auto; } }
+@media (max-width: 760px) { .sv-works:has(.vw) { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: reduce) { .vw .sv-work-img img, .vw-lb, .vw-lb > span { transition: none; } }
+
+/* ═══ «До основания»: прилипший кадр стены и шесть шагов ═══
+   Перенесено из макета (вторая часть). Фото стен подставляет шаблон в style слоёв (background-image с {{ root }}): адрес в переменной браузер считал бы от файла стилей.
+   Статичный вид (reduced-motion, нет animation-timeline, телефон до первой прокрутки): разрез стены ступенями слева направо, без плашек, шаги списком.
+   Движение (от любой ширины, где есть view() и нет reduced-motion): секция 100svh + 8 × 40svh, кадр прилипает, слои и подписи шагов идут по шкале --t-scope секции. */
+#layers { view-timeline-name: --t-scope; position: relative; }
+.vt-stage { padding: var(--section-pad) 0; }
+.vt-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-areas: "wall head" "wall copy"; column-gap: 72px; row-gap: 28px; align-items: start; }
+.vt-head { grid-area: head; align-self: end; }
+.vt-sub { margin-top: 20px; }
+.vt-wall { grid-area: wall; position: relative; justify-self: center; width: min(100%, 560px); aspect-ratio: 4 / 5; border-radius: var(--radius-lg); overflow: hidden; background: #0e0c0a; box-shadow: 0 30px 70px rgba(22,19,16,.28), inset 0 0 0 1px rgba(0,0,0,.06); isolation: isolate; }
+.vt-l { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.vt-cracks { pointer-events: none; }
+.vt-cracks circle { transform-box: fill-box; transform-origin: center; stroke: var(--red); stroke-width: 3; }
+/* слои стены: справа налево лежат «снятые», слева — старые; каждый слой открыт по ширине своей ступени */
+.vt-brick, .vt-wp1, .vt-oplaster, .vt-wire, .vt-beacons, .vt-plaster, .vt-putty, .vt-paint { background-position: 50% 50%; background-size: cover; }
+.vt-wp1 { clip-path: inset(0 87.5% 0 0); }
+.vt-oplaster { clip-path: inset(0 62.5% 0 0); }
+.vt-hole { position: absolute; left: 58%; top: 20%; width: 30%; height: 22%; border-radius: 42% 55% 47% 58%; background-position: 82.9% 25.6%; background-size: 333.3% 454.5%; box-shadow: inset 0 0 0 3px rgba(255,255,255,.55), inset 0 8px 14px rgba(0,0,0,.45); }
+.vt-wire { clip-path: inset(0 50% 0 37.5%); }   /* ступень «Проводка»: между «Кирпичом» и грунтом */
+.vt-primer { background: rgba(222,120,138,.34); clip-path: inset(0 0 0 50%); }
+.vt-beacons { clip-path: inset(0 0 0 62.5%); }
+.vt-plaster { clip-path: inset(0 0 0 70%); }
+.vt-putty { clip-path: inset(0 0 0 80%); }
+.vt-paint { clip-path: inset(0 0 0 87.5%); }
+.vt-blade { display: none; }
+/* подписи слоёв на тёмных плашках: только при работающей прокрутке (ниже) */
+.vt-wall .vt-l::before { display: none; }
+.vt-copy { grid-area: copy; }
+.vt-caps { margin: 0; padding: 0; list-style: none; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 32px; }
+.vt-cap { padding: 14px 0; border-top: 1px solid rgba(0,0,0,.1); }
+.vt-meta { display: flex; justify-content: space-between; gap: 12px; margin: 0 0 6px; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--gray-ink); }
+.vt-k b { font: 600 15px/1 var(--font-display); color: var(--red-ink); }
+.vt-cap h3 { margin: 0; font: 500 22px/1.15 var(--font-display); text-transform: uppercase; color: var(--light-ink); }
+.vt-cap p:last-child { margin: 6px 0 0; font-size: 15px; line-height: 1.5; color: var(--gray-ink); }
+.vt-rail { display: none; }
+.vt-end { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 16px; margin-top: 24px; }
+.vt-end span { font-size: 14px; color: var(--gray-ink); }
+.vt-skip { display: inline-flex; align-items: center; min-height: 44px; margin-top: 6px; font-size: 14px; color: var(--gray-ink); text-decoration: underline; text-underline-offset: 3px; }
+.vt-skip:hover { color: var(--light-ink); }
+.vt-skip:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+@media (max-width: 1099px) { .vt-grid { grid-template-columns: 1fr; grid-template-areas: "head" "wall" "copy"; } .vt-wall { width: min(100%, 460px); } }
+@media (max-width: 640px) { .vt-caps { grid-template-columns: 1fr; } }
+
+@supports (animation-timeline: view()) {
+@media (prefers-reduced-motion: no-preference) and (max-height: 1400px) {
+  #layers { height: calc(100svh + 8 * 40svh); }
+  .vt-stage { position: sticky; top: 0; height: 100svh; box-sizing: border-box; padding: var(--header-h, 72px) 0 0; display: flex; align-items: center; }
+  .vt-stage > .wrapper { width: 100%; }
+  .vt-grid { row-gap: 20px; }
+  .vt-wall { width: min(100%, 600px, calc((100svh - var(--header-h, 72px)) * .7)); }
+  .vt-caps { display: block; position: relative; min-height: 190px; }
+  .vt-cap { position: absolute; inset: 0 0 auto; padding: 0; border: 0; opacity: 0; animation: vtCap linear both; animation-timeline: --t-scope; }
+  .vt-cap h3 { font-size: 40px; }
+  .vt-cap p:last-child { font-size: 17px; max-width: 460px; }
+  /* шесть шагов на восьми долях шкалы: пятый («Грунт, маяки, штукатурка») занимает три доли — на нём идут грунт, маяки и штукатурка */
+  .vt-cap:nth-child(1) { animation-name: vtCapFirst; animation-range: contain 0% contain 12.5%; }
+  .vt-cap:nth-child(2) { animation-range: contain 12.5% contain 25%; }
+  .vt-cap:nth-child(3) { animation-range: contain 25% contain 37.5%; }
+  .vt-cap:nth-child(4) { animation-range: contain 37.5% contain 50%; }
+  .vt-cap:nth-child(5) { animation-range: contain 50% contain 87.5%; }
+  .vt-cap:nth-child(6) { animation-name: vtCapLast; animation-range: contain 87.5% contain 100%; }
+  .vt-rail { display: grid; grid-template-columns: 2fr 2fr 4fr; gap: 0; margin-top: 22px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--gray-ink); }
+  .vt-rail span { padding-bottom: 10px; animation: vtRail linear both; animation-timeline: --t-scope; }
+  .vt-rail .r1 { animation-range: contain 0% contain 25%; } .vt-rail .r2 { animation-range: contain 25% contain 50%; }
+  .vt-rail .r3 { animation-name: vtRailLast; animation-range: contain 50% contain 100%; }
+  .vt-bar { grid-column: 1 / -1; height: 3px; background: rgba(0,0,0,.1); border-radius: 3px; overflow: hidden; }
+  .vt-bar i { display: block; height: 100%; background: var(--red); transform-origin: left; animation: vtBar linear both; animation-timeline: --t-scope; animation-range: contain 0% contain 100%; }
+  .vt-end { animation: vtCapLast linear both; animation-timeline: --t-scope; animation-range: contain 87.5% contain 100%; }
+  /* слои стены: снимаем (шаги 1–2), показываем основу (3–4), делаем заново (5–6) */
+  .vt-wp1, .vt-oplaster { animation: vtPeel linear both; animation-timeline: --t-scope; clip-path: none; }
+  .vt-wp1 { animation-range: contain 0.8% contain 8%; }
+  .vt-oplaster { animation-range: contain 13.5% contain 24%; }
+  .vt-cracks circle { animation: vtPop linear both; animation-timeline: --t-scope; }
+  .vt-cracks .c1 { animation-range: contain 26% contain 30%; } .vt-cracks .c2 { animation-range: contain 29% contain 33%; }
+  .vt-wire, .vt-primer, .vt-beacons, .vt-plaster, .vt-putty, .vt-paint { animation: vtApply linear both; animation-timeline: --t-scope; }
+  .vt-wire { animation-range: contain 38% contain 44%; }
+  .vt-primer { animation-range: contain 51% contain 61%; }
+  .vt-beacons { animation-range: contain 62% contain 68%; }
+  .vt-plaster { animation-range: contain 68% contain 74.5%; }
+  .vt-putty { animation-range: contain 76% contain 86%; }
+  .vt-paint { animation-range: contain 88% contain 96%; }
+  /* фронт нанесения: тонкая красная линия 3 px едет вместе со слоем */
+  .vt-blade { display: block; position: absolute; top: -2%; bottom: -2%; left: 0; width: 3px; margin-left: -1.5px; background: var(--red); z-index: 5; opacity: 0; animation: vtBlade linear both; animation-timeline: --t-scope; }
+  .vt-blade.b5 { animation-range: contain 51% contain 61%; } .vt-blade.b6 { animation-range: contain 68% contain 74.5%; } .vt-blade.b8 { animation-range: contain 88% contain 96%; }
+  /* плашки с названием слоя: снятые слева, новые справа */
+  .vt-wall .vt-l::before { display: block; position: absolute; bottom: 16px; padding: 8px 12px 7px; border-radius: var(--radius-pill); background: rgba(22,19,16,.8); color: #fff; font: 600 13px/1 var(--font-display); letter-spacing: .06em; text-transform: uppercase; white-space: nowrap; }
+  .vt-brick::before { left: 16px; content: "Кирпич"; }
+  .vt-wp1::before { left: 16px; content: "Старая отделка"; }
+  .vt-oplaster::before { left: 16px; content: "Старая штукатурка"; }
+  .vt-wire::before { right: 16px; content: "Проводка"; }
+  .vt-primer::before { right: 16px; content: "Грунт"; }
+  .vt-beacons::before { right: 16px; content: "Маяки"; }
+  .vt-plaster::before { right: 16px; content: "Штукатурка"; }
+  .vt-putty::before { right: 16px; content: "Выровнено по маякам"; }
+  .vt-paint::before { right: 16px; content: "После ремонта"; background: var(--red-ink); }
+}
+@media (prefers-reduced-motion: no-preference) and (max-width: 1099px) and (max-height: 1400px) {
+  .vt-grid { row-gap: 14px; }
+  .vt-head .section-tag, .vt-head .divider, .vt-sub { display: none; }
+  .vt-wall { width: min(100%, 46svh, 420px); }
+  .vt-caps { min-height: 150px; }
+  .vt-cap h3 { font-size: 26px; }
+  .vt-cap p:last-child { font-size: 15px; }
+  .vt-rail { margin-top: 10px; }
+  .vt-head { position: relative; }
+  .vt-skip { position: absolute; right: 0; bottom: 6px; margin: 0; }
+  .vt-copy { position: relative; }
+  .vt-end { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding-top: 8px; background: var(--light-bg); }
+  .vt-end span { display: none; }
+}
+@media (prefers-reduced-motion: no-preference) and (max-width: 1099px) and (max-height: 700px) {
+  .vt-wall { width: min(100%, 40svh); }
+  .vt-cap p:last-child { font-size: 14px; }
+}
+}
+@keyframes vtCap { 0%, 8% { opacity: 0; transform: translateY(18px); } 20%, 80% { opacity: 1; transform: none; } 92%, 100% { opacity: 0; transform: translateY(-18px); } }
+@keyframes vtCapFirst { 0%, 80% { opacity: 1; transform: none; } 92%, 100% { opacity: 0; transform: translateY(-18px); } }
+@keyframes vtCapLast { 0%, 8% { opacity: 0; transform: translateY(18px); } 20%, 100% { opacity: 1; transform: none; } }
+@keyframes vtRail { 0% { color: var(--gray-ink); } 10%, 90% { color: var(--light-ink); } 100% { color: var(--gray-ink); } }
+@keyframes vtRailLast { 0% { color: var(--gray-ink); } 10%, 100% { color: var(--light-ink); } }
+@keyframes vtBar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes vtPeel { from { clip-path: polygon(0 0%, 100% -30%, 100% 100%, 0 100%); } to { clip-path: polygon(0 130%, 100% 100%, 100% 100%, 0 100%); } }
+@keyframes vtApply { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+@keyframes vtBlade { 0% { left: 0; opacity: 0; } 6% { opacity: 1; } 94% { opacity: 1; } 100% { left: 100%; opacity: 0; } }
+@keyframes vtPop { from { transform: scale(0); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+@keyframes vtDrop { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
+/* ═══ Наезд портфолио на этапы (steps.over: "works") ═══
+   Без движения (телефон, reduced-motion, нет view()) портфолио стоит обычным тёмным блоком после этапов внутри той же секции.
+   От 1100 px, при view() и без reduced-motion: секция 420svh. Шкала ленты --t-steps переезжает с секции на пустой .vo-tl1 (320svh), лента едет как раньше.
+   Шкала --t-over на .vo-tl2 (с 220svh, высота 200svh): портфолио в прилипшем кадре въезжает справа на 0–85 % шкалы, остаток держится, потом секция уходит вверх.
+   На прилипшем слое нет затемнений, размытия и filter: только сдвиг. Анимации появления внутри панели отключены (в прилипшем слое они застывают). */
+.vo-sec { position: relative; }
+.vo-tl1, .vo-tl2 { display: none; }
+.vo-over { margin-top: var(--section-pad-mobile); color: #fff; background: var(--bg); }
+.vo-sec { padding-bottom: 0; }
+.vo-over .section-title, .vo-over .sv-work h3 { color: #fff; }
+.vo-over .section-tag { color: var(--red-text); }
+.vo-over { --gray: #9A928A; }
+@supports (animation-timeline: view()) {
+@media (prefers-reduced-motion: no-preference) and (min-width: 1100px) {
+  .vo-sec { timeline-scope: --t-steps, --t-over; height: 420svh; }
+  .vo-tl1, .vo-tl2 { display: block; position: absolute; left: 0; width: 1px; pointer-events: none; visibility: hidden; }
+  .vo-tl1 { top: 0; height: 320svh; view-timeline-name: --t-steps; }
+  .vo-tl2 { top: 220svh; height: 200svh; view-timeline-name: --t-over; }
+  /* лента этапов на CSS (как у «Ванной»): прилипший кадр и шкала --t-steps; значения и ключевые кадры vnTrack, vnStepOn, vnNodeOn, vnScale общие (service.css) */
+  .vo-sec .sv-pin { position: sticky; top: 0; height: 100svh; display: flex; flex-direction: column; justify-content: center; overflow: hidden; }
+  .vo-sec .sv-steps { display: flex; width: max-content; margin-top: 48px; animation: vnTrack linear both; animation-timeline: --t-steps; animation-range: contain 0% contain 100%; }
+  .vo-sec .sv-step { flex: none; width: 400px; padding: 0 56px 0 0; animation: vnStepOn linear both; animation-timeline: --t-steps; }
+  .vo-sec .sv-step::before { animation: vnScale linear both; animation-timeline: --t-steps; }
+  .vo-sec .sv-step-n { width: 72px; height: 72px; margin-top: -37px; font-size: 30px; animation: vnNodeOn linear both; animation-timeline: --t-steps; }
+  .vo-sec .sv-step:nth-child(1) .sv-step-n, .vo-sec .sv-step:nth-child(1), .vo-sec .sv-step:nth-child(1)::before { animation-range: contain 0% contain 2%; }
+  .vo-sec .sv-step:nth-child(2) .sv-step-n, .vo-sec .sv-step:nth-child(2), .vo-sec .sv-step:nth-child(2)::before { animation-range: contain 4% contain 10%; }
+  .vo-sec .sv-step:nth-child(3) .sv-step-n, .vo-sec .sv-step:nth-child(3), .vo-sec .sv-step:nth-child(3)::before { animation-range: contain 22% contain 28%; }
+  .vo-sec .sv-step:nth-child(4) .sv-step-n, .vo-sec .sv-step:nth-child(4), .vo-sec .sv-step:nth-child(4)::before { animation-range: contain 40% contain 46%; }
+  .vo-sec .sv-step:nth-child(5) .sv-step-n, .vo-sec .sv-step:nth-child(5), .vo-sec .sv-step:nth-child(5)::before { animation-range: contain 58% contain 64%; }
+  .vo-sec .sv-step:nth-child(6) .sv-step-n, .vo-sec .sv-step:nth-child(6), .vo-sec .sv-step:nth-child(6)::before { animation-range: contain 76% contain 82%; }
+  .vo-sec .sv-step-fin { display: block; }
+  .vo-sec .sv-step.sv-step-fin, .vo-sec .sv-step.sv-step-fin::before, .vo-sec .sv-step-fin .sv-step-n { animation-range: contain 94% contain 100%; }
+  .vo-sec .sv-step h3 { font-size: 28px; margin-top: 20px; }
+  .vo-sec .sv-step p { font-size: 17px; max-width: 300px; }
+  /* портфолио: прилипший кадр целиком, поверх этапов; тёмный фон, только сдвиг */
+  .vo-over { position: absolute; inset: 0; z-index: 2; margin-top: 0; display: flex; flex-direction: column; justify-content: center; background: var(--bg);
+    transform: translateX(100%); animation: voSlide linear both; animation-timeline: --t-over; animation-range: contain 0% contain 85%; }
+  .vo-over > .sv-sec { padding: var(--header-h, 72px) 0 0; }
+  .vo-over .sv-works { margin-top: 36px; }
+  .vo-over .sv-work-img { height: min(420px, calc(100svh - 360px)); }
+  .vo-over *, .vo-over *::before, .vo-over *::after { animation: none !important; }
+  .vo-over .mo-in, .vo-over .sv-rv { opacity: 1 !important; transform: none !important; clip-path: none !important; translate: none !important; }
+  .vo-over .sv-work-img img { scale: none !important; }
+}}
+@keyframes voSlide { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+/* ── Цитата в «Ценах» (prices.trust) ── */
+.vt-trust { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 16px 40px; align-items: center; margin-top: 16px; padding: 28px 32px; border-radius: var(--radius-lg); background: var(--bg2); }
+.vt-trust blockquote { margin: 0; }
+.vt-trust blockquote p { margin: 0; font: 500 22px/1.35 var(--font-display); color: #fff; }
+.vt-trust cite { display: block; margin-top: 10px; font-style: normal; font-size: 14px; color: var(--gray); }
+.vt-trust-f { margin: 0; padding-left: 20px; border-left: 3px solid var(--red); font-size: 16px; line-height: 1.5; color: var(--gray-light); }
+.vt-trust-f b { color: #fff; }
+@media (max-width: 900px) { .vt-trust { grid-template-columns: 1fr; padding: 24px; } .vt-trust-f { padding-left: 16px; } }
+@media (max-width: 640px) { .vt-trust blockquote p { font-size: 19px; } }
