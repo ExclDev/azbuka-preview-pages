@@ -1,0 +1,131 @@
+
+/* ═══ Страница «Сантехнические работы» (Новосибирск и Томск): первый экран «Ниша» / «Узел» (.ni-), «Что скроется за плиткой» (.cr-), «Ночь. Протечка.» (.lk-), «Отдельно или в ремонте» (.wk-) ═══
+   Перенесено из макетов brand/maket-santeh-nsk-2026-11-14 и maket-santeh-tomsk-2026-11-14 (st.css). Подключается после service.css, только когда страница задаёт hero.niche, carousel, leak или worklist (layouts/service.njk).
+   Отличия от макета: шапка на сайте фиксированная, поэтому прилипший кадр первого экрана и «Протечки» начинается под ней (top: --sv-top, высота 100svh − --sv-top), а не от края окна.
+   Движение первого экрана и смену строк «Протечки» ведут CSS-анимации на шкале прокрутки (ключевые кадры первого экрана пишет santehnika.js по геометрии экрана).
+   Наезд отзывов и вопросов — общий режим steps.panelDirs в service.css, здесь его нет. На прилипших слоях нет filter, blur и размытых теней. */
+#top.ni{position:relative;box-sizing:border-box;height:460svh;display:block;padding:var(--sv-top) 0 0;background:#0f0d0b;scroll-margin-top:0}
+.ni-pin{position:sticky;top:var(--sv-top);height:calc(100svh - var(--sv-top));overflow:hidden;background:#0f0d0b}
+.ni-cam{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+.ni-cam img{position:absolute;max-width:none}
+.ni-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:var(--vo,0)}
+.ni-pins{position:absolute;inset:0;pointer-events:none}
+.ni-pin-i{position:absolute;left:0;top:0;display:flex;align-items:center;gap:12px;transform:translate(var(--x),var(--y));opacity:var(--o,0);transition:opacity .35s}
+.ni-pin-i i{flex:none;width:18px;height:18px;margin:-9px 0 0 -9px;border-radius:50%;background:#e8201a;box-shadow:0 0 0 4px rgba(22,19,16,.9),0 0 0 6px #e8201a}
+.ni-pin-i span{padding:9px 13px;border-radius:6px;background:#161310;color:#fff;font:600 14px/1.15 var(--font-display);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.ni-pin-i.l{flex-direction:row-reverse;transform:translate(var(--x),var(--y)) translateX(-100%)}
+.ni-pin-i.l i{margin:-9px -9px 0 0}
+.ni-plate{position:absolute;left:var(--px,28px);bottom:calc(clamp(20px,4svh,44px) + 110px + var(--cookie-h,0px));z-index:3;display:flex;flex-direction:column;gap:18px;width:min(640px,calc(100% - 2*var(--px,28px)));padding:28px 30px;border-radius:14px;background:#161310;color:#fff;opacity:var(--po,1);transform:translateY(calc((1 - var(--po,1)) * 20px))}
+.ni-plate .sv-crumbs{margin:0}
+.ni-h1{margin:0;font:700 clamp(34px,min(3.5vw,6.8svh),64px)/.94 var(--font-display);text-transform:uppercase;letter-spacing:-.01em;color:#fff;text-wrap:balance}
+.ni-h1 span{color:#e8201a}
+.ni-lead{margin:0;max-width:46ch;font-size:17px;line-height:1.55;color:#ddd6cf}
+.ni-hint{position:absolute;right:var(--px,28px);bottom:calc(clamp(24px,4svh,48px) + 110px + var(--cookie-h,0px));z-index:3;margin:0;padding:10px 14px;border-radius:999px;background:#161310;color:#cfc8c1;font:600 13px/1 var(--font-display);letter-spacing:.1em;text-transform:uppercase;opacity:var(--po,1)}
+.ni-side{position:absolute;right:var(--px,28px);top:50%;z-index:3;width:min(380px,32vw);padding:26px 28px;border-radius:14px;background:#161310;color:#fff;transform:translateY(-50%) translateX(calc((1 - var(--so,0)) * 24px));opacity:var(--so,0)}
+.ni-side h2{margin:0;font:700 clamp(26px,2.2vw,38px)/.95 var(--font-display);text-transform:uppercase}
+.ni-side ol{margin:18px 0 0;padding:0;list-style:none;display:grid;gap:12px}
+.ni-side li{display:grid;grid-template-columns:28px 1fr;gap:10px;font-size:15px;line-height:1.4;color:#cfc8c1;opacity:.35;transition:opacity .4s}
+.ni-side li.on{opacity:1}
+.ni-side li b{display:block;color:#fff;font:600 16px/1.2 var(--font-display);text-transform:uppercase;letter-spacing:.03em}
+.ni-side li em{font:700 15px/1.3 var(--font-display);font-style:normal;color:#ff4a43}
+.ni-end{position:absolute;left:var(--px,28px);bottom:calc(clamp(20px,4svh,44px) + var(--cookie-h,0px));z-index:3;display:flex;flex-direction:column;gap:16px;max-width:560px;padding:26px 28px;border-radius:14px;background:#161310;color:#fff;opacity:var(--eo,0);transform:translateY(calc((1 - var(--eo,0)) * 20px));pointer-events:none}
+.ni-end.live{pointer-events:auto}
+.ni-end h2{margin:0;font:700 clamp(30px,3vw,52px)/.92 var(--font-display);text-transform:uppercase}
+.ni-end p{margin:0;font-size:16px;line-height:1.5;color:#ddd6cf}
+.ni-prog{position:absolute;left:0;right:0;top:0;z-index:4;height:3px;background:rgba(255,255,255,.08)}
+.ni-prog i{display:block;height:100%;background:#e8201a;transform-origin:left;transform:scaleX(var(--p,0))}
+
+/* ═══ Что скроется за плиткой: карусель кадров ═══ */
+.za{background:radial-gradient(90% 70% at 50% 62%,#2a241f 0%,#161310 70%);overflow:hidden}
+.cr-scene{position:relative;perspective:1600px;perspective-origin:50% 42%;display:grid;place-items:center;min-height:min(62svh,620px);margin-top:clamp(16px,3svh,40px);cursor:grab;touch-action:pan-y;user-select:none;outline:none}
+.cr-scene:active{cursor:grabbing}
+.cr-scene:focus-visible figure.front .cr-f{outline:3px solid #e8201a;outline-offset:4px}
+.cr-ring{position:relative;width:var(--w);height:calc(var(--w)*1.33);transform-style:preserve-3d;transform:translateZ(calc(var(--r)*-1)) rotateX(-3deg) rotateY(var(--a,0deg))}
+.cr-ring figure{position:absolute;inset:0;margin:0;transform-style:preserve-3d;backface-visibility:hidden;transform:rotateY(calc(var(--i)*var(--step))) translateZ(var(--r))}
+.cr-f{position:absolute;inset:0;border-radius:16px;overflow:hidden;background:#28231e;transform:scale(calc(1 - var(--d,1)*.2));opacity:calc(1 - var(--d,1)*.6)}
+.cr-ring figure.front .cr-f{box-shadow:0 34px 70px -24px rgba(0,0,0,.75)}
+.cr-f img,.cr-f video{display:block;width:100%;height:100%;object-fit:cover;pointer-events:none}
+.cr-bar{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:24px;width:min(760px,100%);margin:8px auto 0}
+.cr-prev,.cr-next{all:unset;display:grid;place-items:center;width:56px;height:56px;border-radius:50%;border:1px solid rgba(255,255,255,.32);cursor:pointer;transition:border-color .2s,background-color .2s}
+.cr-prev:hover,.cr-next:hover{border-color:#fff;background:rgba(255,255,255,.06)}
+.cr-prev:focus-visible,.cr-next:focus-visible{outline:2px solid #e8201a;outline-offset:3px}
+.cr-prev svg,.cr-next svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2}
+.cr-cap{margin:0;text-align:center;min-height:4.8em;color:#fff}
+.cr-k{display:block;margin-bottom:8px;font:600 14px/1 var(--font-display);letter-spacing:.08em;color:#a59d95;font-variant-numeric:tabular-nums}.cr-k b{color:#fff}
+.cr-t{display:block;font:700 clamp(24px,2.2vw,34px)/1 var(--font-display);text-transform:uppercase}
+.cr-d{display:block;margin:8px auto 0;max-width:40ch;font-size:15px;line-height:1.45;color:#cfc8c1}
+.cr-dots{display:flex;justify-content:center;gap:6px;margin-top:14px}
+.cr-dots i{width:18px;height:3px;border-radius:2px;background:rgba(255,255,255,.18);transition:background-color .3s,width .4s cubic-bezier(.16,1,.3,1)}
+.cr-dots i.on{width:34px;background:#e8201a}
+
+/* ═══ Ночь. Протечка: видео кранов прилипает, три строки сменяют друг друга ═══ */
+.lk{position:relative;height:300svh;background:#f5f5f7;color:#161310}
+.lk-pin{position:sticky;top:var(--sv-top);height:calc(100svh - var(--sv-top));display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);overflow:hidden}
+.lk-media{position:relative;background:#161310}
+.lk-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.lk-snd{position:absolute;left:20px;bottom:20px;z-index:2;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 18px 0 14px;border:0;border-radius:999px;background:#161310;color:#fff;font:600 14px/1 var(--font-display);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background-color .2s}
+.lk-snd:hover{background:#e8201a}
+.lk-snd:focus-visible{outline:2px solid #e8201a;outline-offset:3px}
+.lk-snd svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.lk-snd svg path:first-child{fill:#fff;stroke:none}
+.lk-snd .on{display:none}.lk-snd[aria-pressed="true"] .on{display:inline}.lk-snd[aria-pressed="true"] .off{display:none}
+.lk-copy{display:flex;flex-direction:column;justify-content:center;gap:28px;padding:clamp(28px,5svh,64px) clamp(28px,5vw,96px)}
+.lk-copy .section-title{margin:0}
+.lk-steps{position:relative;margin:0;padding:0;list-style:none;min-height:clamp(240px,32svh,320px)}
+.lk-steps li{position:absolute;inset:0 0 auto;font:700 clamp(28px,2.7vw,46px)/1.12 var(--font-display);text-transform:uppercase;letter-spacing:-.01em;opacity:0;transform:translateY(-12px);transition:opacity .2s ease-in,transform .2s ease-in}
+/* уходящая строка гаснет быстро, новая появляется после неё — без наложения двух строк */
+.lk-steps li.on{opacity:1;transform:none;transition:opacity .5s cubic-bezier(.16,1,.3,1) .2s,transform .7s cubic-bezier(.16,1,.3,1) .2s}
+.lk-steps li small{display:block;margin-top:18px;font:400 17px/1.5 var(--font-body);text-transform:none;letter-spacing:0;color:#3b352f;max-width:40ch}
+.lk-steps li em{font-style:normal;color:#c41a15}
+.lk-dots{display:flex;gap:8px}
+.lk-dots i{width:34px;height:3px;border-radius:2px;background:#d6cfc8;transition:background-color .3s}
+.lk-dots i.on{background:#e8201a}
+
+/* ═══ Что делаем: пять работ крупными строками ═══ */
+.wk-list{margin:clamp(32px,5svh,56px) 0 0;padding:0;list-style:none;border-top:2px solid #161310}
+.za .section-tag{color:#ff4a43}
+.wk-list li{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:12px 48px;align-items:baseline;padding:clamp(18px,3svh,28px) 0;border-bottom:1px solid #d6cfc8}
+.wk-list b{font:700 clamp(26px,2.8vw,46px)/1 var(--font-display);text-transform:uppercase;letter-spacing:-.01em;color:#161310}
+.wk-list span{font-size:17px;line-height:1.5;color:#3b352f}
+
+@media (max-width:899px){
+  .ni-plate{padding:18px 20px;gap:12px;bottom:calc(16px + 100px + var(--cookie-h,0px))}.ni-h1{font-size:clamp(30px,8.6vw,44px)}.ni-lead{display:none}.ni-plate .sv-crumbs{display:none}
+  .ni-side{top:auto;bottom:calc(16px + var(--cookie-h,0px));right:16px;left:16px;width:auto;transform:translateY(calc((1 - var(--so,0)) * 20px));padding:18px 20px}
+  .ni-side h2{font-size:24px}.ni-side ol{gap:6px;margin-top:10px}.ni-side li span{display:none}
+  .ni-pin-i span{font-size:12px;padding:7px 10px}
+  .ni--flip .ni-pin-i.l{flex-direction:row;transform:translate(var(--x),var(--y))}.ni--flip .ni-pin-i.l i{margin:-9px 0 0 -9px}
+  .ni-hint{display:none}
+  .lk{height:auto}.lk-pin{position:relative;top:auto;height:auto;grid-template-columns:minmax(0,1fr)}.lk-media{height:60svh}
+  .lk-steps{min-height:0}.lk-steps li{position:relative;opacity:1;transform:none;margin-bottom:22px}.lk-dots{display:none}
+  .wk-list li{grid-template-columns:minmax(0,1fr)}
+}
+
+/* ═══ «Ночь. Протечка.»: смена строк и точек по шкале прокрутки (от 900 px, view(), без reduced-motion) ═══
+   Только opacity и transform. Уходящая строка гаснет за 3 % шкалы, новая появляется после неё (с зазором в 1 %): две строки одновременно не видны. Запасной путь без view() — santehnika.js (классы .on). */
+@keyframes lkA{0%,30%{opacity:1;transform:none}33%,100%{opacity:0;transform:translateY(-12px)}}
+@keyframes lkB{0%,34%{opacity:0;transform:translateY(-12px)}42%,62%{opacity:1;transform:none}65%,100%{opacity:0;transform:translateY(-12px)}}
+@keyframes lkC{0%,67%{opacity:0;transform:translateY(-12px)}75%,100%{opacity:1;transform:none}}
+@keyframes lkD1{0%,33%{opacity:0}36%,100%{opacity:1}}
+@keyframes lkD2{0%,66%{opacity:0}69%,100%{opacity:1}}
+.lk-dots i{position:relative}
+.lk-dots i::after{content:"";position:absolute;inset:0;border-radius:2px;background:#e8201a;opacity:0}
+@supports (animation-timeline:view()){@media (prefers-reduced-motion:no-preference) and (min-width:900px){
+  .lk{view-timeline-name:--lk;view-timeline-axis:block}
+  .lk-steps li,.lk-steps li.on{transition:none;opacity:0}
+  .lk-steps li{animation:linear both;animation-timeline:--lk;animation-range:contain 0% contain 100%}
+  .lk-steps li:nth-child(1){animation-name:lkA}.lk-steps li:nth-child(2){animation-name:lkB}.lk-steps li:nth-child(3){animation-name:lkC}
+  .lk-dots i,.lk-dots i.on{background:#d6cfc8;transition:none}
+  .lk-dots i:nth-child(1)::after{opacity:1}
+  .lk-dots i:nth-child(2)::after{animation:lkD1 linear both;animation-timeline:--lk;animation-range:contain 0% contain 100%}
+  .lk-dots i:nth-child(3)::after{animation:lkD2 linear both;animation-timeline:--lk;animation-range:contain 0% contain 100%}
+}}
+
+/* ═══ Сниженная анимация: первый экран стоит на общем плане с метками и плашкой, без прилипания и движения; карусель без автолистания; ролики обложками ═══ */
+@media (prefers-reduced-motion:reduce){
+  .ni-pin-i,.ni-side li,.cr-dots i,.lk-steps li,.lk-dots i{transition:none}
+  #top.ni{height:auto}
+  .ni-pin{position:relative;top:auto;height:max(560px,calc(100svh - var(--sv-top)))}
+  .ni-hint,.ni-end{display:none}
+  .ni-prog{display:none}
+}
+@media (prefers-reduced-motion:reduce) and (max-width:899px){.ni-side{display:none}.ni-plate{bottom:calc(16px + var(--cookie-h,0px))}}
