@@ -8,7 +8,7 @@
     new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) dr.dataset.c = r.dataset.c; }); }, { rootMargin: '-45% 0px -45% 0px' }).observe(r);
   });
   /* видео играют только в зоне видимости; при reduced-motion стоят обложкой */
-  document.querySelectorAll('.dr-frame video, .dv-frame video').forEach(function (v) {
+  document.querySelectorAll('.dr-frame video, .vz-frame video').forEach(function (v) {
     if (still) return;
     new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { v.preload = 'auto'; v.play().catch(function () {}); } else v.pause(); }); }, { threshold: .35 }).observe(v);
   });

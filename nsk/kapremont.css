@@ -50,7 +50,7 @@
 @media (max-width:1180px){#top>.wrapper.ks-grid{grid-template-columns:minmax(0,1fr) auto}.ks-side{display:none}}
 @media (max-width:820px){
   #top>.wrapper.ks-grid{grid-template-columns:1fr;min-height:0;gap:20px}
-  .ks-h1{font-size:clamp(38px,11vw,56px)}
+  .ks-h1{font-size:clamp(38px,11vw,56px);line-height:1}
   .ks-story{height:auto;width:100%;max-width:440px;justify-self:center;aspect-ratio:9/15}
   .ks-facts{display:none}
 }
