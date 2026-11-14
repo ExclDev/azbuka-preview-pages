@@ -1,0 +1,80 @@
+/* ═══ Страница «Капитальный ремонт», Новосибирск: первый экран «Истории» (.ks-), «Что меняем» (.ky-) ═══
+   Перенесено из макета brand/maket-kap-nsk-2026-11-14 (ks.css). Подключается после service.css, только когда страница задаёт hero.stories или systems (layouts/service.njk).
+   Отличия от макета: шапка на сайте фиксированная, поэтому верхний отступ первого экрана и высота кадра считаются от --sv-top (в макете стояло 108px); сводка «Что меняем»
+   прилипает под шапкой (top: --sv-top + 12px). Наезд отзывов и вопросов — общий режим steps.panelDirs в service.css, здесь его нет. */
+
+/* ═══ Первый экран: истории с объекта ═══ */
+#top.ks-hero{height:auto;display:block;position:relative;background:#161310;color:#fff;padding:calc(var(--sv-top) + clamp(16px,2.6svh,32px)) 0 clamp(28px,4svh,48px);scroll-margin-top:0}
+#top>.wrapper.ks-grid{display:grid;flex:none;flex-direction:initial;grid-template-columns:minmax(0,1fr) auto minmax(220px,.62fr);gap:clamp(24px,3.2vw,60px);align-items:center;min-height:calc(100svh - var(--sv-top) - clamp(44px,6.6svh,80px))}
+.ks-copy{display:flex;flex-direction:column;gap:22px;align-self:center}
+.ks-copy .sv-crumbs{margin:0}
+.ks-h1{margin:0;font:700 clamp(40px,min(4.9vw,9svh),96px)/.9 var(--font-display);text-transform:uppercase;letter-spacing:-.01em;text-wrap:balance}
+.ks-h1 .red{color:#e8201a;display:block}
+.ks-lead{margin:0;max-width:42ch;font-size:clamp(16px,1.2vw,19px);line-height:1.55;color:#d9d3cd}
+.ks-ctas{display:flex;flex-wrap:wrap;gap:12px}
+.ks-facts{display:flex;flex-wrap:wrap;gap:12px 32px;margin:4px 0 0;padding:16px 0 0;list-style:none;border-top:1px solid rgba(255,255,255,.08)}
+.ks-facts li{max-width:22ch;font-size:14px;line-height:1.4;color:#a59d95}
+.ks-facts b{display:block;margin-bottom:4px;font:600 24px/1 var(--font-display);color:#fff}
+
+.ks-story{position:relative;height:min(calc(100svh - var(--sv-top) - clamp(44px,6.6svh,80px)),900px);aspect-ratio:9/16;border-radius:26px;overflow:hidden;background:#0f0d0b;box-shadow:0 40px 90px -30px rgba(0,0,0,.85);isolation:isolate}
+.ks-story video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s ease}
+.ks-story video.on{opacity:1}
+.ks-seg{position:absolute;left:12px;right:12px;top:12px;z-index:2;display:flex;gap:4px}
+.ks-seg i{flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.38);overflow:hidden}
+.ks-seg b{display:block;height:100%;width:0;background:#fff}
+.ks-who{position:absolute;left:14px;top:26px;z-index:2;display:flex;align-items:center;gap:10px;font:600 14px/1.2 var(--font-body);text-shadow:0 1px 8px rgba(0,0,0,.5)}
+.ks-who img{width:36px;height:36px;border-radius:50%;background:#fff;padding:5px;object-fit:contain}
+.ks-who small{display:block;font-weight:400;font-size:12px;color:#f0ebe6}
+.ks-pause{position:absolute;right:10px;top:24px;z-index:4;width:44px;height:44px;border:0;border-radius:50%;background:rgba(22,19,16,.6);color:#fff;cursor:pointer;display:grid;place-items:center}
+.ks-pause svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.ks-pause .p2{display:none;fill:currentColor;stroke:none}
+.ks-story.paused .ks-pause .p1{display:none}.ks-story.paused .ks-pause .p2{display:block}
+.ks-cap{position:absolute;left:12px;right:12px;bottom:12px;z-index:2;padding:14px 16px 13px;border-radius:14px;background:rgba(22,19,16,.9)}
+.ks-cap b{display:block;font:600 24px/1.05 var(--font-display);text-transform:uppercase}
+.ks-cap span{display:block;margin-top:6px;font-size:14px;line-height:1.4;color:#d9d3cd}
+.ks-k{position:absolute;right:14px;top:16px;font:500 13px/1 var(--font-display);font-style:normal;color:#a59d95;font-variant-numeric:tabular-nums}
+.ks-tap{position:absolute;inset:76px 0 110px;z-index:3;display:grid;grid-template-columns:1fr 2fr}
+.ks-tap button{border:0;background:none;cursor:pointer;padding:0}
+.ks-tap button:focus-visible{outline-offset:-6px}
+
+.ks-side{align-self:center}
+.ks-side-t{margin:0 0 14px;font:600 13px/1 var(--font-display);letter-spacing:.08em;text-transform:uppercase;color:#8b8279}
+.ks-rings{margin:0;padding:0;list-style:none;display:grid;gap:2px}
+.ks-r{display:grid;grid-template-columns:44px 1fr;gap:12px;align-items:center;width:100%;min-height:52px;padding:4px 10px 4px 4px;border:0;border-radius:14px;background:none;color:#8b8279;text-align:left;font:600 clamp(16px,1.3vw,21px)/1.1 var(--font-display);text-transform:uppercase;letter-spacing:.02em;cursor:pointer;transition:color .25s,background .25s}
+.ks-r img{width:40px;height:40px;margin:2px;border-radius:50%;object-fit:cover;outline:2px solid #3a332c;outline-offset:2px;transition:outline-color .25s}
+.ks-r.seen img{outline-color:#6b625a}
+.ks-r.on{color:#fff;background:#1f1b17}
+.ks-r.on img{outline-color:#e8201a}
+.ks-r:hover{color:#fff}
+
+@media (max-width:1180px){#top>.wrapper.ks-grid{grid-template-columns:minmax(0,1fr) auto}.ks-side{display:none}}
+@media (max-width:820px){
+  #top>.wrapper.ks-grid{grid-template-columns:1fr;min-height:0;gap:20px}
+  .ks-h1{font-size:clamp(38px,11vw,56px)}
+  .ks-story{height:auto;width:100%;max-width:440px;justify-self:center;aspect-ratio:9/15}
+  .ks-facts{display:none}
+}
+
+/* ═══ Что меняем: системы с кольцами-историями ═══ */
+.ky-grid{display:grid;grid-template-columns:minmax(0,1fr) 320px;gap:clamp(24px,3vw,56px);align-items:start;margin-top:40px}
+.ky-list{margin:0;padding:0;list-style:none;border-top:1px solid #e1ddd8}
+.ky-row{display:grid;grid-template-columns:28px 96px minmax(0,1fr) auto;gap:20px;align-items:center;padding:22px 0;border-bottom:1px solid #e1ddd8}
+.ky-n{font:500 15px/1 var(--font-display);color:#6b6b6b;align-self:start;padding-top:8px}
+.ky-ring{position:relative;width:88px;height:88px;padding:0;border:0;border-radius:50%;overflow:hidden;background:#d9d4ce;cursor:pointer;outline:3px solid #e8201a;outline-offset:3px;margin:4px}
+.ky-ring video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ky-ring.is-empty{display:grid;place-items:center;cursor:default;outline:2px dashed #b9b1a9;background:#ebe7e2;font:600 11px/1.15 var(--font-display);letter-spacing:.06em;text-transform:uppercase;color:#5e5750;text-align:center}
+.ky-body h3{margin:0;font:700 clamp(24px,2.2vw,34px)/1 var(--font-display);text-transform:uppercase;color:#1a1a1a}
+.ky-body ul{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0;padding:0;list-style:none}
+.ky-body li{padding:7px 12px;border-radius:999px;background:#fff;font-size:14px;line-height:1.3;color:#3a3530}
+.ky-soon{display:inline-flex;align-items:center;gap:8px;margin-top:12px;font-size:14px;color:#6b6b6b}
+.ky-soon em{font-style:normal;padding:3px 7px;border:1px solid #c9c2bb;border-radius:999px;font-size:12px;letter-spacing:.04em}
+.ky-watch{justify-self:end;min-height:44px;padding:0 18px;border:1px solid #1a1a1a;border-radius:6px;background:none;color:#1a1a1a;font:600 14px/1 var(--font-display);letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:background .2s,color .2s}
+.ky-watch:hover{background:#1a1a1a;color:#fff}
+.ky-sum{position:sticky;top:calc(var(--sv-top) + 12px);padding:28px;border-radius:20px;background:#161310;color:#fff}
+.ky-sum-k{margin:0;font:600 13px/1 var(--font-display);letter-spacing:.08em;text-transform:uppercase;color:#a59d95}
+.ky-sum-t{margin:8px 0 20px;font-size:17px;line-height:1.45}
+.ky-sum .btn{width:100%}
+@media (max-width:980px){.ky-grid{grid-template-columns:1fr}.ky-sum{position:static}}
+@media (max-width:640px){.ky-row{grid-template-columns:72px minmax(0,1fr);gap:14px}.ky-n{display:none}.ky-ring{width:64px;height:64px}.ky-watch{grid-column:2;justify-self:start}}
+
+@media (prefers-reduced-motion:reduce){.ks-story video,.ks-r,.ks-r img{transition:none}}

@@ -425,8 +425,10 @@
           var T2 = function () { return tl2.getBoundingClientRect().top + window.pageYOffset; };
           var R2 = function () { return tl2.offsetHeight - H(); };
           var at = function (p) { return function () { return T2() + p * R2(); }; };
-          var from = { steps: function () { return $('#steps').getBoundingClientRect().top + window.pageYOffset - H() * .55; }, reviews: at(.14), faq: at(.69) }[id];
-          var to = { steps: at(.14), reviews: at(.69), faq: function () { return $('#steps').getBoundingClientRect().bottom + window.pageYOffset - H() * .55; } }[id];
+          // режим «наезд» (steps.panelDirs): границы разделов берутся из data-spy шкалы (середина въезда «Отзывов» и «Вопросов»), по умолчанию 14 % и 69 %
+          var spy = (tl2.getAttribute('data-spy') || '14,69').split(',').map(function (x) { return Number(x) / 100; });
+          var from = { steps: function () { return $('#steps').getBoundingClientRect().top + window.pageYOffset - H() * .55; }, reviews: at(spy[0]), faq: at(spy[1]) }[id];
+          var to = { steps: at(spy[0]), reviews: at(spy[1]), faq: function () { return $('#steps').getBoundingClientRect().bottom + window.pageYOffset - H() * .55; } }[id];
           ScrollTrigger.create({ start: from, end: to, invalidateOnRefresh: true, onToggle: function (self) { a.classList.toggle('is-on', self.isActive); } });
           return;
         }

@@ -908,6 +908,25 @@ html.sv-motion { scroll-behavior: auto !important; }
   }
 }
 
+/* ── 5б. Режим «наезд» панелей (steps.panelDirs, Новосибирск: «Капитальный ремонт» и «Дизайнерский ремонт») ──
+   Те же секция .vn-hzsec, прилипший слой .vn-hz, шкала --t-hz на .vn-tl2 и тот же путь прокрутки, что в разделе 5, но панели не едут общей лентой, а лежат друг на друге
+   (position: absolute) и каждая въезжает на свой отрезок шкалы и остаётся: «Отзывы» 0–28 %, пауза 28–45 %, «Вопросы» 45–73 %, пауза до конца. Направление задаёт data-dir панели:
+   rtl — справа налево, скругление 28px 0 0 28px; ltr — слева направо, скругление 0 28px 28px 0. Двигается только translate; тень у переднего края — градиент 36 px, без filter,
+   blur и размытых box-shadow. Телефон, планшет вне условия и prefers-reduced-motion: обычная вертикальная лента, как в разделе 5. */
+@keyframes vnOvR { from { translate: 100% 0; } to { translate: 0 0; } }
+@keyframes vnOvL { from { translate: -100% 0; } to { translate: 0 0; } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) and (min-width: 1100px), (prefers-reduced-motion: no-preference) and (min-width: 768px) and (min-height: 900px) {
+    .vn-hzsec--ov .vn-hz-track { display: block; position: relative; width: 100%; animation: none; }
+    .vn-hzsec--ov .vn-panel { position: absolute; inset: 0; flex: none; animation-timing-function: linear; animation-fill-mode: both; animation-timeline: --t-hz; }
+    .vn-hzsec--ov .vn-panel[data-dir="rtl"] { border-radius: 28px 0 0 28px; animation-name: vnOvR; }
+    .vn-hzsec--ov .vn-panel[data-dir="ltr"] { border-radius: 0 28px 28px 0; animation-name: vnOvL; }
+    .vn-hzsec--ov .vn-panel[data-dir="ltr"]::before { left: auto; right: -36px; background: linear-gradient(to right, rgba(0,0,0,.16), transparent); }
+    .vn-hzsec--ov .vn-panel:nth-child(1) { background: #ffffff; animation-range: contain 0% contain 28%; }
+    .vn-hzsec--ov .vn-panel:nth-child(2) { background: #f5f5f7; animation-range: contain 45% contain 73%; }
+  }
+}
+
 /* ═══ Зоны нажатия 44×44 px (тач-экраны): ::before с отрицательным inset, видимый размер не меняется ═══ */
 .sv-crumbs a { position: relative; }
 .sv-crumbs a::before { content: ""; position: absolute; inset: -14px -6px; }
