@@ -70,7 +70,7 @@
         st.pins.forEach(function (m, k) {
           pk[k].push(q + '{transform:translate(' + m.x.toFixed(1) + 'px,' + m.y.toFixed(1) + 'px)' + (pins[k].classList.contains('l') && !(G.W < 900 && FLIP) ? ' translateX(-100%)' : '') + ';opacity:' + m.o + '}');
         });
-        lk.forEach(function (l, k) { l.push(q + '{opacity:' + (k < st.on ? 1 : .35) + '}'); });
+        lk.forEach(function (l, k) { l.push(q + '{--lc:' + (k < st.on ? 1 : 0) + '}'); });
       }
       var r = '@keyframes niCam{' + a.cam.join('') + '}@keyframes niPo{' + a.po.join('') + '}@keyframes niSo{' + a.so.join('') + '}@keyframes niVo{' + a.vo.join('') + '}@keyframes niEo{' + a.eo.join('') + '}@keyframes niBar{' + a.bar.join('') + '}';
       pk.forEach(function (l, k) { r += '@keyframes niPin' + k + '{' + l.join('') + '}'; });

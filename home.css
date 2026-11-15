@@ -1395,3 +1395,16 @@ a.nvx-chip:hover { border-color: var(--red); background: rgba(232,32,26,.08); }
 @media (min-width: 769px) {
   .ar-dot::before { inset: -18px -4px; }                  /* мышь: зона выше, но соседние точки (шаг 16 px) не перекрываются */
 }
+
+/* Плавающие кнопки на телефоне (16.11.2026): строки не уходят под виджет и «наверх» (x ≈ 309–367 при 375 px), как на страницах услуг */
+@media (max-width: 480px) {
+  .step-result-inline { padding-right: 56px; }
+  .ar-2gis-link { margin-right: 56px; }
+  .process-title { padding: 0 56px; }
+  .ed .process-step-text, .ed .contacts-item-value, .ed .about-text, .ed .ar-text, .pv-finish p { padding-right: 56px; }
+  .ed .sale-badge { max-width: calc(100% - 56px); padding-right: 14px; }
+  .ed .sale-title { padding-right: 56px; }
+  .cares.is-live .cares-bar { padding-right: calc(var(--px) + 56px); }
+  .ed .sale-text, .ed .process-step-title, .ed .tech-title, .ed .tech strong, #mainForm .consent, .cares-bar, .cares-counter { padding-right: 56px; }
+}
+

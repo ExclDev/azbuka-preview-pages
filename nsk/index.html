@@ -11,6 +11,7 @@
 <meta name="robots" content="noindex, nofollow" />
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23E8201A'/%3E%3Ctext x='16' y='23' font-size='20' font-family='Arial' font-weight='bold' fill='white' text-anchor='middle'%3EА%3C/text%3E%3C/svg%3E" type="image/svg+xml" />
 <link rel="apple-touch-icon" href="images/logo.webp" />
+<script>window.AZ_PAGE={"request":{"label":"Получить смету","title":"Смета после замера","note":"Приедем на замер и через 24 часа пришлём предварительную смету. Бесплатно."}};</script>
 <link rel="preload" as="image" href="images/hero-bg-nsk.webp" media="(min-width: 769px)" />
 <link rel="preload" as="image" href="images/hero-bg-nsk-mobile.webp" media="(max-width: 768px)" />
 <meta property="og:type" content="website" />
@@ -51,7 +52,7 @@
 <link rel="preload" as="font" type="font/woff2" href="fonts/oswald-latin.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="fonts/inter-cyrillic-400.woff2" crossorigin />
 <link rel="preload" as="font" type="font/woff2" href="fonts/inter-latin-400.woff2" crossorigin />
-<link rel="stylesheet" href="base.css?v=7d8e0f95b7" />
+<link rel="stylesheet" href="base.css?v=b9261d652d" />
 <link rel="stylesheet" href="motion.css?v=ccb087613e" />
 <link rel="stylesheet" href="editorial.css?v=a9ae4fef66" />
 <link rel="stylesheet" href="consult.css?v=3aaf924e9f" />
@@ -61,7 +62,7 @@
 <link rel="stylesheet" href="sale.css?v=fcea544750" />
 <link rel="stylesheet" href="contacts.css?v=28f1342fba" />
 <link rel="stylesheet" href="hero.css?v=6ab4777c13" />
-<link rel="stylesheet" href="home.css?v=24a0c95d1a" />
+<link rel="stylesheet" href="home.css?v=a8867ac1f1" />
 </head>
 <body class="city-bar-visible">
 <div class="city-bar" id="cityBar" role="navigation" aria-label="Выбор города">
@@ -86,7 +87,7 @@
         <button class="nvx-top" type="button" data-pane="remont" aria-expanded="false" aria-controls="nvxPanel">Ремонт<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></button>
         <button class="nvx-top" type="button" data-pane="uslugi" aria-expanded="false" aria-controls="nvxPanel">Услуги<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></button>
         <a class="nvx-top" href="#works">Портфолио</a>
-        <span class="nvx-top is-soon" aria-disabled="true">Статьи <em class="nvx-soon">скоро</em></span>
+        <span class="nvx-top is-soon" aria-disabled="true" data-soon="stati">Статьи <em class="nvx-soon">скоро</em></span>
         <a class="nvx-top" href="#contacts">Контакты</a>
       </nav>
       <div class="header-right">
@@ -114,7 +115,7 @@
             <a class="nvx-link" href="remont-v-novostrojke/"><span class="nvx-link-t">Ремонт в новостройке<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span><span class="nvx-link-d">Без отделки, предчистовая или с отделкой застройщика</span></a>
           </li>
           <li>
-            <span class="nvx-link is-soon" aria-disabled="true"><span class="nvx-link-t">Ремонт вторички <em class="nvx-soon">скоро</em></span><span class="nvx-link-d">Обновим отделку или сделаем капремонт — поможем выбрать</span></span>
+            <span class="nvx-link is-soon" aria-disabled="true" data-soon="vtorichka"><span class="nvx-link-t">Ремонт вторички <em class="nvx-soon">скоро</em></span><span class="nvx-link-d">Обновим отделку или сделаем капремонт — поможем выбрать</span></span>
           </li>
           <li>
             <a class="nvx-link" href="kapitalnyj-remont/"><span class="nvx-link-t">Капитальный ремонт<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span><span class="nvx-link-d">Стены, стяжка, электрика и сантехника заново</span></a>
@@ -144,13 +145,13 @@
         <p class="nvx-group">Отдельные работы</p>
         <ul class="nvx-links">
           <li>
-            <span class="nvx-link is-soon nvx-link-s" aria-disabled="true"><span class="nvx-link-t">Электромонтаж <em class="nvx-soon">скоро</em></span></span>
+            <span class="nvx-link is-soon nvx-link-s" aria-disabled="true" data-soon="elektromontazh"><span class="nvx-link-t">Электромонтаж <em class="nvx-soon">скоро</em></span></span>
           </li>
           <li>
             <a class="nvx-link nvx-link-s" href="santehnicheskie-raboty/"><span class="nvx-link-t">Сантехника<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
           </li>
           <li>
-            <span class="nvx-link is-soon nvx-link-s" aria-disabled="true"><span class="nvx-link-t">Натяжные потолки <em class="nvx-soon">скоро</em></span></span>
+            <span class="nvx-link is-soon nvx-link-s" aria-disabled="true" data-soon="potolki"><span class="nvx-link-t">Натяжные потолки <em class="nvx-soon">скоро</em></span></span>
           </li>
         </ul>
       </div><a class="nvx-card" href="tehnicheskij-proekt/"><img src="images/technical-project-concept.webp" alt="Чертёж технического проекта и готовая гостиная" loading="lazy"><span class="nvx-card-cap"><b>Технический проект<br>за полцены</b><span>Подробнее<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></span></a>
@@ -163,7 +164,7 @@
     <button class="mm-row is-on" type="button" aria-expanded="true" aria-controls="mm-remont" data-acc="remont">Ремонт<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></button>
     <div class="mm-sub is-on" id="mm-remont" data-acc-body="remont"><div><ul>
       <li><a href="remont-v-novostrojke/" onclick="closeMobileMenu()"><b>Ремонт в новостройке</b><span>Без отделки, предчистовая или с отделкой застройщика</span></a></li>
-      <li><span class="mm-soon" aria-disabled="true"><b>Ремонт вторички <em class="nvx-soon">скоро</em></b><span>Обновим отделку или сделаем капремонт — поможем выбрать</span></span></li>
+      <li><span class="mm-soon" aria-disabled="true" data-soon="vtorichka"><b>Ремонт вторички <em class="nvx-soon">скоро</em></b><span>Обновим отделку или сделаем капремонт — поможем выбрать</span></span></li>
       <li><a href="kapitalnyj-remont/" onclick="closeMobileMenu()"><b>Капитальный ремонт</b><span>Стены, стяжка, электрика и сантехника заново</span></a></li>
       <li><a href="vannaya-pod-klyuch/" onclick="closeMobileMenu()"><b>Ванная под ключ</b><span>Трубы, гидроизоляцию и уклон показываем до плитки</span></a></li>
       <li><a href="dizajnerskij-remont/" onclick="closeMobileMenu()"><b>Дизайнерский ремонт</b><span>Ремонт по проекту дизайнера</span></a></li>
@@ -172,12 +173,12 @@
     <div class="mm-sub" id="mm-uslugi" data-acc-body="uslugi"><div><ul><li class="mm-lbl">К ремонту</li>
       <li><a href="tehnicheskij-proekt/" onclick="closeMobileMenu()"><b>Технический проект</b><span>750 ₽/м² вместо 1 500, если ремонт делаем мы</span></a></li>
       <li><a href="priemka-kvartiry/" onclick="closeMobileMenu()"><b>Приёмка квартиры</b><span>Проверяем квартиру от застройщика по чек-листу с инструментом</span></a></li><li class="mm-lbl">Отдельные работы</li>
-      <li><span class="mm-soon" aria-disabled="true"><b>Электромонтаж <em class="nvx-soon">скоро</em></b></span></li>
+      <li><span class="mm-soon" aria-disabled="true" data-soon="elektromontazh"><b>Электромонтаж <em class="nvx-soon">скоро</em></b></span></li>
       <li><a href="santehnicheskie-raboty/" onclick="closeMobileMenu()"><b>Сантехника</b></a></li>
-      <li><span class="mm-soon" aria-disabled="true"><b>Натяжные потолки <em class="nvx-soon">скоро</em></b></span></li>
+      <li><span class="mm-soon" aria-disabled="true" data-soon="potolki"><b>Натяжные потолки <em class="nvx-soon">скоро</em></b></span></li>
     </ul></div></div>
     <a class="mm-row" href="#works" onclick="closeMobileMenu()">Портфолио</a>
-    <span class="mm-row is-soon" aria-disabled="true">Статьи <em class="nvx-soon">скоро</em></span>
+    <span class="mm-row is-soon" aria-disabled="true" data-soon="stati">Статьи <em class="nvx-soon">скоро</em></span>
     <a class="mm-row" href="#contacts" onclick="closeMobileMenu()">Контакты</a>
   </div>
   <div class="mm-dock">
@@ -228,7 +229,7 @@
       </div>
     </div>
     <div class="hero-ctas hero-after" id="heroCtas">
-      <button class="btn btn-red btn-cta" onclick="openPopup('Первый экран — Получить бесплатную смету')">Получить бесплатную смету</button>
+      <button class="btn btn-red btn-cta" onclick="openPopup('Первый экран — Получить смету', null, 'page')">Получить смету</button>
       <a class="btn btn-outline" href="#works">Смотреть работы</a>
     </div>
   </div>
@@ -253,7 +254,7 @@
           <div class="nvx-top-img"><img src="images/svc-novostrojka.webp" alt="Кухня в новостройке после ремонта" loading="lazy" decoding="async"></div>
           <i class="nvx-seam" aria-hidden="true"></i>
         </div>
-        <div class="nvx-c-body"><h3>Ремонт в новостройке</h3><p>Без отделки, предчистовая или с отделкой застройщика: считаем только то, что нужно вашей квартире.</p><span class="nvx-more">Подробнее<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></div></a><div class="nvx-c is-soon" aria-disabled="true">
+        <div class="nvx-c-body"><h3>Ремонт в новостройке</h3><p>Без отделки, предчистовая или с отделкой застройщика: считаем только то, что нужно вашей квартире.</p><span class="nvx-more">Подробнее<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></div></a><div class="nvx-c is-soon" aria-disabled="true" data-soon="vtorichka">
         <div class="nvx-media"><div class="nvx-under nvx-under-wall">
 <svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g fill="none" stroke="#5a4f45" stroke-width="1"><path d="M0 70h400M0 140h400M0 210h400"/><path d="M60 0v70M180 0v70M300 0v70M120 70v70M240 70v70M360 70v70M60 140v70M180 140v70M300 140v70M120 210v50M240 210v50M360 210v50"/></g><path d="M40 40 C120 60 150 20 230 50 S340 90 380 60" fill="none" stroke="#e8201a" stroke-width="2" stroke-dasharray="6 6"/><path d="M70 190 l30 -14 l18 22 l26 -30" fill="none" stroke="#e8201a" stroke-width="2"/></svg>
 <span class="nvx-tag">Под старой отделкой</span>
@@ -262,7 +263,7 @@
           <div class="nvx-top-img"><img src="images/quiz-vtorichka.webp" alt="Гостиная после ремонта" loading="lazy" decoding="async"></div>
           <i class="nvx-seam" aria-hidden="true"></i>
         </div>
-        <div class="nvx-c-body"><h3>Ремонт вторички</h3><p>Обновим отделку или сделаем капремонт — поможем выбрать.</p><span class="nvx-more"><em class="nvx-soon">скоро</em> Страница готовится</span></div></div><a class="nvx-c" href="vannaya-pod-klyuch/">
+        <div class="nvx-c-body"><h3>Ремонт вторички</h3><p>Обновим отделку или сделаем капремонт — поможем выбрать.</p><span class="nvx-more"><em class="nvx-soon">скоро</em> Страница готовится</span></div></div><a class="nvx-c" href="vannaya-pod-klyuch/">
         <div class="nvx-media"><div class="nvx-under nvx-under-bath">
 <svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g fill="none" stroke="#3d5566" stroke-width="1"><path d="M0 52h400M0 104h400M0 156h400M0 208h400M80 0v260M160 0v260M240 0v260M320 0v260"/></g><path d="M60 230V90h120" fill="none" stroke="#e8edf1" stroke-width="2.5"/><path d="M220 230V120h110" fill="none" stroke="#e8201a" stroke-width="2.5"/><path d="M30 238h340" stroke="#7fa3bb" stroke-width="2" stroke-dasharray="10 6"/><path d="M250 200l60 12" stroke="#e8edf1" stroke-width="1.5"/></svg>
 <span class="nvx-tag">Трубы · гидроизоляция · уклон</span>
@@ -293,9 +294,9 @@
     </div>
     <div class="nvx-chip-row">
       <span>Отдельные работы:</span>
-      <span class="nvx-chip is-soon" aria-disabled="true">Электромонтаж <em class="nvx-soon">скоро</em></span>
+      <span class="nvx-chip is-soon" aria-disabled="true" data-soon="elektromontazh">Электромонтаж <em class="nvx-soon">скоро</em></span>
       <a class="nvx-chip" href="santehnicheskie-raboty/">Сантехника</a>
-      <span class="nvx-chip is-soon" aria-disabled="true">Натяжные потолки <em class="nvx-soon">скоро</em></span>
+      <span class="nvx-chip is-soon" aria-disabled="true" data-soon="potolki">Натяжные потолки <em class="nvx-soon">скоро</em></span>
       <a class="nvx-chip" href="kapitalnyj-remont/">Капитальный ремонт</a>
       <a class="nvx-chip" href="dizajnerskij-remont/">Дизайнерский ремонт</a>
     </div>
@@ -460,7 +461,7 @@
               </svg>
             </div>
             <div class="cares-foot">
-              <button class="btn btn-red" type="button" onclick="openPopup('Главная — Берём заботы — Получить смету за 24 часа')">Получить смету за 24 часа</button>
+              <button class="btn btn-red" type="button" onclick="openPopup('Главная — Берём заботы — Получить смету', null, 'page')">Получить смету</button>
             </div>
           </div>
         </div>
@@ -935,7 +936,7 @@
         <h3 id="nvx-f-remont">Ремонт</h3>
         <ul>
           <li><a href="remont-v-novostrojke/">Ремонт в новостройке</a></li>
-          <li><span class="nvx-f-soon" aria-disabled="true">Ремонт вторички <em class="nvx-soon">скоро</em></span></li>
+          <li><span class="nvx-f-soon" aria-disabled="true" data-soon="vtorichka">Ремонт вторички <em class="nvx-soon">скоро</em></span></li>
           <li><a href="kapitalnyj-remont/">Капитальный ремонт</a></li>
           <li><a href="vannaya-pod-klyuch/">Ванная под ключ</a></li>
           <li><a href="dizajnerskij-remont/">Дизайнерский ремонт</a></li>
@@ -946,9 +947,9 @@
         <ul>
           <li><a href="tehnicheskij-proekt/">Технический проект</a></li>
           <li><a href="priemka-kvartiry/">Приёмка квартиры</a></li>
-          <li><span class="nvx-f-soon" aria-disabled="true">Электромонтаж <em class="nvx-soon">скоро</em></span></li>
+          <li><span class="nvx-f-soon" aria-disabled="true" data-soon="elektromontazh">Электромонтаж <em class="nvx-soon">скоро</em></span></li>
           <li><a href="santehnicheskie-raboty/">Сантехника</a></li>
-          <li><span class="nvx-f-soon" aria-disabled="true">Натяжные потолки <em class="nvx-soon">скоро</em></span></li>
+          <li><span class="nvx-f-soon" aria-disabled="true" data-soon="potolki">Натяжные потолки <em class="nvx-soon">скоро</em></span></li>
         </ul>
       </nav>
       <nav class="nvx-fcol nvx-fcol-company" aria-labelledby="nvx-f-company">
@@ -957,7 +958,7 @@
           <li><a href="#about">О компании</a></li>
           <li><a href="#works">Портфолио</a></li>
           <li><a href="#reviews">Отзывы</a></li>
-          <li><span class="nvx-f-soon" aria-disabled="true">Статьи <em class="nvx-soon">скоро</em></span></li>
+          <li><span class="nvx-f-soon" aria-disabled="true" data-soon="stati">Статьи <em class="nvx-soon">скоро</em></span></li>
           <li><a href="#contacts">Контакты</a></li>
         </ul>
       </nav>
@@ -1153,7 +1154,7 @@
 /* Город этого сайта: объект нужен base.js (заявки, сообщение об ошибке) и home.js (заголовок первого экрана) */
 window.AZ_CITY = {"key":"novosibirsk","name":"Новосибирск","phone":"8 (923) 141-01-54","phoneHref":"tel:+79231410154","heroLine2":"ремонт в Новосибирске"};
 </script>
-<script src="base.js?v=df81b58898"></script>
+<script src="base.js?v=7e01621a95"></script>
 <script>
 /* Данные города для home.js: настройки отзывов и запасные отзывы на случай, если reviews*.json не загрузится */
 window.AZ_HOME = {
@@ -1199,7 +1200,7 @@ fallbackConfig: { total: 27, avg: 5.0, url: 'https://2gis.ru/novosibirsk/geo/700
 <script src="vendor/lenis.min.js?v=44dcd10f2a"></script>
 <script src="motion.js?v=0bad513bb5"></script>
 <script src="consult.js?v=85972f6dc2"></script>
-<script src="process.js?v=32cf3b3d4b"></script>
+<script src="process.js?v=152a5eb6c2"></script>
 <script src="cares.js?v=e07caf65f2"></script>
 <script src="tech.js?v=2969d51a7e"></script>
 <script src="sale.js?v=b17f9fe555"></script>

@@ -13,18 +13,18 @@
 .dr-room.rev>.wrapper.dr-grid{grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)}
 .dr-room.rev .dr-txt{order:2}
 .dr-txt{display:flex;flex-direction:column;gap:24px}
-.dr-txt .sv-crumbs,.dr-txt .sv-crumbs li,.dr-txt .sv-crumbs a{margin:0;color:var(--ink)}
-.dr-txt .sv-crumbs li::before{color:var(--ink)}
+.dr-txt .sv-crumbs,.dr-txt .sv-crumbs li,.dr-txt .sv-crumbs a{margin:0;color:var(--sm)}
+.dr-txt .sv-crumbs li::before{color:var(--sm)}
 .dr-h1{margin:0;font:700 clamp(48px,min(6.6vw,12svh),128px)/.86 var(--font-display);text-transform:uppercase;letter-spacing:-.015em;color:var(--ink);text-wrap:balance}
 .dr-h1 span{display:block;color:#ffffff}
 .dr-h2{margin:0;font:700 clamp(46px,min(6vw,11svh),116px)/.86 var(--font-display);text-transform:uppercase;letter-spacing:-.01em;color:var(--fg)}
-.dr-k{margin:0;font:600 14px/1 var(--font-display);letter-spacing:.12em;text-transform:uppercase;color:var(--fg);opacity:.62}
-.dr-lead{margin:0;max-width:42ch;font-size:clamp(16px,1.25vw,20px);line-height:1.55;color:var(--fg)}
+.dr-k{margin:0;font:600 14px/1 var(--font-display);letter-spacing:.12em;text-transform:uppercase;color:var(--smf);opacity:calc(.62 + .38 * var(--rs))}
+.dr-lead{margin:0;max-width:42ch;font-size:clamp(16px,1.25vw,20px);line-height:1.55;color:var(--smf)}
 .dr-ctas{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px}
 .dr-btn-ink{background:#161310;color:#fff;border:0}
 .dr-btn-ink:hover{background:#000;color:#fff}
-.dr-link{font:600 15px/1.2 var(--font-display);letter-spacing:.06em;text-transform:uppercase;color:var(--ink);text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px}
-.dr-facts{display:flex;flex-wrap:wrap;gap:12px 36px;margin:6px 0 0;padding:18px 0 0;list-style:none;border-top:1px solid rgba(22,19,16,.25);font-size:14px;line-height:1.4;color:var(--ink)}
+.dr-link{font:600 15px/1.2 var(--font-display);letter-spacing:.06em;text-transform:uppercase;color:var(--sm);text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px}
+.dr-facts{display:flex;flex-wrap:wrap;gap:12px 36px;margin:6px 0 0;padding:18px 0 0;list-style:none;border-top:1px solid color-mix(in srgb,rgba(255,255,255,.45) calc(var(--rs) * 100%),rgba(22,19,16,.25));font-size:14px;line-height:1.4;color:var(--sm)}
 .dr-facts b{display:block;margin-bottom:4px;font:600 24px/1 var(--font-display);text-transform:uppercase}
 
 .dr-pic{position:relative;margin:0;justify-self:center;display:flex;flex-direction:column;gap:14px}
@@ -32,7 +32,7 @@
 .dr-frame video{width:100%;height:100%;object-fit:cover}
 .dr-det{position:absolute;left:-22%;bottom:18%;width:40%;height:auto;aspect-ratio:3/4;object-fit:cover;border:8px solid #161310;border-radius:4px}
 .dr-room.rev .dr-det{left:auto;right:-22%}
-.dr-cap{max-width:34ch;font-size:13px;line-height:1.45;color:var(--fg)}
+.dr-cap{max-width:34ch;font-size:13px;line-height:1.45;color:var(--smf)}
 .dr-cap b{display:block;margin-bottom:2px;font:600 13px/1.2 var(--font-display);letter-spacing:.12em;text-transform:uppercase}
 
 /* ═══ Проект на листе и на стене ═══ */
@@ -67,3 +67,24 @@
   .vz-grid{gap:40px}.vz-frame{max-height:none;width:min(100%,420px)}
 }
 @media (prefers-reduced-motion:reduce){.dr{transition:none}}
+
+/* ═══ Красная сцена: мелкий текст и шапка (16.11.2026) ═══
+   Тёмный #161310 на красном #E8201A даёт 4,1:1, белый на нём 4,51:1. Пока активна красная сцена (data-c="red" на .dr, скрипт зеркалит его в html[data-drc]),
+   мелкий текст (крошки, лид, факты, подписи, .dr-k без прозрачности) белый, а шапка и кнопка чата уходят в графит.
+   --rs (0…1) — «насколько красная сцена»: объявлена числом, поэтому переходит за те же .9 с и с той же кривой, что и фон, и все цвета ниже считаются от неё
+   (в том числе в шапке и виджете, которые лежат вне .dr: --rs наследуется от html). H1 и крупные заголовки (3:1 хватает) остаются как были. */
+@property --rs { syntax: '<number>'; inherits: true; initial-value: 0; }
+html { --rs: 0; transition: --rs .9s cubic-bezier(.16, 1, .3, 1); }
+html[data-drc="red"] { --rs: 1; }
+.dr { --sm: color-mix(in srgb, #ffffff calc(var(--rs) * 100%), var(--ink)); --smf: color-mix(in srgb, #ffffff calc(var(--rs) * 100%), var(--fg)); }
+/* шапка */
+.header { --nvx-soon: color-mix(in srgb, #ffffff calc(var(--rs) * 100%), #cfc8c1); }
+.header-nav .nvx-top.is-current, .header-nav .nvx-top.is-current:hover { color: color-mix(in srgb, #ffffff calc(var(--rs) * 100%), var(--red-text)); text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 8px; text-decoration-color: rgba(255, 255, 255, var(--rs)); }
+.header-right .btn.btn-red { background: color-mix(in srgb, var(--bg3) calc(var(--rs) * 100%), var(--red)); color: #fff; box-shadow: 0 6px 20px rgba(232, 32, 26, calc(.35 * (1 - var(--rs)))); }
+.header-right .btn.btn-red:hover { background: color-mix(in srgb, var(--bg2) calc(var(--rs) * 100%), var(--red-dark)); }
+.header-logo { border-radius: 12px; background: rgba(40, 35, 30, var(--rs)); box-shadow: 0 0 0 6px rgba(40, 35, 30, var(--rs)); }
+/* кнопка чата и плавающая кнопка */
+.qw-toggle, .float-cta-btn { --qa: color-mix(in srgb, #3a342d calc(var(--rs) * 100%), #FF3B30); --qb: color-mix(in srgb, var(--bg3) calc(var(--rs) * 100%), var(--red)); --qc: color-mix(in srgb, #14110e calc(var(--rs) * 100%), #8A0E0A); }
+.qw-toggle { background: linear-gradient(135deg, var(--qa) 0%, var(--qb) 55%, var(--qc) 100%); background-size: 160% 160%; background-position: 0% 50%; box-shadow: 0 12px 32px rgba(232, 32, 26, calc(.35 * (1 - var(--rs)))), 0 12px 32px rgba(0, 0, 0, calc(.35 * var(--rs))); }
+.float-cta-btn { background: var(--qb); }
+@media (prefers-reduced-motion: reduce) { html { transition: none; } }

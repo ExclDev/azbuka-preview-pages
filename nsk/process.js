@@ -45,7 +45,7 @@
   fin.innerHTML =
     '<span class="pv-fin-dot" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>' +
     '<p>Предварительная смета <span>за 24 часа</span></p>' +
-    '<button class="btn btn-red" type="button" onclick="openPopup(\'Порядок работы — Получить бесплатную смету\')">Получить бесплатную смету</button>';
+    '<button class="btn btn-red" type="button" onclick="openPopup(\'Порядок работы — Получить смету\', null, \'page\')">Получить смету</button>';
   wrap.appendChild(fin);
 
   /* реакция на смену активного шага (класс is-on ставит motion.js) */

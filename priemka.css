@@ -303,3 +303,12 @@
     .pk-stack > #video, .pk-stack2 > #act { animation: pkPin linear both; animation-timeline: view(); animation-range: contain 100% exit 100%; }
   }
 }
+
+/* Баннер cookie (16.11.2026): кадр первого экрана ниже на высоту баннера (--cookie-h), кнопка «Записаться на приёмку» остаётся над ним */
+@media (min-width: 561px) {
+  .pkB-stage { height: min(calc(62svh - var(--cookie-h, 0px) * 1.45), 560px); min-height: calc(420px - var(--cookie-h, 0px) * 1.6); }
+  .pkB-under { margin-top: calc(32px - var(--cookie-h, 0px) * .2); }
+}
+@media (max-width: 560px) {
+  .pkB-stage { aspect-ratio: auto; height: calc(100vw - 2 * var(--px, 16px) - var(--cookie-h, 0px) * .9); }
+}

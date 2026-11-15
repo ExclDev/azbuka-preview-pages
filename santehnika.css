@@ -24,10 +24,13 @@
 .ni-side{position:absolute;right:var(--px,28px);top:50%;z-index:3;width:min(380px,32vw);padding:26px 28px;border-radius:14px;background:#161310;color:#fff;transform:translateY(-50%) translateX(calc((1 - var(--so,0)) * 24px));opacity:var(--so,0)}
 .ni-side h2{margin:0;font:700 clamp(26px,2.2vw,38px)/.95 var(--font-display);text-transform:uppercase}
 .ni-side ol{margin:18px 0 0;padding:0;list-style:none;display:grid;gap:12px}
-.ni-side li{display:grid;grid-template-columns:28px 1fr;gap:10px;font-size:15px;line-height:1.4;color:#cfc8c1;opacity:.35;transition:opacity .4s}
-.ni-side li.on{opacity:1}
-.ni-side li b{display:block;color:#fff;font:600 16px/1.2 var(--font-display);text-transform:uppercase;letter-spacing:.03em}
-.ni-side li em{font:700 15px/1.3 var(--font-display);font-style:normal;color:#ff4a43}
+/* Неактивные шаги тише активных цветом, а не прозрачностью (16.11.2026): --lc (0 неактивный, 1 активный) смешивает серый #9A928A (6:1 на #161310) с цветом активного шага
+   (#cfc8c1 11:1, заголовок #fff 18:1, номер #ff4a43 5,6:1). Раньше opacity .35 давала 1,7–3,2:1. --lc зарегистрирована числом, поэтому переход плавный; её же пишут ключевые кадры santehnika.js */
+@property --lc{syntax:'<number>';inherits:true;initial-value:0}
+.ni-side li{--lc:0;display:grid;grid-template-columns:28px 1fr;gap:10px;font-size:15px;line-height:1.4;color:color-mix(in srgb,#cfc8c1 calc(var(--lc) * 100%),#9a928a);transition:--lc .4s}
+.ni-side li.on{--lc:1}
+.ni-side li b{display:block;color:color-mix(in srgb,#fff calc(var(--lc) * 100%),#9a928a);font:600 16px/1.2 var(--font-display);text-transform:uppercase;letter-spacing:.03em}
+.ni-side li em{font:700 15px/1.3 var(--font-display);font-style:normal;color:color-mix(in srgb,#ff4a43 calc(var(--lc) * 100%),#9a928a)}
 .ni-end{position:absolute;left:var(--px,28px);bottom:calc(clamp(20px,4svh,44px) + var(--cookie-h,0px));z-index:3;display:flex;flex-direction:column;gap:16px;max-width:560px;padding:26px 28px;border-radius:14px;background:#161310;color:#fff;opacity:var(--eo,0);transform:translateY(calc((1 - var(--eo,0)) * 20px));pointer-events:none}
 .ni-end.live{pointer-events:auto}
 .ni-end h2{margin:0;font:700 clamp(30px,3vw,52px)/.92 var(--font-display);text-transform:uppercase}
@@ -129,3 +132,17 @@
   .ni-prog{display:none}
 }
 @media (prefers-reduced-motion:reduce) and (max-width:899px){.ni-side{display:none}.ni-plate{bottom:calc(16px + var(--cookie-h,0px))}}
+
+/* ═══ Телефон (до 768 px): первый экран «Узел» / «Ниша» (16.11.2026) ═══
+   Раньше на телефоне лид и подсказка были скрыты, а сцена шла 460svh (4,6 экрана): было не понять, что экран надо листать. Теперь лид и подсказка на месте,
+   а прокрутка вдвое короче: все шаги те же (ключевые кадры считаются по долям шкалы), просто быстрее. «Пропустить ↓» уводит к следующей секции (как «Пропустить» в «До основания»).
+   Подсказка и «Пропустить» стоят на тёмной плашке #161310 (белый и #cfc8c1 на ней 18:1 и 10:1). При reduced-motion сцены нет, ничего этого не нужно. */
+.ni-skip{display:none}
+@media (max-width:768px) and (prefers-reduced-motion:no-preference){
+  #top.ni{height:240svh}
+  .ni-lead{display:block;font-size:15px;line-height:1.45}
+  .ni-plate{gap:10px}
+  .ni-hint{display:block;right:16px;left:16px;margin:0 auto;bottom:calc(16px + var(--cookie-h,0px));width:max-content;max-width:calc(100% - 32px);padding:11px 16px;font-size:12px;line-height:1.2;white-space:nowrap}
+  .ni-skip{display:inline-flex;align-items:center;position:absolute;top:12px;right:16px;z-index:4;min-height:44px;padding:0 14px;border-radius:999px;background:#161310;color:#fff;font-size:14px;text-decoration:underline;text-underline-offset:3px;opacity:var(--po,1)}
+  .ni-skip:focus-visible{outline:2px solid var(--red);outline-offset:3px}
+}

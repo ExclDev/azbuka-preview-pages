@@ -681,6 +681,13 @@ body.city-bar-visible .mobile-menu { transform: translateY(var(--city-bar-h, 36p
 }
 .cookie-banner__btn:hover { background: var(--red-dark); }
 .cookie-banner--hidden { display: none; }
+/* Высота баннера и признак «баннер показан» — настоящие свойства, чтобы после выбора они плавно уходили в 0 (класс ck-anim ставит base.js на 0,3 с),
+   а первый экран возвращался без скачка. Без ck-anim (при загрузке, при повороте экрана) значение меняется сразу. */
+@property --cookie-h { syntax: '<length>'; inherits: true; initial-value: 0px; }
+@property --ck { syntax: '<number>'; inherits: true; initial-value: 0; }
+html.ck-anim { transition: --cookie-h .3s cubic-bezier(.4, 0, .2, 1), --ck .3s cubic-bezier(.4, 0, .2, 1); }
+.cookie-banner--closing { transform: translateY(100%); transition: transform .3s cubic-bezier(.4, 0, .2, 1); }
+@media (prefers-reduced-motion: reduce) { html.ck-anim { transition: none; } .cookie-banner--closing { transition: none; } }
 .cookie-banner__actions { display: flex; gap: 10px; flex-shrink: 0; margin-left: auto; }
 .cookie-banner__actions .cookie-banner__btn { min-width: 112px; }
 /* «Отклонить» того же размера, но второстепенный: рамка без заливки */
@@ -825,8 +832,8 @@ body.city-bar-visible .mobile-menu { transform: translateY(var(--city-bar-h, 36p
 .form-consent { margin-top: 4px; }
 .consent {
   position: relative; display: flex; align-items: center; gap: 12px;
-  min-height: 44px; padding: 6px 0; cursor: pointer;
-  font-size: 13px; line-height: 1.4; color: var(--gray);
+  min-height: 44px; padding: 12px 0; cursor: pointer;
+  font-size: 14px; line-height: 1.4; color: var(--gray);
 }
 .consent-input {
   position: absolute; left: 0; top: 50%; width: 24px; height: 24px; margin: -12px 0 0;
@@ -846,7 +853,7 @@ body.city-bar-visible .mobile-menu { transform: translateY(var(--city-bar-h, 36p
 .consent-input:checked + .consent-box::after { transform: rotate(-45deg) scale(1); }
 .consent-input:focus-visible + .consent-box { outline: 2px solid #fff; outline-offset: 3px; }
 .consent-input[aria-invalid="true"] + .consent-box { border-color: #ff6b66; }
-.consent-text a { color: #fff; text-decoration: underline; }
+.consent-text a { color: #fff; text-decoration: underline; padding: 14px 2px; margin: 0 -2px; }   /* ссылка 14 px; вертикальные поля дают зону нажатия 44 px и не выходят за поля метки (12 px сверху и снизу), поэтому соседние поля не перехватываются */
 .form-input[aria-invalid="true"], .form-input[aria-invalid="true"]:focus { border-color: var(--red-text); }
 .field-error { margin: 0; color: var(--red-text); font-size: 13px; line-height: 1.4; }
 .field-error[hidden] { display: none; }

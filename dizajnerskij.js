@@ -4,8 +4,11 @@
   /* ═══ Цвет комнат: фон берёт цвет комнаты, которая сейчас в середине экрана ═══ */
   var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var dr = document.getElementById('drRooms');
+  /* сцену зеркалим в html[data-drc]: шапка и кнопка чата лежат вне .dr, а их цвет зависит от красной сцены (dizajnerskij.css, --rs) */
+  function setScene(c) { dr.dataset.c = c; document.documentElement.dataset.drc = c; }
+  if (dr) document.documentElement.dataset.drc = dr.dataset.c || 'red';
   if (dr) dr.querySelectorAll('.dr-room').forEach(function (r) {
-    new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) dr.dataset.c = r.dataset.c; }); }, { rootMargin: '-45% 0px -45% 0px' }).observe(r);
+    new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) setScene(r.dataset.c); }); }, { rootMargin: '-45% 0px -45% 0px' }).observe(r);
   });
   /* видео играют только в зоне видимости; при reduced-motion стоят обложкой */
   document.querySelectorAll('.dr-frame video, .vz-frame video').forEach(function (v) {

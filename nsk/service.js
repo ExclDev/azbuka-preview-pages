@@ -54,7 +54,7 @@
       if (total) total.textContent = shown;
       if (check) check.textContent = chk;
       if (checkWrap) checkWrap.hidden = chk === 0;  // «, ещё N проверяем и доводим» только при N > 0
-      if (sr) sr.textContent = done + ' из ' + shown;
+      if (sr) sr.textContent = done + ' из ' + shown + ' работ';
     }
 
     tabsBox.addEventListener('click', function (e) {

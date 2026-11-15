@@ -155,7 +155,7 @@ html.sv-motion .sv-plan path { stroke-dasharray: 1; stroke-dashoffset: 1; }
 .sv-row.do .sv-badge { background: var(--red-a10); color: var(--red-dark); }
 .sv-row.check .sv-badge { background: #fff; color: var(--light-ink); }
 .sv-row.skip .sv-badge { background: transparent; color: var(--gray); }
-.sv-sum { position: sticky; top: calc(var(--sv-top) + 12px); padding: 32px; border-radius: var(--radius-lg); background: var(--bg); color: #fff; }
+.sv-sum { position: sticky; top: calc(var(--sv-top) + 12px); padding: 32px; border-radius: var(--radius-lg); background: var(--bg); color: #fff; --gray: #9A928A; }   /* тёмная плашка внутри светлой секции: общая замена --gray на --gray-ink (строка 119) ей не подходит, подписи были 3,2:1 */
 .sv-sum-k { margin: 0; font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--gray); }
 .sv-sum-n { display: flex; align-items: flex-end; margin: 6px 0 0; font-family: var(--font-display); font-weight: 600; font-size: 64px; line-height: 1; font-variant-numeric: tabular-nums; }
 /* число и итог вплотную, как дробь «6/10»; ширина барабана равна числу цифр (--d: 1 или 2) и плавно меняется при 9 → 10 */
@@ -598,7 +598,7 @@ html.sv-motion { scroll-behavior: auto !important; }
 .dv-b .dv-player { height: min(76svh, 700px); }
 .dv-cards { display: grid; gap: 14px; margin: 0; padding: 0; list-style: none; }
 .dv-card { position: relative; display: block; width: 100%; padding: 22px 24px; border: 1px solid rgba(255,255,255,.1); border-radius: 18px; background: #26211c; color: inherit; text-align: left; cursor: pointer; font: inherit; transition: border-color .3s ease, background .3s ease; }
-.dv-t { font: 600 16px/1 var(--font-display); color: #e8201a; }
+.dv-t { font: 600 16px/1 var(--font-display); color: #ff5a53; }   /* #e8201a на карточке #26211c давал 3,5:1, #ff5a53 — 5,2:1 (4,9:1 на #2c2620 у активной) */
 .dv-card b { display: block; margin-top: 10px; font: 500 22px/1.15 var(--font-display); text-transform: uppercase; color: #f5f5f7; }
 .dv-card small { display: block; margin-top: 6px; font-size: 14px; line-height: 1.45; color: #999999; }
 .dv-go { position: absolute; top: 22px; right: 24px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: var(--gray); transition: color .3s ease; }
@@ -1022,3 +1022,62 @@ html.sv-motion { scroll-behavior: auto !important; }
   main.sv .pk-stamp { right: 64px; }
   main.sv .pk-sheet th:last-child, main.sv .pk-sheet td:last-child { padding-right: 56px; }
 }
+
+/* ═══ Баннер cookie и первый экран (16.11.2026) ═══
+   Пока баннер показан, --cookie-h (его высота, ставит base.js) вычитается из первого экрана: главная кнопка и кнопки чертежа
+   остаются над баннером. Вне баннера --cookie-h = 0 и правила ничего не меняют (в Новосибирске баннера нет). --cookie-h объявлена в base.css
+   как <length> с переходом .3 с после «Принять» / «Отклонить» (класс ck-anim), поэтому экран возвращается плавно, без скачка.
+   --ck (0…1, там же) нужна только там, где без неё не обойтись: на невысоких окнах плавно убирает абзац-подводку «Технического проекта». */
+@media (min-width: 1101px) and (min-height: 700px) and (max-height: 1500px) {
+  .sv-scr #top, .vn-hero { height: calc(100svh - var(--cookie-h, 0px)); }
+}
+@media (min-width: 1101px) {
+  /* «стопка листов»: копия сдвигается вверх (центрированный элемент сетки поднимается на половину нижнего поля), веер листов не двигается */
+  .hv-c .hv-c-copy { margin-bottom: calc(var(--cookie-h, 0px) * 1.7); }
+}
+@media (min-width: 1101px) and (max-height: 800px) {
+  .hv-c .hv-c-copy { margin-bottom: calc(var(--cookie-h, 0px) * 4); }
+  .hv-c .sv-lead { overflow: hidden; max-height: calc(320px * (1 - var(--ck, 0))); margin-top: calc(28px * (1 - var(--ck, 0))); }
+}
+@media (min-width: 1101px) and (min-height: 700px) and (max-height: 800px) {
+  /* «Ванная»: на 1280×720 первый экран с абзацем не помещается над баннером, абзац плавно убирается, пока баннер показан */
+  .vn-hero .sv-lead { overflow: hidden; max-height: calc(320px * (1 - var(--ck, 0))); margin-top: calc(28px * (1 - var(--ck, 0))); }
+}
+@media (max-width: 767px) {
+  /* телефон: баннер 103 px, поэтому интервалы первого экрана сжимаются на долю его высоты (общая убыль ≈ 63 px). Только отрицательным нижним полем
+     предыдущего элемента (у всех оно 0), поэтому без баннера (--cookie-h = 0) верстка в точности прежняя; у «Вторички» (.vI) своя схема в vtorichka.css */
+  .sv-hero:not(.vI) .sv-crumbs { margin-bottom: max(-14px, calc(var(--cookie-h, 0px) * -.13)); }
+  .sv-hero:not(.vI) .sv-hero-copy .sv-h1 { margin-bottom: max(-14px, calc(var(--cookie-h, 0px) * -.13)); }
+  .sv-hero:not(.vI) .sv-hero-copy .sv-lead { margin-bottom: max(-20px, calc(var(--cookie-h, 0px) * -.2)); }
+  .sv-hero:not(.vI) .sv-hero-copy .sv-facts { margin-bottom: max(-18px, calc(var(--cookie-h, 0px) * -.16)); }
+  /* длинный лид: пока баннер показан, он на 1,5 px мельче и плотнее (у этих страниц 17 px / 26,35 px) */
+  .sv-hero:not(.vI) .sv-hero-copy .sv-lead { font-size: calc(17px - var(--ck, 0) * 1.5px); line-height: calc(1.55 - var(--ck, 0) * .1); }
+}
+
+/* Ссылка «полные отзывы — на 2ГИС →» в подзаголовке отзывов (16.11.2026): подчёркнутый текст цвета заголовка, отступы по вертикали дают зону нажатия ≥ 44 px (текст не крупнее подзаголовка) */
+.sv-sub-link { padding: 13px 0; color: var(--light-ink); text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; }
+.sv-sub-link:hover { color: var(--red-ink); }
+.sv-sub-link:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+
+/* Почта в тексте страницы ({email} → mailto с темой «Визуализация для сметы», lib/service.js, txt): белый подчёркнутый текст на тёмном, вертикальные поля дают зону нажатия 44 px (инлайновый padding строк не растягивает) */
+.sv-mail { padding: 14px 0; color: #fff; text-decoration: underline; text-underline-offset: 3px; text-decoration-thickness: 1px; overflow-wrap: anywhere; }
+.sv-mail:hover { color: var(--red-text); }
+.sv-mail:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+
+/* ═══ Плавающие кнопки, вторая очередь (16.11.2026) ═══
+   Обход всех 15 страниц на 375 и 390 px нашёл ещё места, где виджет чата и «наверх» (x ≈ 309–367) закрывают строки: лид и подпись первого экрана, пояснения, ответы FAQ,
+   абзацы финального блока и его вторая кнопка, цитаты отзывов, «Протечка», «Лист проекта», список работ. Всем им справа оставлен отступ, как у блоков выше (строки кончаются левее кнопок). */
+@media (max-width: 480px) {
+  main.sv .sv-lead, main.sv .vI-note, main.sv .vt-trust-f, main.sv .sv-faq p, main.sv .sv-cta p, main.sv .sv-cta-row,
+  main.sv .dr-lead, main.sv .vz-sub, main.sv .vz-act p, main.sv .vz-q p, main.sv .vz-frame figcaption, main.sv .vz-cap,
+  main.sv .lk-steps li, main.sv .wk-list li > span, main.sv .dv-card, main.sv .pv-sub, main.sv .dv-sub { padding-right: 56px; }
+  main.sv .sv-rev > p { padding-right: 28px; }
+  main.sv .vt-stage p, main.sv .vz-q footer { padding-right: 56px; }
+  main.sv .vt-skip { margin-right: 56px; }
+  main.sv .sv-sec h2, main.sv .vz h2, main.sv .ky-more, main.sv .vp-hint { padding-right: 56px; }
+  main.sv .sv-qa summary, main.sv .ky-body ul, main.sv .ky-sum-t { padding-right: 56px; }   /* заголовки секций, ссылка «подробнее», подсказка шторки */
+  main.sv .dv-go { right: 68px; }                     /* «Смотреть» в карточке видео: абсолютная, отступ карточки её не сдвигает */
+  main.sv .dv-play { right: 68px; }                   /* кнопка плеера стоит по центру ячейки без правых 56 px: не доходит до кнопок */
+  main.sv .ni-plate { padding-right: 68px; }
+}
+

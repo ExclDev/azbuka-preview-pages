@@ -258,13 +258,12 @@ let popupOpener = null;
 /* Форма записи: тот же попап и та же форма popupFormInner, меняются заголовок, подпись и набор полей.
    booking = { title, note, date, complex } приходит со страницы (window.AZ_PAGE.booking, front matter).
    Без booking попап обычный: «Оставить заявку», площадь и вид ремонта. */
-/* Обычный режим: заголовок и подпись выбираются по фрагменту строки-триггера (сами строки уходят в CRM
-   в поле «кнопка» и не меняются). Нет совпадения — вариант по умолчанию. */
+/* Обычный режим. Главные кнопки заявки страницы зовут openPopup(trigger, null, 'page'): заголовок и подпись берутся
+   у страницы (window.AZ_PAGE.request = { label, title, note }, словарь src/_data/requests.json), а не из надписи кнопки.
+   У остальных кнопок (шапка, подвал, «Обратный звонок», «Заказать по акции») текст выбирается по фрагменту строки-триггера:
+   POPUP_TEXTS ниже — запасной вариант (сами строки уходят в CRM в поле «кнопка» и не меняются). Нет совпадения — вариант по умолчанию. */
 const POPUP_TEXTS = [
-  { match: 'Получить бесплатную смету', title: 'Посчитаем смету бесплатно', note: 'Приедем на замер и за 24 часа пришлём предварительную смету.' },
-  { match: 'Получить смету за 24 часа', title: 'Смета за 24 часа', note: 'Приедем на замер и через 24 часа после него пришлём предварительную смету. Бесплатно.' },
-  { match: 'Заказать замер ванной', title: 'Замер ванной', note: 'Приедем, посмотрим трубы и расскажем, из чего сложится цена.' },
-  { match: 'Обсудить проект', title: 'Обсудим ваш проект', note: 'Расскажем, что входит в технический проект, и договоримся о замере.' },
+  { match: 'Получить смету', title: 'Смета после замера', note: 'Приедем на замер и через 24 часа пришлём предварительную смету. Бесплатно.' },
   { match: 'Заказать по акции', title: 'Технический проект за полцены', note: 'Скидка 50% действует, если ремонт делаем мы.' },
   { match: 'Обратный звонок', title: 'Перезвоним вам', note: 'Оставьте номер, перезвоним в рабочее время.' }
 ];
@@ -273,10 +272,11 @@ function popupTextFor(trigger) {
   const t = String(trigger || '');
   return POPUP_TEXTS.find(x => t.indexOf(x.match) !== -1) || POPUP_TEXT_DEFAULT;
 }
-function setPopupMode(booking, trigger) {
+function setPopupMode(booking, trigger, kind) {
   const form = document.getElementById('popupFormInner');
   const on = !!booking;
-  const txt = on ? { title: booking.title || 'Запись', note: booking.note || '' } : popupTextFor(trigger);
+  const rq = !on && kind === 'page' && window.AZ_PAGE && window.AZ_PAGE.request;
+  const txt = on ? { title: booking.title || 'Запись', note: booking.note || '' } : (rq && rq.title ? { title: rq.title, note: rq.note || '' } : popupTextFor(trigger));
   form.dataset.mode = on ? 'booking' : '';
   form.dataset.title = on ? txt.title : '';
   document.getElementById('popup-heading').textContent = txt.title;
@@ -295,9 +295,9 @@ function setPopupMode(booking, trigger) {
     dateEl.min = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   }
 }
-function openPopup(trigger, booking) {
+function openPopup(trigger, booking, kind) {
   popupOpener = document.activeElement;
-  setPopupMode(booking, trigger);
+  setPopupMode(booking, trigger, kind);
   overlay.classList.add('open');
   document.documentElement.classList.add('scroll-locked');
   document.getElementById('popupFormBox').style.display = '';
@@ -668,8 +668,25 @@ function openVideo(id) {
   function syncCookieH() {
     var h = banner.classList.contains('cookie-banner--hidden') ? 0 : banner.offsetHeight;
     document.documentElement.style.setProperty('--cookie-h', h + 'px');
+    document.documentElement.style.setProperty('--ck', h ? '1' : '0');
+    document.documentElement.classList.toggle('ck-on', !!h);   /* пока баннер показан: скрытое им (крошки, вторая кнопка) недоступно и для клавиатуры, см. vtorichka.css */
   }
-  function close() { banner.classList.add('cookie-banner--hidden'); syncCookieH(); }
+  /* «Принять» / «Отклонить»: баннер уезжает вниз, --cookie-h за те же 0,3 с плавно идёт в 0 (первый экран возвращается без скачка),
+     потом баннер скрывается. При prefers-reduced-motion без перехода. */
+  function close() {
+    var root = document.documentElement;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { banner.classList.add('cookie-banner--hidden'); syncCookieH(); return; }
+    root.classList.add('ck-anim');
+    root.classList.remove('ck-on');
+    banner.classList.add('cookie-banner--closing');
+    root.style.setProperty('--cookie-h', '0px');
+    root.style.setProperty('--ck', '0');
+    setTimeout(function () {
+      banner.classList.add('cookie-banner--hidden');
+      banner.classList.remove('cookie-banner--closing');
+      root.classList.remove('ck-anim');
+    }, 320);
+  }
   if (!read()) {
     banner.classList.remove('cookie-banner--hidden');
     syncCookieH();
