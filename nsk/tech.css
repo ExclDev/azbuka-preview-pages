@@ -48,3 +48,10 @@
 
 /* Г. Иерархия заголовка: «Технический проект» крупно, продолжение — строкой поменьше */
 .tx-title #tech-title .mo-line:nth-child(n+2) { font-size: .46em; line-height: 1.2; margin-top: .3em; }
+
+/* Кнопка «Подробнее о техническом проекте» (sections/tech.njk, только когда страница есть в сборке): под списком, слева по сетке текста; «Показать полностью» (телефон) идёт выше неё */
+.tech-actions { display: flex; flex-direction: column; align-items: flex-start; gap: 12px; margin-top: 24px; }
+.tech-actions .btn-dark { margin: 0; }
+.tx-list .tech-actions { margin-top: 28px; }
+.tech-more { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; text-align: center; text-decoration: none; }
+@media (max-width: 480px) { .tech-more { align-self: stretch; } }
