@@ -2,7 +2,7 @@
    Первый экран «Показал и снял» (.eb-, blocks/hero-show.njk) и лист точек «Каждую трассу снимаем» (.ca-, blocks/sheet.njk).
    Перенесено из макетов brand/maket-elektro-{nsk,tomsk}-2026-11-16 (el.css). Подключает layouts/service.njk, когда задан hero.show или sheet.
    Сетка листа приходит переменными секции (sheetGrid в lib/service.js): --cd/--rd (столбцы и строки, компьютер), --cm/--rm (телефон),
-   --lcd/--lrd и --lcm/--lrm (линии клетки последнего кадра), --rhm (высота строки на телефоне), --st (шаг анимации = 100% / число кадров).
+   --lcd/--lrd и --lcm/--lrm (линии клетки последнего кадра), --rhm (высота строки на телефоне). Лист меняется по нажатию, шкал прокрутки у него нет.
    Отличия от макета: шапка на сайте фиксированная, поэтому секция начинается с отступа --sv-top, кадры прилипают на top: var(--sv-top) и считаются от высоты окна без шапки и баннера cookie.
    На прилипших слоях нет filter, blur и размытых теней; анимируются transform и opacity. */
 
@@ -42,53 +42,33 @@
 @keyframes ebIn{from{transform:translateY(105%)}to{transform:none}}
 @keyframes ebBar{from{transform:scaleX(0)}to{transform:scaleX(1)}}
 
-/* ─── Лист точек «Каждую трассу снимаем»: прокрутка ведёт красную рамку по сетке ─── */
-.ca{position:relative;--st:10%;--cd:5;--rd:3;--cm:4;--rm:3;--lcd:4/6;--lrd:1/4;--lcm:4/5;--lrm:1/4;view-timeline:--t-scope block,--ca block}
+/* ─── Лист точек «Каждую трассу снимаем»: кадр меняется по нажатию на миниатюру (elektromontazh.js) ───
+   Секция обычной высоты. Новый крупный кадр проявляется поверх прежнего (прежний держится, пока новый не проявился, провала в фон нет), рамка и подпись переходят на выбранный. */
+.ca{position:relative;--cd:5;--rd:3;--cm:4;--rm:3;--lcd:4/6;--lrd:1/4;--lcm:4/5;--lrm:1/4}
 .ca-head{padding-top:var(--section-pad,96px)}
-.ca-pin{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(16px,2vw,32px);height:min(86svh,820px);padding:clamp(20px,3svh,40px) var(--px,28px) var(--section-pad,96px)}
+.ca-wrap{padding:clamp(20px,3svh,40px) var(--px,28px) var(--section-pad,96px)}
+.ca-body{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(16px,2vw,32px);height:min(80svh,760px)}
 .ca-view{position:relative;border-radius:16px;overflow:hidden;background:#28231e}
-.ca-view figure{position:absolute;inset:0;margin:0;opacity:0}
-.ca-view figure:first-child{opacity:1}
+.ca-view figure{position:absolute;inset:0;margin:0;opacity:0;z-index:1;transition:opacity .3s ease}
+.ca-view figure.is-on{opacity:1}
+.ca-view figure.is-top{z-index:2}
 .ca-view img{width:100%;height:100%;object-fit:cover}
 .ca-side{display:flex;flex-direction:column;gap:14px;min-height:0}
 .ca-sheet{flex:1;min-height:0;display:grid;grid-template-columns:repeat(var(--cd),minmax(0,1fr));grid-template-rows:repeat(var(--rd),minmax(0,1fr));gap:8px}
-.ca-sheet figure{position:relative;margin:0;border-radius:8px;overflow:hidden;background:#28231e}
+.ca-t{position:relative;display:block;margin:0;padding:0;border:0;border-radius:8px;overflow:hidden;background:#28231e;color:#fff;cursor:pointer;font:inherit;-webkit-tap-highlight-color:transparent}
 /* последний кадр — крупная клетка в правом нижнем углу, остальные ложатся вокруг по строкам; данные сетки проверяет sheetGrid */
-.ca-sheet figure:last-child{grid-column:var(--lcd);grid-row:var(--lrd)}
-.ca-sheet img{width:100%;height:100%;object-fit:cover}
-.ca-sheet figure::after{content:"";position:absolute;inset:0;border:3px solid #e8201a;border-radius:8px;opacity:0}
-.ca-sheet b{position:absolute;left:6px;top:5px;font:600 12px/1 var(--font-display);color:#fff;font-variant-numeric:tabular-nums}
-.ca-caps{position:relative;min-height:64px;color:#fff}
-.ca-caps p{position:absolute;inset:0;margin:0;display:flex;align-items:baseline;gap:14px;opacity:0}
-.ca-caps p:first-child{opacity:1}
-.ca-caps em{font:700 15px/1 var(--font-display);font-style:normal;color:#a59d95;font-variant-numeric:tabular-nums;white-space:nowrap}.ca-caps em b{color:#fff}
-.ca-caps span{font:700 clamp(20px,1.7vw,28px)/1.1 var(--font-display);text-transform:uppercase}
+.ca-t:last-child{grid-column:var(--lcd);grid-row:var(--lrd)}
+.ca-t img{display:block;width:100%;height:100%;object-fit:cover;opacity:.6;transition:opacity .2s ease}
+.ca-t:hover img,.ca-t.is-on img{opacity:1}
+.ca-t::after{content:"";position:absolute;inset:0;border:3px solid #e8201a;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .2s ease}
+.ca-t.is-on::after{opacity:1}
+.ca-t:focus-visible{outline:2px solid #fff;outline-offset:2px}
+.ca-t b{position:absolute;left:6px;top:5px;font:600 12px/1 var(--font-display);color:#fff;font-variant-numeric:tabular-nums;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.ca-cap{position:relative;min-height:64px;margin:0;display:flex;align-items:baseline;gap:14px;color:#fff}
+.ca-cap em{font:700 15px/1 var(--font-display);font-style:normal;color:#a59d95;font-variant-numeric:tabular-nums;white-space:nowrap}.ca-cap em b{color:#fff}
+.ca-cap span{font:700 clamp(20px,1.7vw,28px)/1.1 var(--font-display);text-transform:uppercase}
 .ca .section-tag{color:#ff4a43}
-@supports (animation-timeline: view()){
-@media (prefers-reduced-motion:no-preference){
-  .ca{height:calc(100svh + 340svh)}
-  .ca-pin{position:sticky;top:var(--sv-top);box-sizing:border-box;height:calc(100svh - var(--sv-top) - var(--cookie-h,0px));padding-bottom:clamp(20px,3svh,40px)}
-  /* кадр проявляется поверх предыдущего, без провала в фон на стыке: предыдущий остаётся под ним полностью непрозрачным */
-  .ca-view figure{opacity:0;animation:caIn linear both;animation-timeline:--ca;animation-range:contain calc(var(--i)*var(--st) - 1.5%) contain calc(var(--i)*var(--st) + var(--st))}
-  .ca-view figure:first-child{opacity:1;animation:none}
-  .ca-sheet figure::after{opacity:0;animation:caShow linear both;animation-timeline:--ca;animation-range:contain calc(var(--i)*var(--st)) contain calc(var(--i)*var(--st) + var(--st))}
-  .ca-sheet figure:first-child::after{animation-name:caFirst}
-  .ca-sheet figure:last-child::after{animation-name:caLast}
-  /* подписи: плавная смена около 2 % шкалы (±1 % у границы кадров), новая проявляется, пока старая гаснет, подписи нет совсем не бывает.
-     Две анимации на подпись: проявление (до и после диапазона держит 0 и 1) и затухание (только после своего диапазона, до него не вмешивается); у первой нет проявления, у последней затухания */
-  .ca-caps p{opacity:0;animation:caCapIn linear both,caCapOut linear forwards;animation-timeline:--ca,--ca;
-    animation-range:contain calc(var(--i)*var(--st) - 1%) contain calc(var(--i)*var(--st) + 1%),contain calc(var(--i)*var(--st) + var(--st) - 1%) contain calc(var(--i)*var(--st) + var(--st) + 1%)}
-  .ca-caps p:first-child{opacity:1;animation:caCapOut linear forwards;animation-timeline:--ca;animation-range:contain calc(var(--st) - 1%) contain calc(var(--st) + 1%)}
-  .ca-caps p:last-child{animation:caCapIn linear both;animation-timeline:--ca;animation-range:contain calc(var(--i)*var(--st) - 1%) contain calc(var(--i)*var(--st) + 1%)}
-  .ca-sheet img{opacity:.55;animation:caDim linear both;animation-timeline:--ca;animation-range:contain calc(var(--i)*var(--st)) contain calc(var(--i)*var(--st) + var(--st))}
-}}
-@keyframes caShow{0%,100%{opacity:0}4%,96%{opacity:1}}
-@keyframes caIn{0%{opacity:0}20%,100%{opacity:1}}
-@keyframes caFirst{0%,94%{opacity:1}100%{opacity:0}}
-@keyframes caLast{0%{opacity:0}6%,100%{opacity:1}}
-@keyframes caCapIn{from{opacity:0}to{opacity:1}}
-@keyframes caCapOut{from{opacity:1}to{opacity:0}}
-@keyframes caDim{0%{opacity:.55}6%,100%{opacity:1}}
+@media (prefers-reduced-motion:reduce){.ca-view figure,.ca-t img,.ca-t::after{transition:none}}
 
 @media (max-width:899px){
   .eb-pin{grid-template-columns:minmax(0,1fr);grid-template-rows:44% minmax(0,1fr);padding:12px 16px 16px}
@@ -96,10 +76,12 @@
   .eb-plate{padding:22px 20px;gap:14px}.eb-plate .sv-crumbs{display:none}
   .eb-h1{font-size:clamp(26px,7.8vw,40px)}
   .eb-c figcaption{padding:14px 16px}.eb-c figcaption small{display:none}
-  .ca-pin{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto;padding-left:16px;padding-right:16px}
+  .ca-wrap{padding-left:16px;padding-right:16px}
+  .ca-body{grid-template-columns:minmax(0,1fr);height:auto}
+  .ca-view{height:min(120vw,64svh)}
   .ca-sheet{flex:none;grid-template-columns:repeat(var(--cm),minmax(0,1fr));grid-template-rows:repeat(var(--rm),var(--rhm,44px));gap:6px}
-  .ca-sheet figure:last-child{grid-column:var(--lcm);grid-row:var(--lrm)}
-  .ca-caps{min-height:56px}.ca-caps span{font-size:18px}
+  .ca-t:last-child{grid-column:var(--lcm);grid-row:var(--lrm)}
+  .ca-cap{min-height:56px}.ca-cap span{font-size:18px}
 }
 @media (max-width:899px) and (prefers-reduced-motion:no-preference){@supports (animation-timeline: view()){.eb-f{min-height:0}}}
 
@@ -107,5 +89,5 @@
 @media (max-width:480px){
   main.sv .eb-lead{padding-right:56px}
   main.sv .eb-c figcaption{padding-right:56px}
-  main.sv .ca-caps p{right:56px}
+  main.sv .ca-cap{padding-right:56px}
 }

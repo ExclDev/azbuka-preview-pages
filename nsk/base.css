@@ -145,6 +145,7 @@
   --font-body:    'Inter', 'Inter Fallback', 'Inter Fallback Roboto', sans-serif;
   --max: 100%;
   --px: clamp(16px, 2vw, 28px);
+  --hdr-inner: 72px;      /* высота самой шапки (без полосы города); меняется в медиа-запросах вместе с .header-inner, от неё и от --city-bar-h считаются отступы первых экранов */
   --section-pad: 96px;    
   --section-pad-mobile: 56px;
   --radius-sm:   6px;     
@@ -230,7 +231,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   flex-wrap: nowrap;
   align-items: center;
   justify-content: space-between;
-  height: 72px;
+  height: var(--hdr-inner, 72px);
   gap: 24px;
 }
 .header-logo img { height: 44px; width: auto; }
@@ -344,7 +345,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       --px: 32px;
       --section-pad: 140px;
     }
-  .header-inner { height: 88px; }
+  :root { --hdr-inner: 88px; }
+  .header-inner { height: var(--hdr-inner); }
   .header-logo img { height: 56px; }
   .header-nav { gap: 40px; }
   .header-nav a { font-size: 15px; }
@@ -361,7 +363,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
       --px: 28px;
       --section-pad: 120px;
     }
-  .header-inner { height: 80px; }
+  :root { --hdr-inner: 80px; }
+  .header-inner { height: var(--hdr-inner); }
   .header-logo img { height: 50px; }
   .header-nav { gap: 36px; }
   .header-nav a { font-size: 14px; }
@@ -398,7 +401,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 @media (max-width: 768px) {
   :root { --px: 20px; --section-pad: var(--section-pad-mobile); }
-  .header-inner { height: 64px; gap: 12px; }
+  :root { --hdr-inner: 64px; }
+  .header-inner { height: var(--hdr-inner); gap: 12px; }
   .header-logo img { height: 36px; width: auto; }
   .header-logo { flex-shrink: 0; }
   .header-nav, .header-socials { display: none; }
@@ -416,7 +420,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 @media (max-width: 480px) {
   :root { --px: 16px; }
-  .header-inner { height: 60px; gap: 10px; }
+  :root { --hdr-inner: 60px; }
+  .header-inner { height: var(--hdr-inner); gap: 10px; }
   .header-logo img { height: 32px; }
   .header-phone a { font-size: 13px; }
   .mobile-menu { top: 60px; }
@@ -925,6 +930,9 @@ html.ck-anim { transition: --cookie-h .3s cubic-bezier(.4, 0, .2, 1), --ck .3s c
   transition: opacity .28s ease, transform .42s var(--nvx-ease), visibility 0s linear .28s;
 }
 .nvx-pane.is-on { opacity: 1; visibility: visible; transform: none; transition: opacity .28s ease .06s, transform .42s var(--nvx-ease), visibility 0s; }
+/* видимость потомка сильнее видимости родителя: без этого активный pane оставался visible внутри закрытой (прозрачной, visibility: hidden) панели и перехватывал нажатия под шапкой.
+   Закрытая панель скрывает и активный pane, с той же задержкой видимости (.25s), чтобы затухание осталось; при открытии правило не действует и pane показывается сразу */
+.nvx-panel:not(.is-open) .nvx-pane { visibility: hidden; pointer-events: none; transition: opacity .28s ease, transform .42s var(--nvx-ease), visibility 0s linear .25s; }
 .nvx-col { width: max-content; min-width: 220px; max-width: 340px; }
 .nvx-group { margin: 4px 0 12px; font: 600 12px/1.2 var(--font-body); letter-spacing: .12em; text-transform: uppercase; color: var(--nvx-mute); }
 .nvx-links { display: flex; flex-direction: column; gap: 2px; margin: 0; padding: 0; list-style: none; }

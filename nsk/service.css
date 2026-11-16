@@ -18,14 +18,12 @@
   --red-a10:    rgba(232, 32, 26, .10);
   --red-a12:    rgba(232, 32, 26, .12);
   --red-a50:    rgba(232, 32, 26, .50);
-  --sv-top: 108px;         /* шапка 72 + панель города 36: контент первого экрана начинается ниже */
+  --sv-top: calc(var(--city-bar-h, 36px) + var(--hdr-inner, 72px));   /* панель города + шапка: контент первого экрана начинается ниже; те же переменные, что двигают шапку (base.css). Раньше числами 108 / 116 / 124 / 100 / 96: на телефоне полоса города 44 px, а не 36, и контент заходил под шапку на 8–9 px */
   --ed-sec: clamp(36px, 6vw, 72px);
   --sv-ease: cubic-bezier(.16, 1, .3, 1);
 }
-@media (min-width: 1920px) { :root { --sv-top: 116px; --ed-sec: 87px; } }
-@media (min-width: 2560px) { :root { --sv-top: 124px; --ed-sec: 96px; } }
-@media (max-width: 768px)  { :root { --sv-top: 100px; } }
-@media (max-width: 480px)  { :root { --sv-top: 96px; } }
+@media (min-width: 1920px) { :root { --ed-sec: 87px; } }
+@media (min-width: 2560px) { :root { --ed-sec: 96px; } }
 
 /* копии из home.css */
 html.scroll-locked { overflow-y: hidden; }

@@ -84,10 +84,13 @@ html.scroll-locked { overflow-y: hidden; }
   min-height: 100svh;
   display: flex;
   align-items: center;
+  align-items: safe center;   /* при нехватке высоты экран растёт вниз, содержимое не уходит за верх под шапку */
   padding-bottom: 80px;
-  padding-top: 72px;
+  /* отступ сверху = шапка + полоса города (когда она видна) + воздух; те же переменные, что двигают шапку (--hdr-inner в base.css, --city-bar-h) */
+  padding-top: calc(var(--hdr-inner, 72px) + 20px);
   overflow: hidden;
 }
+body.city-bar-visible .hero { padding-top: calc(var(--city-bar-h, 36px) + var(--hdr-inner, 72px) + 20px); }
 .hero-bg {
   position: absolute; inset: 0; z-index: 1;
   background:
@@ -426,7 +429,7 @@ html.scroll-locked { overflow-y: hidden; }
   .contacts-info { padding: 40px 32px; }
 }
 @media (max-width: 768px) {
-  .hero { padding-top: 64px; padding-bottom: 48px; align-items: flex-end; }
+  .hero { padding-bottom: 48px; align-items: flex-end; align-items: safe flex-end; }
   .hero-title { font-size: clamp(30px, 7.2vw, 52px); margin-bottom: 28px; }
   .hero-badges { flex-direction: column; gap: 10px; margin-bottom: 28px; }
   .hero-badge { padding: 10px 14px; }

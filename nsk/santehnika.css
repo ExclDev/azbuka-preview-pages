@@ -4,8 +4,8 @@
    Отличия от макета: шапка на сайте фиксированная, поэтому прилипший кадр первого экрана и «Протечки» начинается под ней (top: --sv-top, высота 100svh − --sv-top), а не от края окна.
    Движение первого экрана и смену строк «Протечки» ведут CSS-анимации на шкале прокрутки (ключевые кадры первого экрана пишет santehnika.js по геометрии экрана).
    Наезд отзывов и вопросов — общий режим steps.panelDirs в service.css, здесь его нет. На прилипших слоях нет filter, blur и размытых теней. */
-#top.ni{position:relative;box-sizing:border-box;height:460svh;display:block;padding:var(--sv-top) 0 0;background:#0f0d0b;scroll-margin-top:0}
-.ni-pin{position:sticky;top:var(--sv-top);height:calc(100svh - var(--sv-top));overflow:hidden;background:#0f0d0b}
+#top.ni{position:relative;box-sizing:border-box;height:460svh;display:block;padding:var(--header-h) 0 0;background:#0f0d0b;scroll-margin-top:0}
+.ni-pin{position:sticky;top:var(--header-h);height:calc(100svh - var(--header-h));overflow:hidden;background:#0f0d0b}
 .ni-cam{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
 .ni-cam img{position:absolute;max-width:none}
 .ni-vid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:var(--vo,0)}
@@ -63,7 +63,7 @@
 
 /* ═══ Ночь. Протечка: видео кранов прилипает, три строки сменяют друг друга ═══ */
 .lk{position:relative;height:300svh;background:#f5f5f7;color:#161310}
-.lk-pin{position:sticky;top:var(--sv-top);height:calc(100svh - var(--sv-top));display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);overflow:hidden}
+.lk-pin{position:sticky;top:var(--header-h);height:calc(100svh - var(--header-h));display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);overflow:hidden}
 .lk-media{position:relative;background:#161310}
 .lk-media video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .lk-snd{position:absolute;left:20px;bottom:20px;z-index:2;display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 18px 0 14px;border:0;border-radius:999px;background:#161310;color:#fff;font:600 14px/1 var(--font-display);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:background-color .2s}
@@ -127,7 +127,7 @@
 @media (prefers-reduced-motion:reduce){
   .ni-pin-i,.ni-side li,.cr-dots i,.lk-steps li,.lk-dots i{transition:none}
   #top.ni{height:auto}
-  .ni-pin{position:relative;top:auto;height:max(560px,calc(100svh - var(--sv-top)))}
+  .ni-pin{position:relative;top:auto;height:max(560px,calc(100svh - var(--header-h)))}
   .ni-hint,.ni-end{display:none}
   .ni-prog{display:none}
 }
@@ -146,3 +146,5 @@
   .ni-skip{display:inline-flex;align-items:center;position:absolute;top:12px;right:16px;z-index:4;min-height:44px;padding:0 14px;border-radius:999px;background:#161310;color:#fff;font-size:14px;text-decoration:underline;text-underline-offset:3px;opacity:var(--po,1)}
   .ni-skip:focus-visible{outline:2px solid var(--red);outline-offset:3px}
 }
+/* низкий экран телефона (баннер cookie ещё может быть показан): плашка стоит от низа и с лидом не помещалась под шапку, заголовок уходил под неё; лид скрыт, плашка из заголовка и кнопки */
+@media (max-width:768px) and (max-height:700px) and (prefers-reduced-motion:no-preference){ .ni-lead{display:none} }
