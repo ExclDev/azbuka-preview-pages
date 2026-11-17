@@ -1,0 +1,217 @@
+/* portfolio.css: страница объекта портфолио («Квартира на Красноармейской», layouts/object.njk).
+   Подключается после service.css, только на этой странице. Источник: макет brand/maket-portfolio-krasnoarmejskaya-2026-11-16 (gl.css).
+   Общее (заголовки секций, divider, .btn-outline, крошки, финальный блок, .sv-ph) берётся из service.css, здесь не повторяется.
+   Движение только на CSS: keyframes и view-timeline. Без blur и затемнений поверх движущихся слоёв; градиент только у подписей плиток и карточек.
+   Первый экран не имеет id="top": на #top в service.css висят правила первого экрана услуг. */
+
+/* ═══ Первый экран: текст слева, справа две колонны роликов плывут навстречу ═══ */
+.gh { position: relative; padding-top: var(--sv-top); background: var(--bg); color: #fff; overflow: hidden; }
+.gh .gh-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .92fr); gap: clamp(32px, 4vw, 72px); align-items: center;
+  min-height: min(900px, calc(100svh - var(--sv-top) - var(--cookie-h, 0px))); padding-bottom: clamp(24px, 4svh, 48px); }
+.gh-text { padding-top: 8px; }
+.gh-tag { margin-top: clamp(20px, 4svh, 48px); color: var(--red-text); }
+.gh-h1 { margin: 6px 0 0; font: 600 clamp(40px, 5.6vw, 92px)/.94 var(--font-display); text-transform: uppercase; letter-spacing: -.01em; text-wrap: balance; }
+/* «Ё» не режется маской строки: тот же отступ, что у H1 услуг (service.css, --ln-pad) */
+.gh-h1 .ln { display: block; overflow: hidden; padding-top: var(--ln-pad, .18em); margin-top: calc(var(--ln-pad, .18em) * -1); }
+.gh-h1 .ln > span { display: block; }
+.gh-h1 .red { color: var(--red); }
+.gh .divider { margin: 22px 0 0; }
+.gh-lead { max-width: 50ch; margin: 22px 0 0; font-size: clamp(16px, 1.2vw, 19px); line-height: 1.55; color: #ccc; }
+.gh-facts { display: grid; grid-template-columns: repeat(5, auto); justify-content: start; margin: 28px 0 0; padding: 0; list-style: none; border-top: 1px solid rgba(255,255,255,.1); }
+.gh-facts li { padding: 14px 18px 0 0; }
+.gh-facts li + li { padding-left: 18px; border-left: 1px solid rgba(255,255,255,.1); }
+.gh-facts small { display: block; font-size: 13px; color: #9A928A; }
+.gh-facts b { display: block; margin-top: 4px; font: 500 17px/1.25 var(--font-display); text-transform: uppercase; }
+.gh .sv-ctas { margin-top: 30px; }
+
+/* две колонны: A вверх за 60 с, B вниз за 72 с; набор карточек повторён дважды, сдвиг −50 %; сверху и снизу маска-затухание (не затемнение слоя) */
+.gh-wall { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
+  height: min(860px, calc(100svh - var(--sv-top) - 24px - var(--cookie-h, 0px))); overflow: hidden;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 9%, #000 91%, transparent); mask-image: linear-gradient(to bottom, transparent, #000 9%, #000 91%, transparent); }
+.gh-col { min-width: 0; }
+.gh-run { display: flex; flex-direction: column; will-change: transform; animation: ghUp 60s linear infinite; }
+.gh-col.down .gh-run { animation-name: ghDown; animation-duration: 72s; }
+.gh-wall:hover .gh-run { animation-play-state: paused; }
+@keyframes ghUp { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+@keyframes ghDown { from { transform: translateY(-50%); } to { transform: translateY(0); } }
+.gh-card { position: relative; margin: 0 0 16px; aspect-ratio: 9 / 16; border-radius: var(--radius-lg); overflow: hidden; background: linear-gradient(160deg, #2b231d, #130f0c); border: 1px solid var(--border); }
+.gh-card video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.gh-card figcaption { position: absolute; left: 12px; bottom: 12px; padding: 7px 12px; border-radius: var(--radius-pill); background: var(--bg); font: 500 13px/1 var(--font-display); letter-spacing: .04em; text-transform: uppercase; }
+
+/* ═══ «Квартира по комнатам»: стена фото, фильтры-пилюли ═══ */
+.gl { background: var(--bg); color: #fff; padding-top: clamp(56px, 8svh, 96px); padding-bottom: 0; }
+.gl-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 20px 40px; }
+.gl .section-tag { color: var(--red-text); }
+.gl-title { font-size: clamp(32px, 4.4vw, 64px); }
+.gl .divider { margin-bottom: 0; }
+.gl-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.gl-chip { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px; border-radius: var(--radius-pill); border: 1px solid rgba(255,255,255,.16); background: transparent; color: #ccc; font: 600 14px/1 var(--font-body); cursor: pointer; transition: background .25s, color .25s, border-color .25s; }
+.gl-chip i { font-style: normal; font-weight: 400; color: #9A928A; font-variant-numeric: tabular-nums; }
+.gl-chip:hover { border-color: #fff; color: #fff; }
+.gl-chip.on { background: #fff; border-color: #fff; color: #161310; }
+.gl-chip.on i { color: #6b645d; }
+.gl-chip:focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+
+/* запас снизу и минимальная высота: сдвинутая колонка не заходит на следующую секцию, а при фильтре на 2 кадра страница не схлопывается */
+.gl-wall { display: flex; align-items: flex-start; gap: 14px; margin-top: 40px; padding: 0 var(--px) 100px; min-height: min(900px, 100svh); view-timeline: --glw block; }
+.gl-col { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+.gl-t { position: relative; display: block; width: 100%; margin: 0; padding: 0; border: 0; border-radius: var(--radius-lg); overflow: hidden; background: #1f1b17; color: #fff; text-align: left; cursor: zoom-in; }
+.gl-t[hidden] { display: none; }
+.gl-m { position: relative; display: block; aspect-ratio: 3 / 4; }
+.gl-l .gl-m { aspect-ratio: 4 / 3; }
+.gl-m img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 1.2s cubic-bezier(.2,.7,.1,1); }
+.gl-t:hover .gl-m img { transform: scale(1.05); }
+/* подпись внизу на градиенте (как av-caption на главной); градиент только у подписи, не у слоя */
+.gl-cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 44px 16px 14px; background: linear-gradient(to top, rgba(0,0,0,.78), transparent); }
+.gl-cap b { display: block; font: 500 16px/1.2 var(--font-display); text-transform: uppercase; }
+.gl-cap span { display: block; margin-top: 3px; font-size: 13px; line-height: 1.35; color: #ccc; }
+.gl-x { position: absolute; right: 12px; top: 12px; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--bg); color: #fff; opacity: 0; transform: scale(.8); transition: opacity .25s, transform .35s cubic-bezier(.16,1,.3,1), background .2s; }
+.gl-x svg { width: 16px; height: 16px; }
+.gl-t:hover .gl-x, .gl-t:focus-visible .gl-x { opacity: 1; transform: none; }
+.gl-t:hover .gl-x { background: var(--red); }
+.gl-t:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+::view-transition-group(*) { animation-duration: .55s; animation-timing-function: cubic-bezier(.16,1,.3,1); }
+
+/* движение стены только там, где есть view(), и если не просили убрать анимацию: чётные колонны плывут от +90 до −90 px, плитки проявляются при входе */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .gl-col:nth-child(even) { animation: glShift linear both; animation-timeline: --glw; animation-range: cover 0% cover 100%; }
+    .gl-t { animation: glIn linear both; animation-timeline: view(); animation-range: entry 0% entry 80%; }
+  }
+}
+@keyframes glShift { from { transform: translateY(90px); } to { transform: translateY(-90px); } }
+@keyframes glIn { from { clip-path: inset(22% 0 0 0 round 20px); transform: translateY(48px); } to { clip-path: inset(0 0 0 0 round 20px); transform: none; } }
+
+/* ═══ «Обход квартиры»: светлая секция, карточки как av-card главной ═══ */
+.gl-reels { background: var(--light-bg); color: var(--light-ink); padding: var(--section-pad) 0; }
+.gl-reels .section-title { color: var(--light-ink); }
+.gl-reels .section-tag { color: var(--red-ink); }
+.gl-rail { display: flex; gap: 18px; margin-top: 40px; padding: 4px var(--px) 16px; overflow-x: auto; scroll-snap-type: x proximity; scroll-padding-inline: var(--px); scrollbar-width: thin; scrollbar-color: #ccc transparent; }
+.gl-reel { position: relative; flex: 0 0 auto; width: auto; height: min(520px, 62svh); aspect-ratio: 9 / 16; padding: 0; border: 0; border-radius: var(--radius-lg); overflow: hidden; background: #1f1b17; color: #fff; scroll-snap-align: start; cursor: pointer; text-align: left; }
+.gl-reel-l { aspect-ratio: 16 / 9; }
+.gl-reel .av-video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.gl-reel .av-play-badge { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%; background: var(--bg); color: #fff; transition: transform .3s cubic-bezier(.16,1,.3,1), background .2s; }
+.gl-reel .av-play-badge svg { width: 22px; height: 22px; margin-left: 3px; }
+.gl-reel:hover .av-play-badge { transform: translate(-50%, -50%) scale(1.1); background: var(--red); }
+.gl-reel .av-caption { position: absolute; left: 0; right: 0; bottom: 0; padding: 44px 18px 16px; background: linear-gradient(to top, rgba(0,0,0,.8), transparent); color: #fff; font: 500 18px/1.25 var(--font-display); text-transform: uppercase; }
+.gl-reel .av-caption span { display: block; margin-top: 4px; font: 400 13px/1.35 var(--font-body); text-transform: none; color: #ccc; }
+.gl-reel:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+
+/* ═══ Просмотр во весь экран (по стилю portfolio-modal главной) ═══ */
+.gl-lb { position: fixed; inset: 0; z-index: 10000; display: grid; grid-template-columns: 72px minmax(0, 1fr) 72px; grid-template-rows: minmax(0, 1fr) auto; align-items: center; padding: 24px 16px 18px; background: rgba(10,8,7,.96); color: #fff; }
+.gl-lb[hidden] { display: none; }
+.gl-lb.open .gl-lb-fig { animation: lbIn .35s cubic-bezier(.16,1,.3,1); }
+@keyframes lbIn { from { opacity: 0; transform: scale(.97); } to { opacity: 1; transform: none; } }
+.gl-lb-fig { grid-column: 2; grid-row: 1; display: flex; flex-direction: column; align-items: center; min-height: 0; height: 100%; margin: 0; }
+.gl-lb-stage { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; width: 100%; }
+.gl-lb-stage img, .gl-lb-stage video { max-width: 100%; max-height: 100%; border-radius: var(--radius-lg); object-fit: contain; background: #000; }
+.gl-lb-fig figcaption { display: flex; flex-direction: column; align-items: center; gap: 4px; padding-top: 14px; text-align: center; }
+.gl-lb-fig b { font: 600 20px/1.2 var(--font-display); letter-spacing: .04em; text-transform: uppercase; }
+.gl-lb-fig span { font-size: 14px; color: #aaa; }
+.gl-lb-fig em { font-style: normal; font-size: 12px; letter-spacing: .14em; color: #9A928A; font-variant-numeric: tabular-nums; }
+.gl-lb-arrow, .gl-lb-close { display: grid; place-items: center; width: 48px; height: 48px; border: 0; border-radius: 50%; background: rgba(255,255,255,.1); color: #fff; cursor: pointer; transition: background .2s, transform .2s; }
+.gl-lb-arrow svg, .gl-lb-close svg { width: 20px; height: 20px; }
+.gl-lb-arrow:hover, .gl-lb-close:hover { background: var(--red); }
+.gl-lb-arrow.prev { grid-column: 1; grid-row: 1; justify-self: center; }
+.gl-lb-arrow.next { grid-column: 3; grid-row: 1; justify-self: center; }
+.gl-lb-close { position: absolute; top: 16px; right: 16px; z-index: 2; }
+.gl-lb-close:hover { transform: rotate(90deg); }
+.gl-lb-thumbs { grid-column: 1 / -1; grid-row: 2; display: flex; gap: 8px; justify-content: safe center; overflow-x: auto; padding: 16px 4px 2px; scrollbar-width: none; }
+.gl-lb-thumbs button { flex: 0 0 auto; width: 56px; height: 56px; padding: 0; border: 2px solid transparent; border-radius: 10px; overflow: hidden; background: #1f1b17; opacity: .5; cursor: pointer; transition: opacity .2s, border-color .2s; }
+.gl-lb-thumbs button:hover { opacity: .85; }
+.gl-lb-thumbs button.on { opacity: 1; border-color: var(--red); }
+.gl-lb-thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.gl-lb :focus-visible { outline: 2px solid var(--red); outline-offset: 2px; }
+
+@media (max-width: 1099px) {
+  .gh .gh-grid { grid-template-columns: 1fr; min-height: 0; }
+  .gh-wall { height: min(640px, 72svh); }
+  .gh-facts { grid-template-columns: repeat(3, auto); row-gap: 14px; }
+  .gh-facts li:nth-child(4) { padding-left: 0; border-left: 0; }
+}
+@media (max-width: 759px) {
+  .gh-h1 { font-size: clamp(34px, 10vw, 52px); }
+  .gh-facts { grid-template-columns: 1fr 1fr; }
+  .gh-facts li:nth-child(odd) { padding-left: 0; border-left: 0; }
+  .gh-facts li:nth-child(even), .gh-facts li:nth-child(4) { padding-left: 14px; border-left: 1px solid rgba(255,255,255,.1); }
+  .gh .sv-ctas .btn { flex: 1 1 100%; justify-content: center; }
+  /* кнопки сразу под лидом, факты ниже: на телефоне баннер cookie закрывает низ первого экрана, и кнопка не должна быть под ним */
+  .gh-text { display: flex; flex-direction: column; align-items: stretch; }
+  .gh-text .gh-facts { order: 2; margin-top: 28px; }
+  .gh-text .sv-ctas { order: 1; }
+  .gh-wall { grid-template-columns: 1fr; gap: 10px; height: 62svh; }
+  .gh-col.down { display: none; }   /* на телефоне одна колонна: вдвое меньше роликов играет одновременно */
+  .gh-card { margin-bottom: 10px; border-radius: var(--radius-md); }
+  .gl-chips { flex-wrap: nowrap; overflow-x: auto; margin: 0 calc(var(--px) * -1); padding: 0 var(--px); scrollbar-width: none; }
+  .gl-chip { flex: 0 0 auto; }
+  .gl-wall, .gl-col { gap: 10px; }
+  .gl-wall { padding-bottom: 72px; }
+  .gl-t { border-radius: var(--radius-md); }
+  .gl-cap { padding: 32px 12px 10px; }
+  .gl-cap span { display: none; }
+  .gl-x { display: none; }
+  .gl-reels { padding: var(--section-pad-mobile) 0; }
+  .gl-lb { grid-template-columns: 1fr; padding: 56px 8px 12px; }
+  .gl-lb-arrow { position: absolute; top: 50%; width: 40px; height: 40px; transform: translateY(-50%); }
+  .gl-lb-arrow.prev { left: 8px; }
+  .gl-lb-arrow.next { right: 8px; }
+  .gl-lb-fig, .gl-lb-thumbs { grid-column: 1; }
+  .gl-lb-thumbs button { width: 44px; height: 44px; }
+}
+/* плавающие кнопки (чат, «наверх») справа внизу: текст не уходит под них, как на остальных страницах */
+@media (max-width: 480px) {
+  .gh .sv-crumbs { font-size: 13px; gap: 6px; }
+  .gh .sv-crumbs li + li::before { margin-right: 6px; }
+  main.sv.ob .gh-lead, main.sv.ob .gh-facts, main.sv.ob .gl-head > div, main.sv.ob .gl-reels h2 { padding-right: 56px; }
+}
+
+/* уменьшенное движение: колонны стоят, плитки видны сразу, фильтр без View Transitions (скрипт), просмотр без появления */
+@media (prefers-reduced-motion: reduce) {
+  .gh-run, .gl-col, .gl-t { animation: none !important; }
+  .gl-lb.open .gl-lb-fig { animation: none; }
+  .gl-m img { transition: none; }
+  ::view-transition-group(*) { animation: none; }
+}
+/* медленная связь или режим экономии: ролики стоят на обложках, колонны не едут */
+.gl-lite .gh-run { animation: none; }
+
+/* ═══ Каталог портфолио /portfolio/ (layouts/catalog.njk, blocks/catalog.njk). Источник: макет brand/maket-portfolio-katalog-2026-11-17 (kt.css, вариант B) ═══ */
+.kt { position: relative; padding: var(--sv-top) 0 clamp(64px, 9svh, 120px); background: var(--bg); color: #fff; overflow: hidden; }
+.kt-head .section-tag { margin-top: clamp(20px, 4svh, 48px); color: var(--red-text); }
+.kt-h1 { margin: 6px 0 0; font: 600 clamp(40px, 5.6vw, 92px)/.94 var(--font-display); text-transform: uppercase; letter-spacing: -.01em; text-wrap: balance; }
+.kt-h1 span { display: block; }
+.kt-h1 .red { color: var(--red); }
+.kt-head .divider { margin: 22px 0 0; }
+.kt-lead { max-width: 52ch; margin: 22px 0 0; font-size: clamp(16px, 1.2vw, 19px); line-height: 1.55; color: #ccc; }
+.kt a:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+.kt-b-row { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(28px, 4vw, 72px); align-items: center; margin-top: clamp(56px, 8svh, 104px); padding-top: clamp(40px, 5svh, 56px); border-top: 1px solid rgba(255,255,255,.1); }
+.kt-b-row.rev .kt-b-text { order: 2; }
+.kt-b-n { display: block; font: 600 15px/1 var(--font-display); color: var(--red-text); }
+.kt-b-h { margin: 14px 0 0; font: 600 clamp(32px, 3.6vw, 56px)/.95 var(--font-display); text-transform: uppercase; }
+.kt-b-h span { display: block; color: var(--red-text); }
+.kt-b-lead { max-width: 44ch; margin: 18px 0 0; font-size: 17px; line-height: 1.55; color: #ccc; }
+.kt-facts { display: flex; flex-wrap: wrap; margin: 26px 0 0; padding: 0; list-style: none; border-top: 1px solid rgba(255,255,255,.1); }
+.kt-facts li { padding: 14px 18px 0 0; }
+.kt-facts li + li { padding-left: 18px; border-left: 1px solid rgba(255,255,255,.1); }
+.kt-facts small { display: block; font-size: 13px; color: #9A928A; }
+.kt-facts b { display: block; margin-top: 4px; font: 500 16px/1.25 var(--font-display); text-transform: uppercase; }
+.kt-b-btn { margin-top: 30px; }
+.kt-b-loops { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; align-items: start; }
+.kt-b-loop { position: relative; margin: 0; aspect-ratio: 9/16; border-radius: var(--radius-md, 14px); overflow: hidden; background: #221e1a; }
+.kt-b-loop:nth-child(2) { margin-top: 48px; }
+.kt-b-loop:nth-child(3) { margin-top: 24px; }
+.kt-b-loop video { display: block; width: 100%; height: 100%; object-fit: cover; }
+.kt-b-loop figcaption { position: absolute; left: 10px; bottom: 10px; padding: 5px 10px; border-radius: 999px; background: #161310; font: 500 12px/1.2 var(--font-display); text-transform: uppercase; }
+@media (max-width: 1099px) {
+  .kt-b-row, .kt-b-row.rev { grid-template-columns: 1fr; }
+  .kt-b-row.rev .kt-b-text { order: 0; }
+}
+@media (max-width: 759px) {
+  .kt-b-loops { gap: 8px; }
+  .kt-facts { display: grid; grid-template-columns: 1fr 1fr; }
+  .kt-facts li:nth-child(odd) { padding-left: 0; border-left: 0; }
+  .kt-b-loop:nth-child(2) { margin-top: 28px; }
+  .kt-b-loop:nth-child(3) { margin-top: 14px; }
+  .kt .sv-crumbs { font-size: 13px; gap: 6px; }
+  .kt .sv-crumbs li + li::before { margin-right: 6px; }
+}
