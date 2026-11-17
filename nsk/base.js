@@ -582,33 +582,6 @@ const animObserver = new IntersectionObserver(entries => {
   });
 }, { threshold: 0.1 });
 document.querySelectorAll('.anim').forEach(el => animObserver.observe(el));
-function openVideo(id) {
-  if (!/^[a-zA-Z0-9_-]{6,20}$/.test(id)) return;
-  const backdrop = document.createElement('div');
-  backdrop.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:9999;display:flex;align-items:center;justify-content:center;';
-  const closeBtn = document.createElement('button');
-  closeBtn.textContent = '×';
-  closeBtn.setAttribute('aria-label', 'Закрыть видео');
-  closeBtn.style.cssText = 'position:absolute;top:20px;right:20px;font-size:32px;color:#fff;background:none;border:none;cursor:pointer;line-height:1;';
-  closeBtn.addEventListener('click', () => backdrop.remove());
-  const iframe = document.createElement('iframe');
-  iframe.src   = 'https://www.youtube-nocookie.com/embed/' + id + '?autoplay=1&rel=0';
-  iframe.width  = '840';
-  iframe.height = '472';
-  iframe.setAttribute('frameborder', '0');
-  iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
-  iframe.setAttribute('allowfullscreen', '');
-  iframe.style.cssText = 'max-width:90vw;max-height:50vh;';
-  iframe.title = 'Видео о компании Азбука Ремонта';
-  backdrop.appendChild(closeBtn);
-  backdrop.appendChild(iframe);
-  backdrop.addEventListener('click', e => { if (e.target === backdrop) backdrop.remove(); });
-  function escHandler(e) {
-    if (e.key === 'Escape') { backdrop.remove(); document.removeEventListener('keydown', escHandler); }
-  }
-  document.addEventListener('keydown', escHandler);
-  document.body.appendChild(backdrop);
-}
 (function () {
   var widget = document.getElementById('quickWidget');
   if (!widget) return;
