@@ -182,7 +182,8 @@ document.addEventListener('keydown', (e) => {
     var stack = target.closest && target.closest('.pk-stack, .pk-stack2, .dp-stack, .vn') && window.matchMedia('(min-width: 1101px) and (min-height: 700px) and (max-height: 1500px)').matches;
     var margin = stack ? parseFloat(getComputedStyle(target).scrollMarginTop) : 0;
     var top = target.getBoundingClientRect().top + window.pageYOffset - (margin > 0 ? margin : getOffset());
-    window.scrollTo({ top: top, behavior: 'smooth' });
+    // при prefers-reduced-motion переход по якорю мгновенный (оглавление статей, ссылки меню): 'instant', потому что 'auto' берёт html { scroll-behavior: smooth } из base.css
+    window.scrollTo({ top: top, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth' });
     return true;
   }
   document.addEventListener('click', function (e) {

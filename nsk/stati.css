@@ -1,0 +1,219 @@
+/* ═══ Раздел «Статьи» (/stati/): статья, чек-лист, калькулятор, страница раздела ═══
+   Принятый макет: brand/maket-stati-2026-11-17/st.css. Подключается после service.css (там крошки, кнопки, карточки «Читайте также»).
+   Префиксы: sa- (статья), ck- (чек-лист), calc-, sh- (раздел). Префикс ar- не брать: он у отзывов в home.css.
+   Заголовки Oswald капсом: межстрочный не меньше 1.08 (H1, H2 — 1.12), иначе краткая у «Й» во второй строке упирается в первую. */
+
+/* ═══ Статья: светлая страница для чтения ═══ */
+.sa { background: #f5f5f7; color: #1a1a1a; }
+.sa-body a:hover { color: #e8201a; }
+.sa-hero { padding: var(--sv-top) 0 clamp(32px, 5vw, 56px); }
+.sa-hero-in > * { max-width: 1100px; }
+.sa .sv-crumbs { color: #6b6b6b; }
+.sa .sv-crumbs li + li::before { color: #b5b5b5; }
+.sa-h1 { margin: clamp(28px, 4vw, 48px) 0 0; font: 700 clamp(40px, 6.2vw, 92px)/1.12 var(--font-display); text-transform: uppercase; letter-spacing: -.015em; color: #161310; text-wrap: balance; }
+.sa-sub { margin: 18px 0 0; max-width: 30ch; font: 500 clamp(22px, 2.4vw, 34px)/1.15 var(--font-display); text-transform: uppercase; color: #e8201a; text-wrap: balance; }
+.sa-meta { display: flex; flex-wrap: wrap; gap: 8px 24px; margin: 28px 0 0; font-size: 15px; color: #6b6b6b; }
+
+/* Страница светлая с первого экрана, а шапка сайта прозрачная и белая: пока не прокрутили, логотип и меню не видны. Держим шапку в том же тёмном виде,
+   что и после прокрутки (правило .header.scrolled в base.css, значения те же, поэтому при прокрутке ничего не меняется). */
+body:has(main.sa) .header { background: rgba(16, 13, 10, 0.92); -webkit-backdrop-filter: saturate(140%) blur(14px); backdrop-filter: saturate(140%) blur(14px); border-bottom: 1px solid var(--border); box-shadow: 0 1px 0 rgba(0,0,0,0.15), 0 10px 30px rgba(0,0,0,0.35); }
+
+/* сетка: оглавление слева, колонка текста */
+.sa-grid { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: clamp(32px, 5vw, 88px); align-items: start; padding-bottom: clamp(56px, 8vw, 112px); }
+.sa-toc { position: sticky; top: calc(var(--sv-top) + 24px); max-height: calc(100svh - var(--sv-top) - 48px); overflow: auto; }
+.sa-toc summary { list-style: none; cursor: default; font: 600 13px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; color: #6b6b6b; padding-bottom: 14px; }
+.sa-toc summary::-webkit-details-marker { display: none; }
+.sa-toc ol { margin: 0; padding: 0; list-style: none; border-left: 2px solid #dcd9d5; }
+.sa-toc a { position: relative; display: block; margin-left: -2px; padding: 9px 0 9px 16px; border-left: 2px solid transparent; font-size: 15px; line-height: 1.35; text-decoration: none; color: #555; transition: color .2s, border-color .2s; }
+.sa-toc a.is-on { color: #161310; font-weight: 600; border-left-color: #e8201a; }
+.sa-toc a:focus-visible { outline: 2px solid #e8201a; outline-offset: 2px; }
+
+.sa-body { min-width: 0; max-width: 720px; }
+.sa-flow > * { max-width: 68ch; }
+.sa-lead { margin: 0 0 8px; font-size: clamp(20px, 1.6vw, 23px); line-height: 1.55; color: #161310; }
+.sa-body p { font-size: 18px; line-height: 1.7; margin: 0 0 20px; color: #2a2622; }
+.sa-body strong { color: #161310; }
+.sa-body a { color: #161310; text-decoration: underline; text-decoration-color: #e8201a; text-underline-offset: 3px; text-decoration-thickness: 2px; }
+.sa-h2 { scroll-margin-top: calc(var(--sv-top) + 24px); margin: clamp(48px, 6vw, 72px) 0 20px; font: 700 clamp(28px, 3vw, 40px)/1.12 var(--font-display); text-transform: uppercase; letter-spacing: -.005em; color: #161310; }
+.sa-h3 { margin: 36px 0 12px; font: 600 20px/1.3 var(--font-body); color: #161310; }
+.sa-list { margin: 0 0 24px; padding: 0; list-style: none; font-size: 18px; line-height: 1.6; color: #2a2622; }
+.sa-list li { position: relative; padding-left: 28px; margin: 0 0 10px; }
+ul.sa-list li::before { content: ""; position: absolute; left: 4px; top: .72em; width: 12px; height: 2px; background: #e8201a; }
+ol.sa-list { counter-reset: n; }
+ol.sa-list li { counter-increment: n; }
+ol.sa-list li::before { content: counter(n); position: absolute; left: 0; top: 0; font: 700 18px/1.6 var(--font-display); color: #e8201a; }
+
+.sa-table { margin: 8px 0 28px; max-width: 100% !important; overflow-x: auto; border-radius: 16px; background: #fff; box-shadow: 0 1px 0 #e4e2df; }
+.sa-table:focus-visible { outline: 2px solid #e8201a; }
+.sa-table table { width: 100%; border-collapse: collapse; font-size: 16px; line-height: 1.45; }
+.sa-table th, .sa-table td { padding: 14px 18px; text-align: left; vertical-align: top; border-bottom: 1px solid #eeece9; }
+.sa-table thead th { font: 600 13px/1.2 var(--font-display); letter-spacing: .06em; text-transform: uppercase; color: #6b6b6b; background: #faf9f8; }
+.sa-table tbody th { font-weight: 600; color: #161310; }
+.sa-table tr:last-child > * { border-bottom: 0; }
+
+/* ═══ Чек-лист: отмечаемые пункты ═══ */
+.ck { margin: clamp(48px, 6vw, 72px) 0 8px; padding: clamp(24px, 3vw, 40px); border-radius: 24px; background: #161310; color: #fff; max-width: none; }
+.ck .sa-h2 { margin: 0; color: #fff; }
+.ck-top { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px 24px; align-items: end; padding-bottom: 24px; border-bottom: 1px solid rgba(255,255,255,.12); }
+.ck-sum { grid-column: 2; grid-row: 1; margin: 0 !important; font: 600 18px/1 var(--font-display) !important; text-transform: uppercase; color: #a59d95 !important; white-space: nowrap; }
+.ck-sum b { color: #fff; font-variant-numeric: tabular-nums; }
+.ck-note { grid-column: 1 / -1; margin: 0 !important; font-size: 16px !important; color: #cfc8c1 !important; }
+.ck-act { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; }
+.ck-reset { min-height: 44px; padding: 0; border: 0; background: none; color: #cfc8c1; font: 500 15px/1 var(--font-body); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.ck-reset:hover { color: #fff; }
+.ck-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 32px; padding-top: 12px; }
+.ck-g { margin: 0; padding: 16px 0 4px; border: 0; min-width: 0; }
+.ck-g legend { float: left; width: 100%; padding: 0; font: 600 17px/1.2 var(--font-display); text-transform: uppercase; letter-spacing: .02em; color: #fff; }
+.ck-gn { clear: both; margin: 6px 0 8px !important; font-size: 14px !important; color: #a59d95 !important; font-variant-numeric: tabular-nums; }
+.ck-gd { margin: 0 0 4px !important; font-size: 15px !important; color: #a59d95 !important; }
+.ck-g.is-full .ck-gn { color: #e8201a !important; }
+.ck-g ul { margin: 0; padding: 0; list-style: none; }
+.ck-g label { display: flex; gap: 14px; align-items: flex-start; padding: 10px 0; cursor: pointer; font-size: 16px; line-height: 1.45; color: #ddd6cf; }
+.ck-g input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.ck-box { flex: none; display: grid; place-items: center; width: 24px; height: 24px; margin-top: -1px; border: 2px solid #5a524b; border-radius: 7px; transition: background-color .18s, border-color .18s; }
+.ck-box svg { width: 16px; height: 16px; fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 24; stroke-dashoffset: 24; transition: stroke-dashoffset .22s ease .05s; }
+.ck-g input:checked + .ck-box { background: #e8201a; border-color: #e8201a; }
+.ck-g input:checked + .ck-box svg { stroke-dashoffset: 0; }
+.ck-g input:checked ~ .ck-t { color: #8f877f; text-decoration: line-through; text-decoration-color: #5a524b; }
+.ck-g input:focus-visible + .ck-box { outline: 2px solid #e8201a; outline-offset: 3px; }
+.ck-t strong { color: inherit; }
+.ck-print { display: none; }   /* блок «Азбуки» виден только при печати */
+
+.sa-src { margin-top: clamp(48px, 6vw, 72px); padding-top: 24px; border-top: 1px solid #dcd9d5; }
+.sa-src h2 { margin: 0 0 12px; font: 600 13px/1 var(--font-display); letter-spacing: .08em; text-transform: uppercase; color: #6b6b6b; }
+.sa-src ol { margin: 0; padding-left: 20px; font-size: 15px; line-height: 1.6; color: #555; }
+.sa-src a { color: #555 !important; text-decoration-color: #c9c5c0 !important; }
+
+/* ═══ Блок городов в конце статьи ═══ */
+.sa-city { padding: clamp(56px, 8vw, 112px) 0; background: #161310; color: #fff; }
+.sa-city-h { margin: 0; max-width: 16ch; font: 700 clamp(36px, 5vw, 72px)/1.12 var(--font-display); text-transform: uppercase; color: #fff; text-wrap: balance; }
+.sa-city-p { max-width: 52ch; margin: 20px 0 0; font-size: 18px; line-height: 1.55; color: #cfc8c1; }
+.sa-cities { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: clamp(32px, 4vw, 48px); }
+.sa-c { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding: clamp(24px, 3vw, 36px); border-radius: 20px; background: #1f1b17; text-decoration: none; color: #fff; transition: background-color .25s; }
+.sa a.sa-c:hover { background: #28231e; color: #fff; }   /* .sv a:hover (красный) иначе перекрасил бы текст карточки */
+.sa-c-k { font: 700 clamp(28px, 3vw, 44px)/1.12 var(--font-display); text-transform: uppercase; }
+.sa-c-a { font-size: 15px; color: #a59d95; }
+.sa-c .btn { margin-top: 14px; pointer-events: none; }
+.sa-c:focus-visible { outline: 2px solid #e8201a; outline-offset: 3px; }
+.sa-more-h { margin: 0; font: 700 clamp(28px, 3vw, 40px)/1.12 var(--font-display); text-transform: uppercase; color: #161310; }
+.sa-reads { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 32px; }
+
+/* ═══ Сравнение отделок: переключатель только на телефоне ═══ */
+.sa-cmp-tabs { display: none; }
+@media (max-width: 767px) {
+  .sa-cmp-tabs { display: flex; gap: 6px; margin: 8px 0 10px; padding: 4px; border-radius: 999px; background: #e8e6e3; max-width: none !important; }
+  .sa-cmp-tabs button { flex: 1; min-height: 44px; padding: 0 8px; border: 0; border-radius: 999px; background: none; font: 600 14px/1 var(--font-display); text-transform: uppercase; letter-spacing: .02em; color: #555; cursor: pointer; transition: background-color .2s, color .2s; }
+  .sa-cmp-tabs button[aria-pressed=true] { background: #161310; color: #fff; }
+  .sa-cmp-tabs button:focus-visible { outline: 2px solid #e8201a; outline-offset: 2px; }
+  .sa-cmp [data-c] { display: none; }
+  .sa-cmp [data-c="0"], .sa-cmp[data-show="1"] [data-c="1"], .sa-cmp[data-show="2"] [data-c="2"], .sa-cmp[data-show="3"] [data-c="3"] { display: table-cell; }
+  .sa-cmp thead { display: none; }
+  .sa-cmp tbody th { width: 42%; }
+}
+
+/* ═══ Калькулятор технического проекта ═══ */
+.calc { margin: 8px 0 28px; padding: clamp(22px, 3vw, 32px); border-radius: 20px; background: #161310; color: #fff; max-width: none !important; }
+.calc-h { margin: 0 0 20px; font: 700 clamp(22px, 2vw, 28px)/1.12 var(--font-display); text-transform: uppercase; color: #fff; }
+.calc-row { display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: flex-end; }
+.calc-city { display: flex; gap: 6px; margin: 0; padding: 4px; border: 0; border-radius: 999px; background: #28231e; }
+.calc-city legend { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.calc-city label { cursor: pointer; }
+.calc-city input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.calc-city span { display: flex; align-items: center; min-height: 44px; padding: 0 18px; border-radius: 999px; font: 600 15px/1 var(--font-display); text-transform: uppercase; color: #cfc8c1; transition: background-color .2s, color .2s; }
+.calc-city input:checked + span { background: #e8201a; color: #fff; }
+.calc-city input:focus-visible + span { outline: 2px solid #fff; outline-offset: 2px; }
+.calc-area { display: flex; flex-direction: column; gap: 6px; font-size: 14px; color: #a59d95; }
+.calc-area input { width: 120px; min-height: 48px; padding: 0 14px; border: 2px solid #3a332d; border-radius: 12px; background: #1f1b17; color: #fff; font: 600 20px/1 var(--font-display); font-variant-numeric: tabular-nums; }
+.calc-area input:focus-visible { outline: none; border-color: #e8201a; }
+.calc-range { width: 100%; margin: 22px 0 4px; accent-color: #e8201a; }
+.calc-out { display: flex; flex-wrap: wrap; gap: 8px 32px; align-items: baseline; margin-top: 14px; padding-top: 18px; border-top: 1px solid rgba(255,255,255,.12); }
+.calc-out p { display: flex; flex-direction: column; gap: 6px; margin: 0 !important; }
+.calc-out span { font-size: 14px !important; color: #a59d95; }
+.calc-main b { font: 700 clamp(34px, 4vw, 52px)/1.12 var(--font-display); font-variant-numeric: tabular-nums; color: #fff; }
+.calc-old s { font: 500 22px/1.12 var(--font-display); color: #8f877f; font-variant-numeric: tabular-nums; }
+
+/* ═══ Частые вопросы ═══ */
+.sa-faq { max-width: 68ch; border-bottom: 1px solid #dcd9d5; }
+.sa-faq:first-of-type { border-top: 1px solid #dcd9d5; }
+.sa-faq summary { position: relative; display: block; padding: 20px 44px 20px 0; cursor: pointer; list-style: none; font: 600 18px/1.4 var(--font-body); color: #161310; }
+.sa-faq summary::-webkit-details-marker { display: none; }
+.sa-faq summary::after { content: ""; position: absolute; right: 8px; top: 50%; width: 12px; height: 12px; margin-top: -9px; border-right: 2px solid #e8201a; border-bottom: 2px solid #e8201a; transform: rotate(45deg); transition: transform .2s; }
+.sa-faq[open] summary::after { transform: translateY(5px) rotate(-135deg); }
+.sa-faq summary:hover { color: #e8201a; }
+.sa-faq summary:focus-visible { outline: 2px solid #e8201a; outline-offset: 2px; }
+.sa-faq p { margin: 0 0 20px !important; }
+
+/* ═══ Страница раздела: три статьи строками по порядку пути покупателя ═══ */
+.sh { padding: 0 0 clamp(72px, 10vw, 140px); }
+.sh-list { margin: 0; padding: 0; list-style: none; border-top: 2px solid #161310; }
+.sh-row { display: grid; grid-template-columns: clamp(48px, 7vw, 120px) minmax(0, 1fr) auto; gap: 8px clamp(20px, 3vw, 48px); align-items: start; padding: clamp(28px, 4vw, 48px) 0; border-bottom: 1px solid #d6d2cd; text-decoration: none; color: #161310; }
+.sh-n { font: 700 clamp(48px, 6vw, 96px)/.8 var(--font-display); color: #e8201a; font-variant-numeric: tabular-nums; }
+.sh-txt { display: flex; flex-direction: column; gap: 10px; max-width: 760px; }
+.sh-when { font: 600 13px/1.2 var(--font-display); letter-spacing: .08em; text-transform: uppercase; color: #6b6b6b; }
+.sh-t { font: 700 clamp(30px, 3.6vw, 54px)/1.12 var(--font-display); text-transform: uppercase; letter-spacing: -.01em; transition: color .25s; }
+.sh-s { font: 500 clamp(18px, 1.6vw, 24px)/1.15 var(--font-display); text-transform: uppercase; color: #e8201a; }
+.sh-d { max-width: 60ch; margin-top: 6px; font-size: 17px; line-height: 1.55; color: #4a443e; }
+.sh-meta { padding-top: 8px; font-size: 15px; color: #6b6b6b; white-space: nowrap; }
+.sa a.sh-row:hover { color: #161310; }
+.sh-row:hover .sh-t { color: #e8201a; }
+.sh-row:focus-visible { outline: 2px solid #e8201a; outline-offset: 4px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ck-box, .ck-box svg, .sa-toc a, .sa-faq summary::after, .sa-cmp-tabs button, .calc-city span, .sa-c, .sh-t, .sa-toc-d summary::after { transition: none; }
+  .sa .sv-read, .sa .sv-read .go { transition: none; }
+  .sa a.sv-read:hover, .sa a.sv-read:hover .go { transform: none; }
+}
+
+@media (max-width: 1023px) {
+  .sa-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .sa-toc { position: static; max-height: none; margin-bottom: 8px; overflow: visible; }
+  .sa-toc-d { border-radius: 16px; background: #fff; }
+  .sa-toc summary { display: flex; justify-content: space-between; align-items: center; min-height: 52px; padding: 0 20px; cursor: pointer; font-size: 14px; color: #161310; }
+  .sa-toc summary::after { content: ""; width: 10px; height: 10px; border-right: 2px solid #161310; border-bottom: 2px solid #161310; transform: translateY(-3px) rotate(45deg); transition: transform .2s; }
+  .sa-toc-d[open] summary::after { transform: translateY(2px) rotate(-135deg); }
+  .sa-toc ol { margin: 0 20px 16px; border-left-color: #eeece9; }
+  .sa-body { max-width: none; }
+}
+@media (max-width: 767px) {
+  .sa .wrapper { padding-left: 16px; padding-right: 16px; }
+  .sa-body p, .sa-list { font-size: 17px; }
+  .ck { margin-left: -16px; margin-right: -16px; border-radius: 0; padding: 28px 16px; }
+  .ck-top { grid-template-columns: minmax(0, 1fr); }
+  .ck-sum { grid-column: 1; grid-row: auto; }
+  .ck-groups { grid-template-columns: minmax(0, 1fr); }
+  .sa-table table { font-size: 15px; }
+  .sa-table th, .sa-table td { padding: 12px 14px; }
+  .sa-cities, .sa-reads { grid-template-columns: minmax(0, 1fr); }
+  .calc { margin-left: -16px; margin-right: -16px; border-radius: 0; padding: 24px 16px; }
+  .sh-row { grid-template-columns: 44px minmax(0, 1fr); padding: 28px 0; }
+  .sh-meta { grid-column: 2; padding-top: 4px; }
+  .sh-d { font-size: 16px; }
+}
+
+/* ═══ Печать: только чек-лист, чёрным по белому, внизу каждого листа блок «Азбуки Ремонта» ═══
+   Всё, кроме чек-листа, убираем из потока (display: none), у предков снимаем обрезку и отступы. */
+@media print {
+  body > :not(main) { display: none !important; }
+  .sa-hero, .sa-city, .sa-more, .sa-toc, .sa-body > :not(.ck), .ck-act, .ck-note, .ck-sum, .ck-gn { display: none !important; }
+  body, .sv, .sa { background: #fff !important; overflow: visible !important; }
+  .sa-grid { display: block !important; max-width: none !important; padding: 0 !important; margin: 0 !important; }
+  .sa-body { max-width: none !important; }
+  .ck { margin: 0 !important; padding: 0 0 30mm !important; border-radius: 0 !important; background: #fff !important; color: #000 !important; }
+  .ck-top { padding: 0 0 12px !important; border-bottom: 1px solid #000 !important; }
+  .ck .sa-h2, .ck-g legend, .ck-g label, .ck-t, .ck-gd { color: #000 !important; text-decoration: none !important; }
+  .ck-groups { display: block !important; padding: 0 !important; }
+  .ck-g { break-inside: avoid; padding-top: 14px !important; }
+  .ck-g legend { float: none !important; display: block; margin-bottom: 4px; }
+  .ck-g ul { clear: both; }
+  .ck-g label { padding: 6px 0 !important; }
+  .ck-box { border: 1.5px solid #000 !important; background: #fff !important; }
+  .ck-box svg { stroke: #000 !important; }
+  /* блок «Азбуки» внизу каждого листа: фиксированный элемент Chrome повторяет на всех страницах */
+  .ck-print { display: flex !important; position: fixed; left: 0; right: 0; bottom: 0; gap: 14px; align-items: center; padding: 10px 0 0; border-top: 1.5px solid #000; background: #fff; color: #000; }
+  .ck-print-l { flex: none; display: flex; align-items: center; gap: 8px; }
+  .ck-print-l img { width: 34px; height: 34px; object-fit: cover; object-position: left center; }
+  .ck-print-l b { font: 700 13px/1.12 var(--font-display); text-transform: uppercase; color: #000; }
+  .ck-print-t { flex: 1; margin: 0 !important; font-size: 10.5px !important; line-height: 1.4 !important; color: #000 !important; }
+  .ck-print-c { flex: none; display: flex; flex-direction: column; gap: 2px; margin: 0 !important; font-size: 10.5px !important; line-height: 1.35 !important; color: #000 !important; text-align: right; }
+  @page { margin: 14mm; }
+}
