@@ -1,0 +1,175 @@
+/* ═══ «О компании и контакты» (/kontakty/, оба города). Подключается после service.css, только на этой странице.
+   Макет: brand/maket-o-kompanii-2026-11-18 (ok.css). Префикс ok- (ar- занят отзывами в bundle.css, pk- «Приёмкой», sa- статьями).
+   Движение без скрипта на прокрутке: CSS view-timeline. Скрытых состояний под html.sv-pre здесь нет, service.js на странице не подключается.
+   На прилипшем слое нет filter, backdrop-filter и размытых теней: подписи кадров сплошные (#161310). ═══ */
+
+/* именованные шкалы разделов читает оглавление, которое лежит вне <main>: общий предок — body */
+body { timeline-scope: --t-team, --t-how, --t-kont; }
+#team { view-timeline-name: --t-team; }
+#how { view-timeline-name: --t-how; }
+#kontakty { view-timeline-name: --t-kont; }
+::selection { background: var(--red); color: #fff; }
+
+/* ═══ Первый экран «Знакомьтесь» ═══
+   Базовая раскладка — без прилипания: портрет и все факты на месте, кадры 2 и 3 скрыты (телефон, планшет, reduced-motion, нет animation-timeline).
+   Режим «карточка прилипает» включается ниже одним блоком @supports + @media. В #top нет .wrapper: правило «#top > .wrapper» растягивает экран, контейнер здесь .ok-wrap.
+   Высоту секции задаёт #top.ok-hero: селектор с id перебивает правила шаблона вида «#top { height: … }». */
+#top.ok-hero { position: relative; --eh: calc(100svh - var(--sv-top) - var(--cookie-h, 0px)); }
+.ok-pin { padding: calc(var(--sv-top) + 24px) 0 56px; }
+.ok-wrap { box-sizing: border-box; width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--px); }
+.ok-grid { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: clamp(32px, 5vw, 88px); align-items: center; }
+.ok-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 24px; min-width: 0; }
+.ok-copy .sv-crumbs { padding: 0; }
+.ok-h1 { margin: 0; font: 600 clamp(34px, min(5.4vw, 10svh), 88px)/1.12 var(--font-display); text-transform: uppercase; letter-spacing: -.01em; }
+.ok-h1 span { display: block; color: var(--red); }
+.ok-facts { margin: 0; padding: 0; list-style: none; display: grid; max-width: 48ch; }
+.ok-facts li { display: grid; grid-template-columns: 28px 1fr; gap: 12px; padding: 14px 0; border-top: 1px solid rgba(255,255,255,.12); font-size: 17px; line-height: 1.5; color: #d9d3cd; }
+.ok-facts li:last-child { border-bottom: 1px solid rgba(255,255,255,.12); }
+.ok-facts .n { font: 600 20px/1.25 var(--font-display); color: var(--red-text); }
+.ok-strip { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 22px; margin: 0; font-size: 15px; line-height: 1.4; color: var(--gray); }
+.ok-ph { font: 600 28px/1 var(--font-display); color: #fff; text-decoration: none; font-variant-numeric: tabular-nums; }
+.ok-ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+.ok-card { position: relative; isolation: isolate; height: min(calc(var(--eh) - 56px), 740px); aspect-ratio: 3 / 4; border-radius: 24px; overflow: hidden; background: #1f1b17; box-shadow: 0 40px 90px -30px rgba(0,0,0,.85); }
+.ok-card figure { position: absolute; inset: 0; margin: 0; background: #1f1b17; }
+.ok-card img { position: absolute; inset: 0; width: 100%; height: 100%; max-width: none; object-fit: cover; object-position: 50% 22%; }
+.ok-f1 { z-index: 1; }
+.ok-f2, .ok-f3 { display: none; border-top: 3px solid var(--red); }
+.ok-f2 { z-index: 2; }
+.ok-f3 { z-index: 3; }
+/* плашка подписи сплошная: без прозрачности и размытия, иначе на прилипшем слое прокрутка «тугая» */
+.ok-cap { position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 2; padding: 12px 14px; border-radius: 14px; background: #161310; font-size: 14px; line-height: 1.4; color: #d9d3cd; }
+.ok-cap b { display: block; margin-bottom: 3px; font: 600 17px/1.1 var(--font-display); text-transform: uppercase; letter-spacing: .02em; color: #fff; }
+
+/* Компьютер, без reduced-motion, с поддержкой view(): секция 300svh, карточка прилипает, кадры 2 и 3 наезжают снизу, факты горят по очереди.
+   Порядок слоёв: z-index 1/2/3 у кадров и isolation у карточки, иначе подпись первого кадра видна поверх второго. */
+@supports (animation-timeline: view()) {
+  @media (min-width: 961px) and (prefers-reduced-motion: no-preference) {
+    #top.ok-hero { height: 300svh; view-timeline-name: --okh; view-timeline-axis: block; }
+    .ok-pin { position: sticky; top: 0; box-sizing: border-box; height: 100svh; padding: var(--sv-top) 0 var(--cookie-h, 0px); display: flex; flex-direction: column; justify-content: center; }
+    .ok-f2, .ok-f3 { display: block; transform: translate3d(0, 100%, 0); animation: okUp linear both; animation-timeline: --okh; }
+    .ok-f2 { animation-range: contain 20% contain 42%; }
+    .ok-f3 { animation-range: contain 58% contain 80%; }
+    .ok-facts li { animation: okOn2 linear both; animation-timeline: --okh; animation-range: contain 0% contain 100%; }
+    .ok-facts li:nth-child(1) { animation-name: okOn1; }
+    .ok-facts li:nth-child(3) { animation-name: okOn3; }
+  }
+}
+@keyframes okUp { to { transform: translate3d(0, 0, 0); } }
+@keyframes okOn1 { 0%, 30% { opacity: 1; } 38%, 100% { opacity: .38; } }
+@keyframes okOn2 { 0%, 26% { opacity: .38; } 34%, 64% { opacity: 1; } 72%, 100% { opacity: .38; } }
+@keyframes okOn3 { 0%, 62% { opacity: .38; } 70%, 100% { opacity: 1; } }
+
+/* Невысокие окна на компьютере: текст не выше низа шапки и не ниже низа экрана (у Новосибирска первый факт длиннее: 1280×800 без этого давал верх на 6 px выше шапки) */
+@media (min-width: 961px) and (max-height: 860px) {
+  .ok-copy { gap: 18px; }
+  .ok-facts li { padding: 10px 0; }
+  .ok-h1 { font-size: clamp(34px, min(5.4vw, 9svh), 88px); }
+}
+@media (min-width: 961px) and (max-height: 780px) {
+  .ok-copy { gap: 14px; }
+  .ok-facts li { padding: 8px 0; font-size: 15px; line-height: 1.4; }
+  .ok-h1 { font-size: clamp(34px, min(5.4vw, 8svh), 88px); }
+  .ok-ph { font-size: 24px; }
+}
+@media (max-width: 960px) {
+  .ok-pin { padding-bottom: 56px; }
+  .ok-grid { grid-template-columns: 1fr; gap: 28px; }
+  .ok-card { height: auto; width: 100%; max-width: 480px; aspect-ratio: 4 / 5; justify-self: start; }
+}
+@media (max-width: 640px) {
+  .ok-h1 { font-size: clamp(34px, 10vw, 44px); }
+  .ok-facts li { font-size: 16px; }
+  .ok-ctas .btn { flex: 1 1 100%; }
+}
+
+/* ═══ «Команда» / «Филиал» ═══ */
+.ok-team-grid { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: clamp(28px, 4vw, 64px); align-items: end; margin-top: 44px; }
+.ok-team-ph { position: relative; margin: 0; border-radius: 20px; overflow: hidden; background: #e7e5e1; }
+.ok-team-ph img { display: block; width: 100%; height: auto; max-width: none; aspect-ratio: 4 / 3; object-fit: cover; }
+.ok-team-ph figcaption, .ok-team-side figcaption { position: absolute; left: 14px; bottom: 14px; padding: 8px 12px; border-radius: 999px; background: #161310; font-size: 13px; color: #e6e0da; }
+.ok-team-txt { display: flex; flex-direction: column; gap: 18px; }
+.ok-team-txt > p { margin: 0; max-width: 44ch; font-size: 19px; line-height: 1.55; color: var(--light-ink); }
+.ok-team-txt .ok-muted { font-size: 16px; color: var(--gray-ink); }
+.ok-q { margin: 0; padding: 18px 0 0; border-top: 2px solid var(--red); }
+.ok-q p { margin: 0; font: 500 clamp(22px, 2vw, 28px)/1.25 var(--font-display); text-transform: none; }
+.ok-q cite { display: block; margin-top: 10px; font-style: normal; font-size: 14px; color: var(--gray-ink); }
+.ok-team-nsk { align-items: stretch; }
+.ok-slot { display: flex; flex-direction: column; justify-content: center; gap: 10px; min-height: 420px; padding: 32px; border: 2px dashed #c9c4be; border-radius: 20px; font-size: 16px; line-height: 1.5; color: var(--gray-ink); }
+.ok-slot b { font: 600 22px/1.1 var(--font-display); letter-spacing: .04em; color: var(--light-ink); }
+.ok-slot .sv-ph { padding: 0; border: 0; opacity: 1; }   /* рамка уже у самого места под фото */
+.ok-team-side { position: relative; margin: 0; border-radius: 20px; overflow: hidden; max-width: 340px; }
+.ok-team-side img { display: block; width: 100%; height: auto; max-width: none; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 30%; }
+@media (max-width: 960px) { .ok-team-grid { grid-template-columns: 1fr; } .ok-slot { min-height: 240px; } }
+
+/* ═══ «Как работаем» ═══ */
+.ok-how-grid { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.2fr); gap: clamp(32px, 5vw, 88px); align-items: start; }
+.ok-how-side { position: sticky; top: calc(var(--sv-top) + 24px); display: flex; flex-direction: column; gap: 32px; }
+.ok-how-ph { margin: 0; border-radius: 20px; overflow: hidden; background: #1f1b17; }
+.ok-how-ph img { display: block; width: 100%; height: auto; max-width: none; max-height: calc(100svh - var(--sv-top) - 190px); min-height: 240px; aspect-ratio: 4 / 5; object-fit: cover; object-position: 50% 25%; }
+.ok-how-list { margin: 0; padding: 0; list-style: none; }
+.ok-how-list > li { display: grid; grid-template-columns: 44px 1fr; gap: 18px; padding: 32px 0; border-top: 1px solid rgba(255,255,255,.12); }
+.ok-how-list > li:first-child { border-top: 0; padding-top: 8px; }
+.ok-how-list .n { font: 600 32px/1 var(--font-display); color: var(--red-text); }
+.ok-how-list h3 { margin: 0 0 12px; font: 600 clamp(24px, 2.2vw, 32px)/1.12 var(--font-display); text-transform: uppercase; color: #fff; }
+.ok-how-list p { margin: 0; max-width: 56ch; font-size: 17px; line-height: 1.6; color: #cfc8c1; }
+.ok-how-list .ok-q { margin-top: 20px; border-top-color: var(--red); }
+.ok-how-list .ok-q p { color: #fff; font-size: 22px; }
+.ok-how-list .ok-q cite { color: #a39a91; }
+.ok-links { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 16px !important; }
+.ok-links a { position: relative; font: 500 16px/1.3 var(--font-display); text-transform: uppercase; letter-spacing: .04em; color: #fff; text-decoration: underline; text-decoration-color: var(--red); text-decoration-thickness: 2px; text-underline-offset: 6px; }
+.ok-links a::before { content: ""; position: absolute; inset: -12px -4px; }   /* зона нажатия не ниже 44 px */
+.ok-links a:hover { color: var(--red-text); }
+@media (max-width: 960px) {
+  .ok-how-grid { grid-template-columns: 1fr; }
+  .ok-how-side { position: relative; top: auto; }
+  .ok-how-ph { max-width: 420px; }
+  .ok-how-ph img { aspect-ratio: 4 / 3; max-height: none; }
+}
+
+/* ═══ «Контакты» ═══ */
+.ok-kont-grid { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(28px, 4vw, 64px); align-items: stretch; margin-top: 44px; }
+.ok-kont-list { display: flex; flex-direction: column; align-items: flex-start; gap: 22px; min-width: 0; }
+.ok-addr { margin: 0; max-width: 22ch; font: 500 clamp(26px, 2.4vw, 36px)/1.15 var(--font-display); text-transform: uppercase; color: var(--light-ink); }
+.ok-kont-ph { font: 600 clamp(36px, 3.6vw, 56px)/1 var(--font-display); color: var(--light-ink); text-decoration: none; font-variant-numeric: tabular-nums; }
+.ok-kont-ph:hover { color: var(--red-ink); }
+.ok-kont-list dl { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 14px 24px; margin: 0; font-size: 17px; line-height: 1.45; color: var(--light-ink); }
+.ok-kont-list dt { font: 600 13px/1.9 var(--font-body); letter-spacing: .08em; text-transform: uppercase; color: var(--gray-ink); }
+.ok-kont-list dd { margin: 0; min-width: 0; overflow-wrap: anywhere; }
+.ok-kont-list dd a { text-underline-offset: 4px; text-decoration-color: #b9b3ad; }
+.ok-soc { display: flex; flex-wrap: wrap; gap: 8px; }
+.ok-kont-list .ok-soc a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 16px; border-radius: 999px; border: 1px solid #cfcac4; font: 600 14px/1 var(--font-body); text-decoration: none; color: var(--light-ink); transition: border-color .2s, color .2s; }
+.ok-kont-list .ok-soc a:hover { border-color: var(--red); color: var(--red-ink); }
+.ok-soc svg { flex: none; }
+.ok-kont-ctas { display: flex; flex-wrap: wrap; gap: 12px; }
+.ok-btn-dark { justify-content: center; background: transparent; color: var(--light-ink); border: 1px solid var(--light-ink); }
+.ok-btn-dark:hover { background: var(--light-ink); color: #fff; }
+.ok-legal { margin: 0; font-size: 14px; color: var(--gray-ink); }
+.ok-map { position: relative; min-height: 520px; border-radius: 20px; overflow: hidden; background: #e7e5e1; }
+.ok-map iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+/* щит поверх карты: пока на него не нажали, карта не перехватывает прокрутку и масштаб колесом */
+.ok-shield { position: absolute; inset: 0; z-index: 1; padding: 0; border: 0; background: none; cursor: pointer; }
+.ok-shield span { position: absolute; left: 14px; bottom: 14px;   /* слева: справа плавают кнопки «наверх» и чата */ padding: 12px 16px; border-radius: 999px; background: #161310; font: 600 13px/1 var(--font-body); color: #fff; }
+.ok-shield:focus-visible { outline: 3px solid var(--red); outline-offset: -3px; }
+.ok-shield[hidden] { display: none; }
+@media (max-width: 960px) {
+  .ok-kont-grid { grid-template-columns: 1fr; }
+  .ok-map { min-height: 380px; }
+  .ok-kont-ctas .btn { flex: 1 1 100%; }
+}
+
+/* ═══ Движение заголовков и оглавления (CSS view-timeline, без скрипта на прокрутке) ═══ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .ok .sv-sec .section-title .mo-in, .ok .sv-cta h2 .ln > span { animation: okTitle linear both; animation-timeline: view(); animation-range: entry 10% entry 90%; }
+    .ok .sv-cta h2 .ln:nth-child(2) > span { animation-range: entry 25% entry 100%; }
+    /* оглавление: подсветка своего раздела по его шкале; класс пункта делает toc.njk из id раздела */
+    .sv-toc a { animation: okSpy linear both; }
+    .sv-toc a::before { animation: okSpyDash linear both; }
+    .sv-toc .t-team, .sv-toc .t-team::before { animation-timeline: --t-team; }
+    .sv-toc .t-how, .sv-toc .t-how::before { animation-timeline: --t-how; }
+    .sv-toc .t-kontakty, .sv-toc .t-kontakty::before { animation-timeline: --t-kont; }
+  }
+}
+@keyframes okTitle { from { transform: translateY(105%); } to { transform: none; } }
+@keyframes okSpy { 0%, 22% { color: var(--gray); } 28%, 72% { color: #fff; } 78%, 100% { color: var(--gray); } }
+@keyframes okSpyDash { 0%, 22% { width: 8px; background: currentColor; } 28%, 72% { width: 16px; background: var(--red); } 78%, 100% { width: 8px; background: currentColor; } }
