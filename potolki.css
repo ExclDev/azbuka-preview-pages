@@ -1,0 +1,89 @@
+/* ═══ Страница «Натяжные потолки» (Новосибирск и Томск) ═══
+   Первый экран «Над полотном» (.ph-, blocks/hero-canvas.njk), рассказ на объекте (.pg-, blocks/video-talk.njk), «Свет на потолке» (.pt-, blocks/lights.njk).
+   Перенесено из макетов brand/maket-potolki-2026-11-18 (build.py). Подключает layouts/service.njk, когда задан hero.canvas, lights или video.variant "talk".
+   Префиксы ph-, pg-, pt-: pk- занят «Приёмкой» (priemka.css).
+   Шапка на сайте фиксированная: секция первого экрана начинается с отступа --sv-top, карточка прилипает на top: var(--sv-top) и считается от высоты окна без шапки и баннера cookie.
+   Движение первого экрана — CSS на view-timeline секции (--ph), только от 961 px, без reduced-motion и при поддержке view(); иначе оба слоя стоят друг под другом, оба шага горят.
+   На прилипшем слое нет filter, backdrop-filter и размытых теней; анимируется только transform. */
+
+/* ─── Первый экран «Над полотном» ─── */
+#top.ph{position:relative;display:block;box-sizing:border-box;padding:var(--sv-top) 0 0;background:#161310;color:#fff;scroll-margin-top:0;view-timeline:--ph block;--eh:calc(100svh - var(--sv-top) - var(--cookie-h,0px))}  /* #top.ph перебивает правило шаблона «первый экран = экран» */
+.ph-pin{display:block;padding:24px 0 56px;background:#161310}
+.ph-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);gap:clamp(28px,5vw,96px);align-items:center;justify-content:space-between}
+.ph-copy{display:flex;flex-direction:column;gap:20px;align-items:flex-start;min-width:0}
+.ph .sv-crumbs{margin:0;padding:0}
+.ph-h1{margin:0;font:700 clamp(40px,min(4.8vw,9svh),84px)/1.02 var(--font-display);text-transform:uppercase;letter-spacing:-.01em;text-wrap:balance}
+.ph-h1 span{display:block;color:#e8201a}
+.ph-lead{margin:0;max-width:42ch;font-size:clamp(16px,1.2vw,19px);line-height:1.55;color:#ddd6cf}
+.ph-steps{margin:0;padding:0;list-style:none;display:grid;gap:12px;width:100%;max-width:46ch}
+.ph-steps li{--cT:#d9d3cd;--cA:#fff;--cN:#e8201a;display:grid;grid-template-columns:28px minmax(0,1fr);gap:12px;padding-top:12px;border-top:1px solid rgba(255,255,255,.14);font-size:15px;line-height:1.5;color:var(--cT)}
+.ph-steps b{display:block;margin-bottom:2px;font:600 19px/1.15 var(--font-display);letter-spacing:.02em;text-transform:uppercase;color:var(--cA)}
+.ph-steps .n{font:600 19px/1.15 var(--font-display);color:var(--cN)}
+.ph-ctas{display:flex;flex-wrap:wrap;gap:12px}
+.ph-note{margin:0;max-width:44ch;font-size:13px;line-height:1.45;color:#a59d95}
+.ph-card{display:grid;gap:12px;width:100%;max-width:440px;justify-self:end}
+.ph-under,.ph-over{position:relative;margin:0;aspect-ratio:9/16;border-radius:18px;overflow:hidden;background:#28231e}
+.ph-under{z-index:1}
+.ph-over{z-index:2}
+.ph-under video,.ph-over img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ph-over::before{content:"";position:absolute;left:0;right:0;top:0;z-index:3;height:3px;background:#e8201a}
+.ph-tag{position:absolute;left:14px;top:16px;z-index:3;display:flex;gap:8px;padding:8px 12px 7px;border-radius:999px;background:#161310;font:600 13px/1 var(--font-display);letter-spacing:.06em;text-transform:uppercase;color:#fff}
+.ph-tag span{color:#e8201a}
+
+/* компьютер: секция 240svh, карточка прилипает; фаза удержания 0–20 % и 80–100 %, середина сглажена */
+@supports (animation-timeline: view()){
+@media (min-width:961px) and (prefers-reduced-motion:no-preference){
+  #top.ph{height:240svh}
+  .ph-pin{position:sticky;top:var(--sv-top);height:var(--eh);box-sizing:border-box;display:flex;align-items:center;padding:0}
+  .ph-grid{width:100%}
+  .ph-card{display:block;position:relative;height:min(calc(var(--eh) - 24px),820px);width:auto;aspect-ratio:9/16;max-width:none;justify-self:end;border-radius:22px;overflow:hidden;background:#0e0c0a;box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
+  .ph-under,.ph-over{position:absolute;inset:0;aspect-ratio:auto;border-radius:0}
+  .ph-over{transform:translateY(100%);will-change:transform;animation:phUp linear both;animation-timeline:--ph;animation-range:contain 0% contain 100%}
+  .ph-s1{animation:phOn linear both;animation-timeline:--ph;animation-range:contain 0% contain 100%}
+  .ph-s2{animation:phOff linear both;animation-timeline:--ph;animation-range:contain 0% contain 100%}
+}}
+@keyframes phUp{0%,20%{transform:translateY(100%);animation-timing-function:cubic-bezier(.4,0,.6,1)}80%,100%{transform:translateY(0)}}
+/* шаг гаснет ровно на середине шкалы: непрозрачные свойства (пользовательские) переключаются на половине отрезка */
+@keyframes phOn{from{--cT:#d9d3cd;--cA:#fff;--cN:#e8201a}to{--cT:#8b8279;--cA:#8b8279;--cN:#6b625a}}
+@keyframes phOff{from{--cT:#8b8279;--cA:#8b8279;--cN:#6b625a}to{--cT:#d9d3cd;--cA:#fff;--cN:#e8201a}}
+
+/* ─── Рассказ на объекте ─── */
+.pg-grid{display:grid;grid-template-columns:auto minmax(0,1fr);gap:clamp(28px,6vw,112px);align-items:center}
+.pg-card{position:relative;margin:0;height:min(78svh,760px);aspect-ratio:9/16;border-radius:22px;overflow:hidden;background:#0e0c0a}
+.pg-card video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pg-snd{position:absolute;left:14px;right:14px;bottom:14px;z-index:2;display:flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 16px;border:0;border-radius:14px;background:#161310;color:#fff;font:600 15px/1 var(--font-display);letter-spacing:.05em;text-transform:uppercase;cursor:pointer;transition:background-color .2s}
+.pg-snd:hover{background:#e8201a}
+.pg-snd:focus-visible{outline:2px solid #e8201a;outline-offset:3px}
+.pg-snd svg{flex:none;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.pg-snd .on{display:none}.pg-snd[aria-pressed=true] .on{display:inline}.pg-snd[aria-pressed=true] .off{display:none}
+.pg-list{margin:24px 0 0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+.pg-list li{padding:9px 14px 8px;border-radius:999px;background:#fff;border:1px solid rgba(26,26,26,.12);font:600 14px/1 var(--font-display);letter-spacing:.05em;text-transform:uppercase;color:#1a1a1a}
+
+/* ─── Свет на потолке ─── */
+#lights{view-timeline-name:--t-scope}
+.pt-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-top:40px}
+.pt-tile{position:relative;margin:0;aspect-ratio:3/4;border-radius:18px;overflow:hidden;background:#0e0c0a}
+.pt-tile video,.pt-tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.pt-tile::after{content:"";position:absolute;inset:auto 0 0;height:45%;background:linear-gradient(transparent,rgba(14,12,10,.82));pointer-events:none}
+.pt-tile figcaption{position:absolute;left:18px;right:18px;bottom:16px;z-index:2;color:#fff}
+.pt-tile figcaption b{display:block;font:600 clamp(19px,1.6vw,25px)/1.08 var(--font-display);letter-spacing:.02em;text-transform:uppercase}
+.pt-tile figcaption span{display:block;margin-top:6px;font-size:14px;line-height:1.4;color:#e1dbd5}
+.pt-n{position:absolute;left:16px;top:14px;z-index:2;font:600 14px/1 var(--font-body);color:rgba(255,255,255,.85)}
+
+@media (max-width:960px){
+  .ph-pin{padding:20px 0 48px}
+  .ph-grid{grid-template-columns:minmax(0,1fr);gap:28px}
+  .ph-card{justify-self:center}
+  .pg-grid{grid-template-columns:minmax(0,1fr)}
+  .pg-card{height:auto;width:100%;max-width:420px;justify-self:center;order:2}.pg-copy{order:1}
+  .pt-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){.ph-h1{font-size:clamp(34px,10vw,48px)}}
+@media (max-width:560px){
+  .pt-grid{display:flex;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:28px -16px 0;padding:0 16px;-webkit-overflow-scrolling:touch}
+  .pt-grid::-webkit-scrollbar{display:none}
+  .pt-tile{flex:0 0 74vw;scroll-snap-align:start}
+}
+/* плавающие кнопки (виджет и «наверх») на ≤480 px занимают правый край: тексту, который доходит до него, оставлен отступ 56 px */
+@media (max-width:480px){main.sv .ph-lead,main.sv .ph-note{padding-right:56px}}
+@media (prefers-reduced-motion:reduce){.pg-snd{transition:none}}
