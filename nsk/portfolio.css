@@ -10,7 +10,7 @@
   min-height: min(900px, calc(100svh - var(--sv-top) - var(--cookie-h, 0px))); padding-bottom: clamp(24px, 4svh, 48px); }
 .gh-text { padding-top: 8px; }
 .gh-tag { margin-top: clamp(20px, 4svh, 48px); color: var(--red-text); }
-.gh-h1 { margin: 6px 0 0; font: 600 clamp(40px, 5.6vw, 92px)/.94 var(--font-display); text-transform: uppercase; letter-spacing: -.01em; text-wrap: balance; }
+.gh-h1 { margin: 6px 0 0; font: 600 clamp(40px, 5.6vw, 92px)/1.12 var(--font-display); text-transform: uppercase; letter-spacing: -.01em; text-wrap: balance; }
 /* «Ё» не режется маской строки: тот же отступ, что у H1 услуг (service.css, --ln-pad) */
 .gh-h1 .ln { display: block; overflow: hidden; padding-top: var(--ln-pad, .18em); margin-top: calc(var(--ln-pad, .18em) * -1); }
 .gh-h1 .ln > span { display: block; }
@@ -187,7 +187,7 @@
 .kt-b-row { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(28px, 4vw, 72px); align-items: center; margin-top: clamp(56px, 8svh, 104px); padding-top: clamp(40px, 5svh, 56px); border-top: 1px solid rgba(255,255,255,.1); }
 .kt-b-row.rev .kt-b-text { order: 2; }
 .kt-b-n { display: block; font: 600 15px/1 var(--font-display); color: var(--red-text); }
-.kt-b-h { margin: 14px 0 0; font: 600 clamp(32px, 3.6vw, 56px)/.95 var(--font-display); text-transform: uppercase; }
+.kt-b-h { margin: 14px 0 0; font: 600 clamp(32px, 3.6vw, 56px)/1.12 var(--font-display); text-transform: uppercase; }
 .kt-b-h span { display: block; color: var(--red-text); }
 .kt-b-lead { max-width: 44ch; margin: 18px 0 0; font-size: 17px; line-height: 1.55; color: #ccc; }
 .kt-facts { display: flex; flex-wrap: wrap; margin: 26px 0 0; padding: 0; list-style: none; border-top: 1px solid rgba(255,255,255,.1); }

@@ -319,3 +319,53 @@
   .vI-cmp { max-height: calc(var(--ck, 0) * (100svh - var(--cookie-h, 0px) - 377px) + (1 - var(--ck, 0)) * 2000px); }
 }
 
+
+/* ═══ «Ремонт вторички», Новосибирск: первый экран «Входим» (hero.walk), «Квартира по комнатам» (flat) ═══
+   Первый экран: сетка и левая колонка те же, что у «Было — стало» (.vI-grid, .vI-copy, порядок на телефоне), справа карточка 9:16 с роликом.
+   «По комнатам»: компьютер (от 961 px) прилипший кадр слева и комнаты справа, телефон — ролик в каждой комнате. Без filter, backdrop-filter и размытых теней на прилипшем слое. */
+.rv-walk { position: relative; width: 100%; max-width: 440px; margin: 0 auto; aspect-ratio: 9 / 16; border-radius: var(--radius-lg); overflow: hidden; background: #0e0c0a; box-shadow: 0 40px 90px -30px rgba(0,0,0,.85); }
+.rv-vid { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.rv-walk::after { content: ""; position: absolute; inset: auto 0 0; height: 40%; background: linear-gradient(transparent, rgba(14,12,10,.8)); pointer-events: none; }
+.rv-route { position: absolute; left: 16px; right: 16px; bottom: 18px; z-index: 2; margin: 0; padding: 0; list-style: none; display: grid; gap: 7px; }
+.rv-route li { display: grid; grid-template-columns: 24px 1fr; gap: 10px; align-items: center; font: 600 15px/1.2 var(--font-display); letter-spacing: .04em; text-transform: uppercase; color: rgba(255,255,255,.55); transition: color .35s; }
+.rv-route i { height: 3px; border-radius: 2px; background: rgba(255,255,255,.3); overflow: hidden; }
+.rv-route i b { display: block; height: 100%; width: 0; background: var(--red); transition: width .26s linear; }
+.rv-route li.on { color: #fff; }
+.rv-route li.done { color: rgba(255,255,255,.8); }
+.rv-route li.done i b { width: 100%; }
+.rv-hero .vI-view .vI-note { text-align: center; }
+@media (min-width: 1101px) {
+  .rv-hero .vI-grid { grid-template-columns: minmax(0, 1fr) auto; }
+  .rv-hero .vI-view { align-items: flex-end; }
+  .rv-walk { width: auto; max-width: none; margin: 0; height: max(520px, min(calc(100svh - var(--header-h, 109px) - 150px - var(--cookie-h, 0px)), 820px)); }
+  .rv-hero .vI-view .vI-note { align-self: stretch; text-align: right; }
+}
+@media (prefers-reduced-motion: reduce) { .rv-route li, .rv-route i b { transition: none; } }
+
+.rv-sec { padding: 96px 0 120px; }
+.rv-wrap { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: clamp(32px, 6vw, 112px); margin-top: 48px; }
+.rv-stick { position: sticky; top: max(calc(var(--header-h, 109px) + 16px), calc(50svh - min(39svh, 390px))); align-self: start; height: min(78svh, 780px); aspect-ratio: 9 / 16; border-radius: var(--radius-lg); overflow: hidden; background: #0e0c0a; }
+.rv-stick video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0; transition: opacity .5s; }
+.rv-stick video.on { opacity: 1; }
+.rv-lab { position: absolute; left: 14px; top: 14px; z-index: 2; padding: 8px 12px 7px; border-radius: var(--radius-pill); background: rgba(22,19,16,.9); color: #fff; font: 600 13px/1 var(--font-display); letter-spacing: .06em; text-transform: uppercase; }
+.rv-list { margin: 0; padding: 0; list-style: none; }
+.rv-item { min-height: 78svh; display: flex; flex-direction: column; justify-content: center; gap: 18px; max-width: 600px; opacity: .3; transition: opacity .4s; }
+.rv-item.on { opacity: 1; }
+.rv-n { font: 600 15px/1 var(--font-display); letter-spacing: .06em; text-transform: uppercase; color: var(--red-ink); }
+.rv-item h3 { margin: 0; font: 700 clamp(30px, 3.2vw, 52px)/.95 var(--font-display); text-transform: uppercase; color: var(--light-ink); }
+.rv-item ul { margin: 0; padding: 0; list-style: none; display: grid; }
+.rv-item li { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 16px; padding: 16px 0; border-top: 1px solid rgba(0,0,0,.12); font-size: 17px; line-height: 1.5; color: #555; }
+.rv-item li b { font-weight: 600; color: var(--light-ink); }
+.rv-m { display: none; }
+.rv-cta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; margin-top: 24px; }
+.rv-cta span { color: var(--gray-ink); font-size: 15px; }
+@media (max-width: 960px) {
+  .rv-sec { padding: 56px 0 64px; }
+  .rv-wrap { grid-template-columns: minmax(0, 1fr); margin-top: 28px; }
+  .rv-stick { display: none; }
+  .rv-item { min-height: 0; padding: 20px 0 28px; opacity: 1; }
+  .rv-m { display: block; width: 100%; max-width: 420px; aspect-ratio: 9 / 16; object-fit: cover; border-radius: var(--radius-md); background: #0e0c0a; }
+  .rv-item li { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+}
+@media (max-width: 480px) { .rv-item li, .rv-cta span { padding-right: 56px; } }   /* под плавающие кнопки, как у остальных блоков */
+@media (prefers-reduced-motion: reduce) { .rv-item, .rv-stick video { transition: none; } }

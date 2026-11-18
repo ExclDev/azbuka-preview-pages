@@ -271,7 +271,7 @@ a.sv-read.svc:hover { color: #fff; }
 .sv-cta-bg img { width: 100%; height: 100%; max-width: none; object-fit: cover; opacity: .32; }
 .sv-cta-bg::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, var(--bg) 30%, rgba(22,19,16,.4)); }
 .sv-cta .wrapper { position: relative; }
-.sv-cta h2 { max-width: 760px; margin: 0; font-family: var(--font-display); font-weight: 600; font-size: clamp(40px, 5vw, 72px); line-height: 1; text-transform: uppercase; }
+.sv-cta h2 { max-width: 760px; margin: 0; font-family: var(--font-display); font-weight: 600; font-size: clamp(40px, 5vw, 72px); line-height: 1.12; text-transform: uppercase; }
 .sv-cta h2 .red { color: var(--red); }
 .sv-cta h2 .ln { display: block; overflow: hidden; padding-top: var(--ln-pad); margin-top: calc(var(--ln-pad) * -1); }
 .sv-cta h2 .ln > span { display: block; }
