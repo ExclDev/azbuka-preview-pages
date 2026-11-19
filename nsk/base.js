@@ -319,18 +319,7 @@ function closePopup() {
 /* Кнопки «Записаться…» на страницах услуг. Источник тот же, что у openPopup. */
 function openBooking(trigger, booking) { openPopup(trigger, booking || { title: 'Запись', note: 'Перезвоним и договоримся о времени' }); }
 overlay.addEventListener('click', e => { if (e.target === overlay) closePopup(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { closePopup(); closeDevPopup(); } });
-function openDevPopup() {
-  document.getElementById('devOverlay').classList.add('open');
-  document.documentElement.classList.add('scroll-locked');
-}
-function closeDevPopup() {
-  document.getElementById('devOverlay').classList.remove('open');
-  document.documentElement.classList.remove('scroll-locked');
-}
-document.getElementById('devOverlay').addEventListener('click', e => {
-  if (e.target === document.getElementById('devOverlay')) closeDevPopup();
-});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closePopup(); } });
 /* ══════════════════════════════════════════════════════════
    ОТПРАВКА ЗАЯВОК
    Раньше формы ничего не отправляли и всегда показывали «Заявка принята!».

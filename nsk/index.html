@@ -330,10 +330,6 @@
             <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M6 3.5L12 8l-6 4.5V3.5z"/></svg>
             Смотреть видео
           </button>
-          <button class="btn btn-outline" onclick="openDevPopup()">
-            Подробнее
-            <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M1 5h14M10 1l4 4-4 4"/></svg>
-          </button>
         </div>
       </div>
     </div>
@@ -955,19 +951,6 @@
     <p class="popup-success-call" id="popupSuccessCall">Если удобнее, позвоните сами: <a href="tel:+79231410154">8 (923) 141-01-54</a></p>
   </div>
 </div>
-<div class="overlay" id="devOverlay" role="dialog" aria-modal="true" aria-labelledby="dev-popup-heading">
-  <div class="popup-box popup-success">
-    <button class="popup-close" onclick="closeDevPopup()" aria-label="Закрыть">×</button>
-    <div class="popup-success-icon">
-      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
-      </svg>
-    </div>
-    <p class="popup-success-title" id="dev-popup-heading">Раздел в разработке</p>
-    <p class="popup-success-text">Извините, раздел находится в разработке</p>
-    <button class="btn btn-red form-submit" onclick="closeDevPopup()" style="margin-top:20px">Понятно</button>
-  </div>
-</div>
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Просмотр фото">
   <button class="lightbox-close" id="lightboxClose" aria-label="Закрыть">
     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true">
@@ -1029,7 +1012,7 @@
 /* Город этого сайта: объект нужен base.js (заявки, сообщение об ошибке) и home.js (заголовок первого экрана) */
 window.AZ_CITY = {"key":"novosibirsk","name":"Новосибирск","phone":"8 (923) 141-01-54","phoneHref":"tel:+79231410154","heroLine2":"ремонт в Новосибирске"};
 </script>
-<script src="base.js?v=108e81c5f3"></script>
+<script src="base.js?v=ca3ea410df"></script>
 <script>
 /* Данные города для home.js: настройки отзывов и запасные отзывы на случай, если reviews*.json не загрузится */
 window.AZ_HOME = {
