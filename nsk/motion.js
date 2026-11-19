@@ -296,55 +296,6 @@
   }
 
   /* ---------------------------------------------------------
-     7. Видео-лента: карточки въезжают веером, перекос от скорости
-     --------------------------------------------------------- */
-  var cards = $$('.av-card');
-  if (cards.length) {
-    gsap.set(cards, { opacity: 0, x: 160, rotate: 3 });
-    ScrollTrigger.create({
-      trigger: '#avRail', start: 'top 85%', once: true,
-      onEnter: function () {
-        gsap.to(cards, { opacity: 1, x: 0, rotate: 0, duration: 1.4, ease: EXPO, stagger: 0.07 });
-      }
-    });
-  }
-  var reelsSec = $('.av-reels');
-  var rail = $('#avRail');
-  mm.add('(min-width: 1025px)', function () {
-    if (!reelsSec || !rail) return;
-    reelsSec.classList.add('ed-h');
-    var dist = function () {
-      var r = rail.getBoundingClientRect();
-      var left = r.left - (gsap.getProperty(rail, 'x') || 0);
-      return Math.max(0, rail.scrollWidth + left - window.innerWidth + left);
-    };
-    var tw = gsap.to(rail, {
-      x: function () { return -dist(); }, ease: 'none',
-      scrollTrigger: {
-        trigger: reelsSec, start: 'center center',
-        end: function () { return '+=' + dist(); },
-        pin: true, scrub: 1, invalidateOnRefresh: true, anticipatePin: 1
-      }
-    });
-    return function () { reelsSec.classList.remove('ed-h'); gsap.set(rail, { clearProps: 'x' }); };
-  });
-  var skewProxy = { s: 0 };
-  /* перекос от скорости нужен только пока лента видео в кадре: без trigger он считался на каждую прокрутку страницы и писал стиль карточкам вне экрана */
-  ScrollTrigger.create({
-    trigger: reelsSec || '#avRail', start: 'top bottom', end: 'bottom top',
-    onUpdate: function (self) {
-      var s = gsap.utils.clamp(-5, 5, self.getVelocity() / -350);
-      if (Math.abs(s) > Math.abs(skewProxy.s)) {
-        skewProxy.s = s;
-        gsap.to(skewProxy, {
-          s: 0, duration: 0.9, ease: 'power3', overwrite: true,
-          onUpdate: function () { gsap.set(cards, { skewY: skewProxy.s }); }
-        });
-      }
-    }
-  });
-
-  /* ---------------------------------------------------------
      8. Порядок работы: таймлайн с номерами, активная карточка,
         счётчик «шаг / 8» и шкала прогресса
      --------------------------------------------------------- */
@@ -545,9 +496,9 @@
       if (!moved) { moved = true; gsap.set([dot, ring], { x: e.clientX, y: e.clientY }); dot.classList.remove('is-hidden'); ring.classList.remove('is-hidden'); }
       dx(e.clientX); dy(e.clientY); rx(e.clientX); ry(e.clientY);
       var t = e.target;
-      var media = t.closest && t.closest('.av-card, .ed-card, .consult-photo:not(.consult-photo-all)');
+      var media = t.closest && t.closest('.ed-card, .consult-photo:not(.consult-photo-all)');
       var link = !media && t.closest && t.closest('a, button, input, select, textarea, label, [role="button"], .consult-photo-all');
-      var next = media ? (media.classList.contains('av-card') ? 'play' : 'zoom') : link ? 'link' : '';
+      var next = media ? 'zoom' : link ? 'link' : '';
       if (next !== mode) {
         mode = next;
         ring.classList.toggle('is-media', next === 'play' || next === 'zoom');

@@ -25,7 +25,7 @@
 /* ---------- Шапка секции (SectionHeading): тег → заголовок → разделитель ---------- */
 .ed .section-title,
 .ed .process-title,
-.ed .ar-reviews-title, .ed #av-reels-title, .ed #contacts-title, .ed #tech-title {
+.ed .ar-reviews-title, .ed #contacts-title, .ed #tech-title {
   font-size: var(--ed-sec);
   line-height: 1.1;
   text-align: left !important;
@@ -77,15 +77,6 @@
   }
 }
 .ed .consult-form-title { font-size: var(--ed-form); line-height: 1.12; }
-
-/* ---------- Видео-лента: секция закрепляется, лента едет вбок ---------- */
-.ed .av-reels { overflow: hidden; }
-@media (min-width: 1025px) {
-  .ed .av-reels.ed-h .av-rail {
-    overflow: visible; scroll-snap-type: none; width: max-content;
-    padding-left: var(--px); padding-right: var(--px);
-  }
-}
 
 /* ---------- Технический проект: фото уходит в край экрана ---------- */
 @media (min-width: 1025px) {
@@ -226,7 +217,7 @@
 @media (max-width: 480px) {
   .ed .section-title,
   .ed .process-title,
-  .ed .ar-reviews-title, .ed #av-reels-title, .ed #contacts-title, .ed #tech-title {
+  .ed .ar-reviews-title, .ed #contacts-title, .ed #tech-title {
     font-size: clamp(32px, 9.5vw, 54px);                               /* 24–36 × 1.5 */
   }
   .ed .sale-title { font-size: clamp(32px, 9.5vw, 54px); }

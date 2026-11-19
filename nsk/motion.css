@@ -157,9 +157,6 @@ html.lenis, html.lenis body { height: auto; }
 .motion-on .process-step.mo-lit { box-shadow: inset 0 3px 0 var(--red); }
 .motion-on .process-step { transition: box-shadow .5s ease; }
 
-/* --- Видео-лента: перекос от скорости --- */
-.motion-on .av-card { will-change: transform; }
-
 @media (prefers-reduced-motion: reduce) {
   .mo-pre, .mo-cursor, .mo-ring, .mo-progress { display: none !important; }
 }

@@ -37,151 +37,12 @@ function toggleTech(btn) {
   items.forEach(li => li.classList.toggle('show', !isOpen));
   btn.querySelector('span').textContent = isOpen ? 'Показать полностью' : 'Свернуть';
 }
-(function initVideoReels() {
-  var rail = document.getElementById('avRail');
-  if (!rail) return;
-  var cards = Array.from(rail.querySelectorAll('.av-card'));
+/* Лайтбокс ролика «О компании» (разметка partials/about-lightbox.njk): закрытие по кнопке, фону, Esc и по окончании ролика. */
+(function initAboutLightbox() {
   var lightbox = document.getElementById('avLightbox');
   var lightboxVideo = document.getElementById('avLightboxVideo');
   var lightboxClose = document.getElementById('avLightboxClose');
-  var currentlyPlaying = null;
-  function playOnly(video) {
-    if (currentlyPlaying && currentlyPlaying !== video) {
-      currentlyPlaying.pause();
-    }
-    if (video && video !== currentlyPlaying) {
-      video.play().catch(function () {});
-    }
-    currentlyPlaying = video;
-  }
-  var ratios = new Map();
-  var suppressAutoplay = false;
-  function applyVisibilityAutoplay() {
-    var bestCard = null;
-    var bestRatio = 0;
-    ratios.forEach(function (ratio, card) {
-      if (ratio > bestRatio) {
-        bestRatio = ratio;
-        bestCard = card;
-      }
-    });
-    if (bestCard) {
-      playOnly(bestCard.querySelector('.av-video'));
-    } else if (currentlyPlaying) {
-      currentlyPlaying.pause();
-      currentlyPlaying = null;
-    }
-  }
-  var io = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      ratios.set(entry.target, entry.isIntersecting ? entry.intersectionRatio : 0);
-    });
-    if (suppressAutoplay) return;
-    applyVisibilityAutoplay();
-  }, { threshold: [0.6, 0.75, 0.9] });
-  cards.forEach(function (card) { io.observe(card); });
-  /* Ленивая подгрузка постеров: отдельный observer с запасом по rootMargin,
-     чтобы не трогать пороги/логику автовоспроизведения основного observer. */
-  var posterObserver = new IntersectionObserver(function (entries, obs) {
-    entries.forEach(function (entry) {
-      if (!entry.isIntersecting) return;
-      var video = entry.target.querySelector('.av-video');
-      if (video) {
-        if (video.dataset.poster) {
-          video.poster = video.dataset.poster;
-        }
-        video.preload = 'metadata';
-      }
-      obs.unobserve(entry.target);
-    });
-  }, { rootMargin: '400px 0px', threshold: 0 });
-  cards.forEach(function (card) { posterObserver.observe(card); });
-  /* Первые три обложки (их видно сразу, когда секция доехала до экрана) грузим с высоким приоритетом и заранее:
-     у video.poster нет fetchpriority, поэтому прогреваем кэш картинкой с fetchPriority = high, когда секция в пределах четырёх экранов (примерно 3 тыс. пикселей до неё).
-     Секция далеко внизу страницы, раньше этого момента обложки не запрашиваем, чтобы не мешать первому экрану. Остальные остаются ленивыми. */
-  var sec = document.getElementById('video-reels');
-  if (sec && 'IntersectionObserver' in window) {
-    var warm = new IntersectionObserver(function (entries, obs) {
-      if (!entries[0].isIntersecting) return;
-      obs.disconnect();
-      cards.slice(0, 3).forEach(function (card) {
-        var v = card.querySelector('.av-video');
-        if (!v || !v.dataset.poster) return;
-        var img = new Image();
-        img.fetchPriority = 'high';
-        img.decoding = 'async';
-        img.src = v.dataset.poster;
-        v.poster = v.dataset.poster;
-      });
-    }, { rootMargin: '400% 0px', threshold: 0 });
-    warm.observe(sec);
-  }
-  /* Ховер запускает видео карточки под курсором — только на устройствах
-     с настоящим курсором, чтобы не мешать touch-автоплею по видимости. */
-  var hoverCapable = window.matchMedia && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
-  if (hoverCapable) {
-    var resumeTimer = null;
-    cards.forEach(function (card) {
-      var video = card.querySelector('.av-video');
-      if (!video) return;
-      card.addEventListener('mouseenter', function () {
-        suppressAutoplay = true;
-        if (resumeTimer) {
-          clearTimeout(resumeTimer);
-          resumeTimer = null;
-        }
-        playOnly(video);
-      });
-      card.addEventListener('mouseleave', function () {
-        if (currentlyPlaying === video) {
-          video.pause();
-          currentlyPlaying = null;
-        }
-        if (resumeTimer) clearTimeout(resumeTimer);
-        resumeTimer = setTimeout(function () {
-          resumeTimer = null;
-          suppressAutoplay = false;
-          applyVisibilityAutoplay();
-        }, 180);
-      });
-    });
-  }
-  /* Горизонтальный скролл колесом мыши, как в карусели отзывов */
-  rail.addEventListener('wheel', function (e) {
-    var delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
-    if (Math.abs(delta) > 0) {
-      e.preventDefault();
-      rail.scrollLeft += delta;
-    }
-  }, { passive: false });
-  function centerRailIfNoOverflow() {
-    rail.style.justifyContent = rail.scrollWidth <= rail.clientWidth ? 'center' : 'flex-start';
-  }
-  centerRailIfNoOverflow();
-  window.addEventListener('resize', centerRailIfNoOverflow);
-  cards.forEach(function (card) {
-    var btn = card.querySelector('.av-sound-btn');
-    var video = card.querySelector('.av-video');
-    if (!btn || !video) return;
-    btn.addEventListener('click', function (e) {
-      e.stopPropagation();
-      if (video.dataset.fullSrc) {
-        openLightbox(video.dataset.fullSrc);
-      } else {
-        video.muted = !video.muted;
-        btn.dataset.state = video.muted ? 'muted' : 'on';
-        btn.setAttribute('aria-label', video.muted ? 'Включить звук' : 'Выключить звук');
-      }
-    });
-  });
-  function openLightbox(src) {
-    lightboxVideo.src = src;
-    lightboxVideo.muted = false;
-    lightboxVideo.currentTime = 0;
-    lightbox.classList.add('open');
-    document.documentElement.classList.add('scroll-locked');
-    lightboxVideo.play().catch(function () {});
-  }
+  if (!lightbox || !lightboxVideo || !lightboxClose) return;
   function closeLightbox() {
     lightbox.classList.remove('open');
     document.documentElement.classList.remove('scroll-locked');
@@ -190,20 +51,6 @@ function toggleTech(btn) {
     lightboxVideo.load();
   }
   lightboxVideo.addEventListener('ended', closeLightbox);
-  cards.forEach(function (card) {
-    var video = card.querySelector('.av-video');
-    card.addEventListener('click', function () {
-      var fullSrc = video.dataset.fullSrc || video.getAttribute('src');
-      openLightbox(fullSrc);
-    });
-    card.addEventListener('keydown', function (e) {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        var fullSrc = video.dataset.fullSrc || video.getAttribute('src');
-        openLightbox(fullSrc);
-      }
-    });
-  });
   lightboxClose.addEventListener('click', closeLightbox);
   lightbox.addEventListener('click', function (e) { if (e.target === lightbox) closeLightbox(); });
   document.addEventListener('keydown', function (e) {
