@@ -20,11 +20,15 @@
   var clamp = function (v) { return v < 0 ? 0 : v > 1 ? 1 : v; };
   var ease = function (t) { return 1 - Math.pow(1 - t, 3); };
 
-  /* Для каждой строки «нашей» заботы: какой отзыв показывать (последний с отзывом среди строк до неё включительно) */
+  /* Для каждой строки «нашей» заботы: какой отзыв показывать (последний с отзывом среди строк до неё включительно).
+     Карточка с data-own (поле card в cares.json) стоит только на своей строке и в «последний отзыв» не попадает. */
   var proofRows = proofs.map(function (p) { return +p.getAttribute('data-row'); });
+  var ownRows = proofs.filter(function (p) { return p.hasAttribute('data-own'); }).map(function (p) { return +p.getAttribute('data-row'); });
+  var reviewRows = proofRows.filter(function (r) { return ownRows.indexOf(r) < 0; });
   var proofFor = ours.map(function (row) {
     var idx = cares.indexOf(row), best = -1;
-    proofRows.forEach(function (r) { if (r >= 0 && r <= idx && r > best) best = r; });
+    if (ownRows.indexOf(idx) >= 0) return idx;
+    reviewRows.forEach(function (r) { if (r >= 0 && r <= idx && r > best) best = r; });
     return best;
   });
 
