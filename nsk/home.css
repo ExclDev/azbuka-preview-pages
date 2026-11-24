@@ -163,7 +163,7 @@ body.city-bar-visible .hero { padding-top: calc(var(--city-bar-h, 36px) + var(--
 }
 .hero-badge:hover .hero-badge-text { color: var(--red); }
 .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
-.about { padding: var(--section-pad) 0; overflow: hidden; }
+.about { padding: var(--section-pad) 0; overflow: hidden; overflow: clip; }   /* clip: обрезает так же, но не делает секцию прокручиваемой областью, иначе view() у фото считался бы по ней (aboutReveal) */
 .about-top {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -180,9 +180,14 @@ body.city-bar-visible .hero { padding-top: calc(var(--city-bar-h, 36px) + var(--
 .about-text { color: var(--gray-light); font-size: 14px; margin-bottom: 24px; }
 .about-text p + p { margin-top: 12px; }
 .about-btns { display: flex; gap: 12px; flex-wrap: wrap; }
-.about-photo {
-  clip-path: inset(0 100% 0 0);
-  transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+/* Фото открыто сразу. Шторка (сверху вниз: открывающаяся часть уже на экране) привязана к прокрутке: начинает открываться, когда верх фото показался снизу экрана,
+   открыто полностью, когда верх дошёл до середины экрана (cover 0 → 50svh). Без animation-timeline и при reduced-motion шторки нет, таймера нет. */
+.about-photo { clip-path: none; }
+@keyframes aboutReveal { from { clip-path: inset(0 0 100% 0); } to { clip-path: inset(0 0 0 0); } }
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .about-photo { animation: aboutReveal linear both; animation-timeline: view(); animation-range: cover 0% cover 50svh; }
+  }
 }
 .about-content #about-title {
   opacity: 0;
@@ -199,7 +204,6 @@ body.city-bar-visible .hero { padding-top: calc(var(--city-bar-h, 36px) + var(--
   transform: translateY(15px);
   transition: opacity 0.5s ease-out 500ms, transform 0.5s ease-out 500ms;
 }
-.about-top.is-visible .about-photo { clip-path: inset(0 0% 0 0); }
 .about-top.is-visible .about-content #about-title { opacity: 1; transform: translateY(0); }
 .about-top.is-visible .about-content .about-text { opacity: 1; transform: translateY(0); }
 .about-top.is-visible .about-content .about-btns { opacity: 1; transform: translateY(0); }

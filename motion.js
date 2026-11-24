@@ -237,13 +237,12 @@
     var pic = photo && $('picture', photo);
     var img = photo && $('img', photo);
     if (pic) pic.style.display = 'block';
-    gsap.set(photo, { clipPath: 'inset(100% 0% 0% 0%)', '--fr': 0, '--fro': 0 });
+    gsap.set(photo, { '--fr': 0, '--fro': 0 });   // шторку фото ведёт CSS по прокрутке (home.css, aboutReveal)
     gsap.set(img, { scale: 1.35 });
     var aboutBits = [].concat($$('.about-text p', aboutTop), [$('.about-btns', aboutTop)]);
     gsap.set(aboutBits, { opacity: 0, y: 34 });
     var atl = gsap.timeline({ paused: true, defaults: { ease: EXPO } });
-    atl.to(photo, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.5, ease: 'expo.inOut' }, 0)
-       .to(img, { scale: 1.08, duration: 2.2 }, 0.1)
+    atl.to(img, { scale: 1.08, duration: 2.2 }, 0.1)
        .to(photo, { '--fr': 1, '--fro': 1, duration: 1.2 }, 0.9)
        .to(aboutBits, { opacity: 1, y: 0, duration: 1.1, stagger: 0.1 }, 0.35);
     ScrollTrigger.create({ trigger: aboutTop, start: 'top 75%', once: true, onEnter: function () { atl.play(); } });

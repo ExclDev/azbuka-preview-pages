@@ -232,7 +232,7 @@
 
     /* ── Чертёж → интерьер ── */
     var mm = gsap.matchMedia();
-    mm.add('(min-width: 1100px)', function () {
+    mm.add('(min-width: 1101px)', function () {
       if (!plan || !photo) return;
       // линии рисуются при загрузке (стены, двери и окна, размеры), подписи комнат проявляются
       var draw = function (sel, delay, dur) { gsap.to($$(sel, plan), { strokeDashoffset: 0, duration: dur, delay: delay, ease: 'power2.inOut' }); };
@@ -248,7 +248,7 @@
       if (colorImg && grayImg) scrub(colorImg, { clipPath: 'inset(0% 100% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)' }, { trigger: document.body, start: 120, end: 620 });
       if (cap) scrub(cap, { opacity: 0, visibility: 'hidden' }, { opacity: 1, visibility: 'visible' }, { trigger: document.body, start: 420, end: 620 });
     });
-    mm.add('(max-width: 1099px)', function () {
+    mm.add('(max-width: 1100px)', function () {
       if (!plan || !photo) return;
       // фото ниже первого экрана: всё привязано к самому фото
       var d = { trigger: photo };
@@ -318,7 +318,7 @@
     var viewCss = !!(window.CSS && CSS.supports && CSS.supports('animation-timeline: view()'));
     if (stepsSec) {
       var track = $('.sv-steps', stepsSec);
-      mm.add('(min-width: 1100px)', function () {
+      mm.add('(min-width: 1101px)', function () {
         if ((hzSec || voSec) && viewCss) return;
         // секция закреплена, лента из шагов едет влево; каждый шаг загорается и тянет свою красную линию
         root.classList.add('sv-pinned');
@@ -367,10 +367,10 @@
           }
         });
       };
-      // три условия вместо одного (max-width: 1099px): планшет в портрете (768–1099 × от 900) у «Ванной» с view() живёт на CSS
-      mm.add('(max-width: 1099px) and (max-height: 899px)', flat);
+      // три условия вместо одного (max-width: 1100px): планшет в портрете (768–1100 × от 900) у «Ванной» с view() живёт на CSS
+      mm.add('(max-width: 1100px) and (max-height: 899px)', flat);
       mm.add('(max-width: 767px)', flat);
-      mm.add('(min-width: 768px) and (max-width: 1099px) and (min-height: 900px)', flat);
+      mm.add('(min-width: 768px) and (max-width: 1100px) and (min-height: 900px)', flat);
     }
 
     if (!cssTl) {

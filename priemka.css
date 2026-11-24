@@ -39,7 +39,7 @@
 .pkF-ic { grid-row: 1 / 3; width: 44px; height: 44px; max-width: none; fill: none; stroke: #e8201a; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .pkF b { font-size: clamp(26px, 2.4vw, 34px); letter-spacing: .01em; text-transform: uppercase; }
 .pkF .pkF-i > span { margin-top: 4px; font-size: 15px; color: #a8a29c; }
-@media (min-width: 761px) and (max-width: 1099px) {
+@media (min-width: 761px) and (max-width: 1100px) {
   .pkF .pkF-i { grid-template-columns: 1fr; row-gap: 0; align-content: start; padding-right: 20px; }
   .pkF .pkF-i + .pkF-i { padding-left: 20px; }
   .pkF-ic { grid-row: auto; width: 40px; height: 40px; margin-bottom: 12px; }
@@ -53,7 +53,7 @@
   .pkF b { font-size: 24px; }
   .pkF .pkF-i > span { margin-top: 2px; font-size: 14px; }
 }
-@media (max-width: 1099px) { .pkB-under { grid-template-columns: 1fr; gap: 24px; } .pkB-m > span { display: none; } }
+@media (max-width: 1100px) { .pkB-under { grid-template-columns: 1fr; gap: 24px; } .pkB-m > span { display: none; } }
 @media (max-width: 640px) {
   .pkB-stage { height: auto; min-height: 0; aspect-ratio: 1 / 1; }
   .pkB-img { object-position: 38% 50%; }
@@ -311,4 +311,12 @@
 }
 @media (max-width: 560px) {
   .pkB-stage { aspect-ratio: auto; height: calc(100vw - 2 * var(--px, 16px) - var(--cookie-h, 0px) * .9); }
+}
+
+/* ═══ Планшет (768–1100 px): без прилипания и наезда ═══
+   Настольный наезд сюда не помещается, а сдвиг по view() (pkPin) держал «Видео» и «Акт» на экране, пока под ними ехал следующий блок:
+   видео закрывало первый экран, лист акта наезжал на цены. На планшете блоки идут друг за другом, как в обычном потоке.
+   Телефон (до 767 px) и компьютер (от 1101 px) не затронуты. Тот же приём для «Листов проекта» — в конце service.css. */
+@media (min-width: 768px) and (max-width: 1100px) {
+  .pkB, .pk-stack > #video, .pk-stack2 > #act { animation: none; translate: none; }
 }

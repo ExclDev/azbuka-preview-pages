@@ -466,7 +466,7 @@ html.sv-motion { scroll-behavior: auto !important; }
 @media (prefers-reduced-motion: reduce) { .lay path { stroke-dashoffset: 0 !important; } }
 /* уже 1100 px: панель закреплена сверху над списком. Колонка flex, а не сетка: у элемента сетки область закрепления ограничена его ячейкой,
    а во flex-колонке панель держится, пока прокручивается весь блок. Высоту ограничиваем, чтобы список оставался виден */
-@media (max-width: 1099px) {
+@media (max-width: 1100px) {
   .dp-board { display: flex; flex-direction: column; gap: 24px; }
   .dp-plan { order: -1; flex: none; width: 100%; box-sizing: border-box; top: calc(var(--sv-top) + 8px); z-index: 2; max-height: 38vh; max-height: 38svh; box-shadow: 0 12px 32px rgba(22,19,16,.25); }
   /* прокрутка к строке (фокус стрелками, якорь) оставляет её под панелью, а не за ней: отступ не меньше высоты панели */
@@ -831,7 +831,7 @@ html.sv-motion { scroll-behavior: auto !important; }
 
 /* ── 4. «Как идёт ремонт ванной» наезжает на «Цены» ──
    Компьютер: цены прилипают под шапкой, этапы со скруглением 28px наезжают поверх, тень края — градиент в ::before.
-   Телефон, планшет и окна вне 700–1500 px по высоте: сдвиг цен по view() (vnPin, как pkPin на «Приёмке»). Без view() и при reduced-motion обычная прокрутка. */
+   Телефон и окна вне 700–1500 px по высоте: сдвиг цен по view() (vnPin, как pkPin на «Приёмке»); на планшете 768–1100 px сдвига и прилипания нет (24.11.2026). Без view() и при reduced-motion обычная прокрутка. */
 .vn-stack { position: relative; isolation: isolate; }   /* свой контекст наложения: порядок цен и этапов не зависит от слоёв вне блока */
 .vn-stack > #prices { position: relative; z-index: 1; }
 .vn-stack > #steps { position: relative; z-index: 2; border-radius: 28px 28px 0 0; background-color: #f5f5f7; }   /* сплошной фон: цены под этапами не просвечивают */
@@ -843,13 +843,8 @@ html.sv-motion { scroll-behavior: auto !important; }
   @media (prefers-reduced-motion: no-preference) and (min-width: 1101px) and (min-height: 700px) and (max-height: 1500px) {
     .vn-stack > #prices { position: sticky; top: var(--header-h); }
   }
-  /* планшет в портрете (768–1100 × 900–1500): цены помещаются в экран, поэтому, как на компьютере, обычное прилипание под шапкой, без анимированного слоя.
-     Safari (iPad) при сдвиге по view() выносил анимированные цены поверх наезжающих этапов; у sticky анимированного слоя нет. */
-  @media (prefers-reduced-motion: no-preference) and (min-width: 768px) and (max-width: 1100px) and (min-height: 900px) and (max-height: 1500px) {
-    .vn-stack > #prices { position: sticky; top: var(--header-h); }
-  }
-  /* телефон и окна вне планшетного диапазона: сдвиг по view() с учётом шапки */
-  @media (prefers-reduced-motion: no-preference) and (max-width: 767px), (prefers-reduced-motion: no-preference) and (max-width: 1100px) and (max-height: 899px), (prefers-reduced-motion: no-preference) and (max-width: 1100px) and (min-height: 1501px), (prefers-reduced-motion: no-preference) and (max-height: 699px), (prefers-reduced-motion: no-preference) and (min-height: 1501px) {
+  /* телефон (до 767 px) и окна вне компьютерного диапазона: сдвиг по view() с учётом шапки. Планшет 768–1100 px сюда не входит: цены и этапы идут обычным потоком */
+  @media (prefers-reduced-motion: no-preference) and (max-width: 767px), (prefers-reduced-motion: no-preference) and (min-width: 1101px) and (max-height: 699px), (prefers-reduced-motion: no-preference) and (min-width: 1101px) and (min-height: 1501px) {
     .vn-stack > #prices { animation: vnPin linear both; animation-timeline: view(block var(--header-h) 0px); animation-range: contain 100% exit 100%; }
   }
 }
@@ -862,12 +857,12 @@ html.sv-motion { scroll-behavior: auto !important; }
 .vn-hzsec { position: relative; timeline-scope: --t-hz, --t-steps; }
 .vn-tl1, .vn-tl2 { display: none; }
 @keyframes vnHz { 0% { translate: 50% 0; } 28%, 55% { translate: 0 0; } 83%, 100% { translate: -50% 0; } }
-@keyframes vnTrack { 0%, 10% { translate: 0 0; } 100% { translate: -2000px 0; } }
+@keyframes vnTrack { 0%, 10% { translate: 0 0; } 100% { translate: calc(var(--vn-sw, 400px) * -5) 0; } }   /* путь ленты = 5 ширин шага; ширина шага --vn-sw (по умолчанию 400 px, на планшете больше) */
 @keyframes vnStepOn { from { opacity: .28; } to { opacity: 1; } }
 @keyframes vnNodeOn { 0%, 60% { background: #f5f5f7; color: #e8201a; } 100% { background: #e8201a; color: #ffffff; } }
 @keyframes vnScale { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) and (min-width: 1100px), (prefers-reduced-motion: no-preference) and (min-width: 768px) and (min-height: 900px) {
+  @media (prefers-reduced-motion: no-preference) and (min-width: 1101px), (prefers-reduced-motion: no-preference) and (min-width: 768px) and (min-height: 900px) {
     /* Скорость выезда панелей: на 1 px прокрутки ≈ 1,2 px сдвига (было ≈ 1,83). Въезд «Отзывов» и выезд на «Вопросы» занимают по 28 % пути шкалы и двигают панель
        на ширину кадра (100vw), поэтому путь шкалы = 100vw / (1,2 × 0,28) ≈ 2,976 × 100vw, а высота шкалы .vn-tl2 = путь + высота кадра. */
     .vn-hzsec { --vn-hz: calc(100svh + 2.976 * 100vw); height: calc(220svh + var(--vn-hz)); padding: 0; }
@@ -900,7 +895,23 @@ html.sv-motion { scroll-behavior: auto !important; }
     .vn-panel > section { width: 100%; padding: calc(var(--header-h) + clamp(20px, 3.5svh, 48px)) 0 clamp(28px, 6.5svh, 88px) !important; }
     .vn-panel > #faq .sv-faq { align-items: start; }
   }
-  @media (prefers-reduced-motion: no-preference) and (min-width: 1100px) and (max-height: 760px) {
+  /* Планшет в портрете 768–1100 px (от 900 px по высоте, граница 1100 включена): кадр ленты этапов не центрируется по вертикали, а начинается с верхнего отступа секции под шапкой,
+     шаги крупнее, чтобы лента занимала свободную высоту (~3/4 экрана). Длина прокрутки (320svh) и поведение ленты прежние; путь ленты считается от --vn-sw (vnTrack).
+     Компонент общий для всех страниц с лентой этапов (.vn-hzsec). От 1101 px и на телефоне не действует. */
+  @media (prefers-reduced-motion: no-preference) and (min-width: 768px) and (max-width: 1100px) and (min-height: 900px) {
+    .vn-hzsec { --vn-sw: 560px; }
+    .vn-hzsec .sv-pin { justify-content: flex-start; padding-top: calc(var(--header-h) + var(--section-pad)); box-sizing: border-box; }
+    .vn-hzsec .sv-pin > .wrapper { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+    /* строка шагов по вертикали посередине свободного места между низом заголовка и низом кадра: auto-поля по обе стороны; padding-top 57px = вынос кольца над линией */
+    .vn-hzsec .sv-steps { margin-top: auto; margin-bottom: auto; padding-top: 57px; }
+    .vn-hzsec .sv-pin .divider { margin-bottom: 0; }   /* нижний отступ черты не входит в «свободное место», иначе пустота над шагами больше */
+    .vn-hzsec .sv-step { width: var(--vn-sw); padding-right: 64px; }
+    .vn-hzsec .sv-step-n { width: 112px; height: 112px; margin-top: -57px; font-size: 46px; }
+    .vn-hzsec .sv-step-fin .sv-step-n svg { width: 46px; height: 46px; }
+    .vn-hzsec .sv-step h3 { font-size: 48px; margin-top: 32px; }
+    .vn-hzsec .sv-step p { font-size: 26px; max-width: 440px; margin-top: 14px; }
+  }
+  @media (prefers-reduced-motion: no-preference) and (min-width: 1101px) and (max-height: 760px) {
     .vn-panel > #reviews .sv-sub { display: none; }
     .vn-panel .sv-rev p { -webkit-line-clamp: 5; display: -webkit-box; -webkit-box-orient: vertical; overflow: hidden; }
   }
@@ -914,7 +925,7 @@ html.sv-motion { scroll-behavior: auto !important; }
 @keyframes vnOvR { from { translate: 100% 0; } to { translate: 0 0; } }
 @keyframes vnOvL { from { translate: -100% 0; } to { translate: 0 0; } }
 @supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) and (min-width: 1100px), (prefers-reduced-motion: no-preference) and (min-width: 768px) and (min-height: 900px) {
+  @media (prefers-reduced-motion: no-preference) and (min-width: 1101px), (prefers-reduced-motion: no-preference) and (min-width: 768px) and (min-height: 900px) {
     .vn-hzsec--ov .vn-hz-track { display: block; position: relative; width: 100%; animation: none; }
     .vn-hzsec--ov .vn-panel { position: absolute; inset: 0; flex: none; animation-timing-function: linear; animation-fill-mode: both; animation-timeline: --t-hz; }
     .vn-hzsec--ov .vn-panel[data-dir="rtl"] { border-radius: 28px 0 0 28px; animation-name: vnOvR; }
@@ -974,7 +985,7 @@ html.sv-motion { scroll-behavior: auto !important; }
   }
   /* узкие экраны, обычная сетка этапов: красная линия идёт по шагам подряд. Диапазоны шагов — по шкале списка: первый «entry 70 % → cover 34 %», дальше по 6 % */
   /* кроме «Ванной» на планшете в портрете: там ленту ведёт --t-steps */
-  @media (prefers-reduced-motion: no-preference) and (max-width: 1099px) and (max-height: 899px), (prefers-reduced-motion: no-preference) and (max-width: 767px) {
+  @media (prefers-reduced-motion: no-preference) and (max-width: 1100px) and (max-height: 899px), (prefers-reduced-motion: no-preference) and (max-width: 767px) {
     .sv-steps { view-timeline-name: --svlist; }
     .sv-step:not(.sv-step-fin)::before { animation: svLine linear both; animation-timeline: --svlist; }
     .sv-step:nth-child(1)::before { animation-range: entry 70% cover 34%; }
@@ -1080,7 +1091,7 @@ html.sv-motion { scroll-behavior: auto !important; }
 }
 
 
-/* ═══ Карточка текста: общий вид «Под старой отделкой» (.vt-find, blocks/finds.njk, vtorichka.css) и «Как мы делаем проект» (.sv-ncard, blocks/notes.njk) ═══
+/* ═══ Карточка текста: общий вид «Под старой отделкой» (.vt-find, blocks/finds.njk, vtorichka.css) и «Зачем делать проект у нас» (.sv-ncard, blocks/notes.njk) ═══
    Отличается только поле у заголовка: у .vt-find сверху номер (vtorichka.css), у .sv-ncard номера нет. */
 .sv-ncards { display: grid; grid-template-columns: 1fr; gap: 16px; margin-top: 48px; }
 .vt-find, .sv-ncard { position: relative; padding: 32px 28px 30px; border-radius: var(--radius-lg); background: #211d19; overflow: hidden; transition: background .4s ease; }
@@ -1094,3 +1105,8 @@ html.sv-motion { scroll-behavior: auto !important; }
 @media (max-width: 640px) { .vt-find h3, .sv-ncard h3 { font-size: 24px; } }
 /* справа плавающие кнопки: текст карточки не заходит под них */
 @media (max-width: 1100px) { .sv-ncard { padding-right: 56px; } }
+
+/* Планшет (768–1100 px): «Листы проекта» не сдвигаются по view() (dvPin) и не прилипают, видео идёт следом обычным потоком (как «Приёмка», см. конец priemka.css) */
+@media (min-width: 768px) and (max-width: 1100px) {
+  .dp-stack > #sheets { animation: none; translate: none; }
+}

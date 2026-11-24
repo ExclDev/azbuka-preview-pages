@@ -63,7 +63,7 @@
 
 /* ── «Под старой отделкой» ── */
 .vt-finds { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 48px; }
-/* Вид карточки (рамка, красная черта, hover, заголовок, текст) — общий с «Как мы делаем проект» (.sv-ncard), правила в конце service.css */
+/* Вид карточки (рамка, красная черта, hover, заголовок, текст) — общий с «Зачем делать проект у нас» (.sv-ncard), правила в конце service.css */
 .vt-find-n { display: block; font: 600 15px/1 var(--font-display); color: var(--red-text); }
 .vt-find h3 { margin: 14px 0 18px; }   /* вид заголовка карточки — общий с .sv-ncard, service.css */
 .vt-find .vt-find-k { margin: 0 0 4px; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--gray); }
@@ -147,7 +147,7 @@
 .vt-skip { display: inline-flex; align-items: center; min-height: 44px; margin-top: 6px; font-size: 14px; color: var(--gray-ink); text-decoration: underline; text-underline-offset: 3px; }
 .vt-skip:hover { color: var(--light-ink); }
 .vt-skip:focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
-@media (max-width: 1099px) { .vt-grid { grid-template-columns: 1fr; grid-template-areas: "head" "wall" "copy"; } .vt-wall { width: min(100%, 460px); } }
+@media (max-width: 1100px) { .vt-grid { grid-template-columns: 1fr; grid-template-areas: "head" "wall" "copy"; } .vt-wall { width: min(100%, 460px); } }
 @media (max-width: 640px) { .vt-caps { grid-template-columns: 1fr; } }
 
 @supports (animation-timeline: view()) {
@@ -203,7 +203,7 @@
   .vt-putty::before { right: 16px; content: "Выровнено по маякам"; }
   .vt-paint::before { right: 16px; content: "После ремонта"; background: var(--red-ink); }
 }
-@media (prefers-reduced-motion: no-preference) and (max-width: 1099px) and (max-height: 1400px) {
+@media (prefers-reduced-motion: no-preference) and (max-width: 1100px) and (max-height: 1400px) {
   .vt-grid { row-gap: 14px; }
   .vt-head .section-tag, .vt-head .divider, .vt-sub { display: none; }
   .vt-wall { width: min(100%, 46svh, 420px); }
@@ -217,7 +217,7 @@
   .vt-end { position: absolute; left: 0; right: 0; bottom: 0; margin: 0; padding-top: 8px; background: var(--light-bg); }
   .vt-end span { display: none; }
 }
-@media (prefers-reduced-motion: no-preference) and (max-width: 1099px) and (max-height: 700px) {
+@media (prefers-reduced-motion: no-preference) and (max-width: 1100px) and (max-height: 700px) {
   .vt-wall { width: min(100%, 40svh); }
   .vt-cap p:last-child { font-size: 14px; }
 }
@@ -247,7 +247,7 @@
 .vo-over .section-tag { color: var(--red-text); }
 .vo-over { --gray: #9A928A; }
 @supports (animation-timeline: view()) {
-@media (prefers-reduced-motion: no-preference) and (min-width: 1100px) {
+@media (prefers-reduced-motion: no-preference) and (min-width: 1101px) {
   .vo-sec { timeline-scope: --t-steps, --t-over; height: 420svh; }
   .vo-tl1, .vo-tl2 { display: block; position: absolute; left: 0; width: 1px; pointer-events: none; visibility: hidden; }
   .vo-tl1 { top: 0; height: 320svh; view-timeline-name: --t-steps; }
