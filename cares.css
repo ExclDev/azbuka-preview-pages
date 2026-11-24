@@ -52,10 +52,6 @@
 .care[data-yours] { --k: 0; }
 .care[data-yours] .chip .you { border-color: var(--gray-light); color: var(--white); }
 
-/* Отзыв под строкой (телефон, планшет и конечное состояние) */
-.care .m-proof { grid-column: 2 / -1; margin: 10px 0 2px; padding-left: 14px; border-left: 1px solid var(--red); font-size: 14px; line-height: 1.45; color: var(--gray-light); }
-.m-proof cite { display: block; margin-top: 4px; font-style: normal; color: var(--gray); font-size: 12px; }
-
 /* Справа плавающие кнопки: на узком экране текст и метка «вам»/«мы» не заходят под них, как на страницах услуг */
 @media (max-width: 768px) { .care { padding-right: 56px; } }
 
@@ -79,40 +75,27 @@
 
 /* Счётчик, отзыв, печать — правая колонка */
 .cares-side { display: grid; gap: 28px; padding-top: 32px; }
-.tally, .proof-wrap, .stamp { display: none; }
+.tally, .stamp { display: none; }
 .tally { align-items: flex-end; gap: 18px; }
 .tally-n { font: 700 clamp(96px, 11vw, 168px)/.8 var(--font-display); color: var(--red); font-variant-numeric: tabular-nums; letter-spacing: -.02em; min-width: 1.1ch; }
 .tally-t { margin: 0; padding-bottom: 6px; font: 500 15px/1.35 var(--font-body); color: var(--gray-light); max-width: 15ch; }
 .tally-t b { color: var(--white); font-weight: 600; }
-.proof { position: relative; min-height: 8.6em; margin: 0; }
-.proof-q { margin: 0; font: 500 clamp(18px, 1.6vw, 22px)/1.35 var(--font-body); color: var(--white); text-wrap: balance; }
-.proof cite { display: block; margin-top: 10px; font: 500 13px/1 var(--font-body); font-style: normal; letter-spacing: .04em; color: var(--gray); }
-.proof cite span { color: var(--gray-light); }
+.proof { position: relative; margin: 0; }
 .proof-i { position: absolute; inset: 0 auto auto 0; opacity: 0; transform: translateY(-10px); transition: opacity .18s ease-out, transform .3s var(--c-ease); }
 .proof-i.on { opacity: 1; transform: none; transition: opacity .45s var(--c-ease) .16s, transform .7s var(--c-ease) .16s; }
 .proof-i.lead { position: relative; }
-.proof-i.lead p { margin: 12px 0 0; color: var(--gray); font-size: 14px; max-width: 30ch; }
-/* Без JS и при reduced-motion: виден последний отзыв, как в конце прокрутки */
+.proof-h { margin: 0; font: 700 clamp(22px, 2vw, 28px)/1.15 var(--font-display); color: var(--white); }
+/* Справа плавающие кнопки: на узком экране карточка не заходит под них, как строки списка */
+@media (max-width: 768px) { .proof-wrap { padding-right: 56px; } }
+.proof-t { margin: 12px 0 0; font: 400 16px/1.5 var(--font-body); color: var(--gray-light); max-width: 34ch; }
+/* Без JS и при reduced-motion: карточка видна, как в конце прокрутки */
 .cares:not(.is-live) .proof-i:last-child { opacity: 1; transform: none; }
-.rating { display: inline-flex; align-items: center; gap: 10px; padding: 10px 14px; border: 1px solid var(--c-line2); border-radius: 12px; font: 600 14px/1 var(--font-body); color: var(--white); }
-.rating b { font: 700 24px/1 var(--font-display); }
-.rating .stars { color: var(--red-text); letter-spacing: 2px; font-size: 12px; }
-.rating small { color: var(--gray); font-weight: 500; font-size: 13px; }
-
-.stamp { position: relative; width: 150px; height: 150px; margin: -8px 0 -8px 8px; pointer-events: none; color: var(--red-text); opacity: .92; transform: rotate(-12deg); }
-.stamp svg { width: 100%; height: 100%; display: block; }
-.stamp-ring { font: 600 10.4px var(--font-body); letter-spacing: .06em; text-transform: uppercase; fill: currentColor; }
-.stamp-num { font: 700 22px var(--font-display); fill: currentColor; }
-.stamp-sub { font: 600 9px var(--font-body); letter-spacing: .14em; fill: currentColor; }
-
 .cares-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; padding-top: 12px; }
 /* Для чтения с экрана: один абзац итога */
 .cares-sr { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; }
 
 /* ── Живой блок на телефоне и планшете: один список, строка становится «нашей» у линии чтения ── */
 .cares.is-live .care { --k: 0; }
-.cares.is-live .care .m-proof { opacity: 0; max-height: 0; margin-block: 0; overflow: hidden; transition: opacity .5s var(--c-ease), max-height .6s var(--c-ease), margin .6s var(--c-ease); }
-.cares.is-live .care.is-taken .m-proof { opacity: 1; max-height: 9em; margin: 10px 0 2px; }
 .cares.is-live .care[data-yours] .chip .you { border-color: var(--c-line2); color: var(--gray); }
 .cares.is-live.is-done .care[data-yours] .chip .you { border-color: var(--gray-light); color: var(--white); }
 .cares.is-live .cares-bar {
@@ -130,7 +113,7 @@ body:has(.header.mo-hide) .cares.is-live .cares-bar { top: var(--city-bar-h, 36p
 @media (min-width: 1101px) and (min-height: 700px) and (max-height: 1500px) {
   .cares-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(260px, .72fr); gap: 0 clamp(32px, 4vw, 64px); align-items: start; --row: clamp(40px, 5.6svh, 56px); margin-top: 0; }
   .ours-col, .cares-colh--ours { display: block; }
-  .care .m-proof, .care-n { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); border: 0; white-space: nowrap; }
+  .care-n { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); border: 0; white-space: nowrap; }
   .care { padding: 0; height: var(--row); align-items: center; }
   .care .chip { display: none; }
   .care[data-yours] .chip { display: inline-grid; visibility: hidden; }
@@ -138,14 +121,16 @@ body:has(.header.mo-hide) .cares.is-live .cares-bar { top: var(--city-bar-h, 36p
   .our { padding: 0; height: var(--row); align-content: center; }
   .cares-side { padding-top: 0; align-content: space-between; height: 100%; gap: 28px; }
   .tally { display: flex; }
-  .proof-wrap, .stamp { display: block; }
+  .stamp { display: block; }
   .tally, .proof-wrap { padding-right: 64px; }   /* справа плавающий виджет: счётчик и цитата под него не заходят */
   .cares-head { padding-block: 0 24px; }
   .cares-head .cares-lead { display: none; }
   .cares-title { font-size: clamp(40px, 6.4svh, 76px); }
   .cares-head .section-tag { margin-bottom: 12px; }
   .cares-head .divider { margin: 14px 0 0; }
-  .care-t::after { display: block; }
+  /* Черта вычёркивания — фон самой строки (inline), а не ::after блока: у длинной заботы («Закупить черновые и чистовые материалы» на 1101–1440 px)
+     заголовок идёт в две строки, и черта должна пройти по каждой. Растёт слева направо тем же --k. */
+  .care-tx { display: inline; background: linear-gradient(var(--red), var(--red)) no-repeat 0 56% / calc(var(--k) * 100%) 2px; -webkit-box-decoration-break: slice; box-decoration-break: slice; }
   .care-t { opacity: calc(1 - var(--k) * .62); }   /* затухание вычеркнутой заботы: opacity, не цвет */
   .care[data-yours] .care-t { opacity: 1; }
   .cares:not(.is-live) .care[data-ours] { --k: 1; }
@@ -183,6 +168,11 @@ body:has(.header.mo-hide) .cares.is-live .cares-bar { top: var(--city-bar-h, 36p
   .why-stack.ws-live .cares { z-index: 4; background: transparent; margin-top: calc(var(--city-bar-h, 36px) - 100svh); pointer-events: none; scroll-margin-top: calc(var(--city-bar-h, 36px) - 100svh); }
   /* Тень выезжающего слоя у левого края: градиент 36 px, не размытая тень */
   .why-stack.ws-live .cares-stage::before { content: ""; position: absolute; right: 100%; top: 0; bottom: 0; width: 36px; pointer-events: none; background: linear-gradient(to left, rgba(0, 0, 0, .45), rgba(0, 0, 0, 0)); }
+}
+/* Длинная забота («Закупить черновые и чистовые материалы») до 1500 px идёт в две строки: строка выше на одну строку текста, отступы сверху и снизу как у однострочных.
+   Та же высота у «нашей» строки справа, иначе нижние пункты двух колонок разъедутся. Строки ниже сдвигаются вместе, друг относительно друга не смещаются. */
+@media (min-width: 1101px) and (max-width: 1500px) and (min-height: 700px) and (max-height: 1500px) {
+  .care-long { height: calc(var(--row) + clamp(17px, 1.5vw, 21px) * 1.25); }
 }
 @media (min-width: 1101px) and (min-height: 700px) and (max-height: 820px) {
   .why-stack.ws-live #about-title { font-size: min(10.5vw, 12svh); }   /* невысокие окна: название ниже, как на страницах услуг */

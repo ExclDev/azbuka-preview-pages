@@ -78,7 +78,7 @@
 }
 .ed .consult-form-title { font-size: var(--ed-form); line-height: 1.12; }
 
-/* ---------- Технический проект: фото уходит в край экрана ---------- */
+/* ---------- Проект: фото уходит в край экрана ---------- */
 @media (min-width: 1025px) {
   .ed .tech { overflow: hidden; }
   .ed .tech-inner { grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); }

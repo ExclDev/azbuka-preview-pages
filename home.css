@@ -1303,7 +1303,7 @@ a.nvx-chip:hover { border-color: var(--red); background: rgba(232,32,26,.08); }
   .step-result-inline { padding-right: 56px; }
   .ar-2gis-link { margin-right: 56px; }
   .process-title { padding: 0 56px; }
-  .ed .process-step-text, .ed .contacts-item-value, .ed .about-text, .ed .ar-text, .pv-finish p { padding-right: 56px; }
+  .ed .process-step-text, .ed .contacts-item-value, .ed .about-text, .ed .about-btns, .ed .ar-text, .pv-finish p { padding-right: 56px; }
   .ed .sale-badge { max-width: calc(100% - 56px); padding-right: 14px; }
   .ed .sale-title { padding-right: 56px; }
   .cares.is-live .cares-bar { padding-right: calc(var(--px) + 56px); }

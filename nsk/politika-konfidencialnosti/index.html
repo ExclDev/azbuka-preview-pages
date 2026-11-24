@@ -121,7 +121,7 @@
         <p class="nvx-group">К ремонту</p>
         <ul class="nvx-links">
           <li>
-            <a class="nvx-link" href="../tehnicheskij-proekt/"><span class="nvx-link-t">Технический проект<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span><span class="nvx-link-d">750 ₽/м² вместо 1 500, если ремонт делаем мы</span></a>
+            <a class="nvx-link" href="../proekt/"><span class="nvx-link-t">Проект<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span><span class="nvx-link-d">750 ₽/м² вместо 1 500, если ремонт делаем мы</span></a>
           </li>
           <li>
             <a class="nvx-link" href="../priemka-kvartiry/"><span class="nvx-link-t">Приёмка квартиры<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span><span class="nvx-link-d">Проверяем квартиру от застройщика по чек-листу с инструментом</span></a>
@@ -141,7 +141,7 @@
             <a class="nvx-link nvx-link-s" href="../natyazhnye-potolki/"><span class="nvx-link-t">Натяжные потолки<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></a>
           </li>
         </ul>
-      </div><a class="nvx-card" href="../tehnicheskij-proekt/"><img src="../images/technical-project-concept.webp" alt="Чертёж технического проекта и готовая гостиная" loading="lazy"><span class="nvx-card-cap"><b>Технический проект<br>за полцены</b><span>Подробнее<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></span></a>
+      </div><a class="nvx-card" href="../proekt/"><img src="../images/technical-project-concept.webp" alt="Чертёж проекта и готовая гостиная" loading="lazy"><span class="nvx-card-cap"><b>Проект<br>за полцены</b><span>Подробнее<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg></span></span></a>
     </div>
   </div>
 </header>
@@ -158,7 +158,7 @@
     </ul></div></div>
     <button class="mm-row" type="button" aria-expanded="false" aria-controls="mm-uslugi" data-acc="uslugi">Услуги<svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 4.5L6 8l3.5-3.5"/></svg></button>
     <div class="mm-sub" id="mm-uslugi" data-acc-body="uslugi"><div><ul><li class="mm-lbl">К ремонту</li>
-      <li><a href="../tehnicheskij-proekt/" onclick="closeMobileMenu()"><b>Технический проект</b><span>750 ₽/м² вместо 1 500, если ремонт делаем мы</span></a></li>
+      <li><a href="../proekt/" onclick="closeMobileMenu()"><b>Проект</b><span>750 ₽/м² вместо 1 500, если ремонт делаем мы</span></a></li>
       <li><a href="../priemka-kvartiry/" onclick="closeMobileMenu()"><b>Приёмка квартиры</b><span>Проверяем квартиру от застройщика по чек-листу с инструментом</span></a></li><li class="mm-lbl">Отдельные работы</li>
       <li><a href="../elektromontazhnye-raboty/" onclick="closeMobileMenu()"><b>Электромонтаж</b></a></li>
       <li><a href="../santehnicheskie-raboty/" onclick="closeMobileMenu()"><b>Сантехника</b></a></li>
@@ -214,6 +214,14 @@
   <p>Автоматически, без участия Пользователя, обрабатываются технические данные:
   IP-адрес, тип устройства и браузера, источник перехода.</p>
 
+  <h3>Данные в браузере Пользователя</h3>
+  <p><span class="todo">ПРОВЕРИТЬ ЮРИСТУ</span></p>
+  <p>Сайт сохраняет в локальном хранилище браузера (localStorage) служебное значение,
+  которое не передаётся Оператору и не покидает устройство:</p>
+  <ul>
+    <li><code>cookieAccepted</code> — выбор в баннере cookie: «принято» или «отклонено».</li>
+  </ul>
+
   <h2><span class="num">4</span> Цели обработки</h2>
   <ul>
     <li>связаться с Пользователем по оставленной заявке, согласовать замер и смету;</li>
@@ -238,7 +246,8 @@
   становиться известна сервисам, чьи компоненты подключены на страницах:</p>
   <ul>
     <li><strong>Яндекс Карты</strong> — карта офиса в разделе «Контакты»; загружается только
-    после нажатия на кнопку карты.</li>
+    после нажатия на кнопку карты;</li>
+    <li><strong>Яндекс Метрика</strong> — веб-аналитика, подробности в разделе 7.</li>
   </ul>
   <p>Оператор не передаёт этим сервисам имя и телефон Пользователя.</p>
   <p><strong>Заявки передаются в CRM Битрикс24.</strong> Когда Пользователь отправляет форму,
@@ -250,7 +259,16 @@
 
   <h2><span class="num">7</span> Веб-аналитика</h2>
   <p><span class="todo">ПРОВЕРИТЬ ЮРИСТУ</span></p>
-  <p>На сайте nsk.azbuka-remonta.ru счётчиков веб-аналитики нет.</p>
+  <p>Сайт nsk.azbuka-remonta.ru использует «Яндекс Метрику» — сервис веб-аналитики
+  ООО «Яндекс».</p>
+  <p>Счётчик включается только после согласия: кнопка «Принять» в баннере cookie. Там же можно
+  выбрать «Отклонить», и тогда Метрика не загружается и данные в неё не передаются.</p>
+  <p>С включённым счётчиком собираются: просмотры страниц, клики и переходы по ссылкам,
+  источник перехода, тип устройства и браузера, примерный регион по IP-адресу, факт отправки
+  формы (без имени и телефона). Также включён Вебвизор: запись действий на странице —
+  движений мыши, прокрутки и кликов. Метрика сохраняет в браузере собственные cookie.</p>
+  <p>Чтобы отозвать согласие, очистите cookie и данные сайта в браузере. После этого баннер
+  появится снова, и выбор можно сделать заново.</p>
 
   <h2><span class="num">8</span> Сроки обработки и хранения</h2>
   <p>Данные обрабатываются до достижения целей обработки либо до отзыва согласия
@@ -291,7 +309,7 @@
       <nav class="nvx-fcol nvx-fcol-uslugi" aria-labelledby="nvx-f-uslugi">
         <h3 id="nvx-f-uslugi">Услуги</h3>
         <ul>
-          <li><a href="../tehnicheskij-proekt/">Технический проект</a></li>
+          <li><a href="../proekt/">Проект</a></li>
           <li><a href="../priemka-kvartiry/">Приёмка квартиры</a></li>
           <li><a href="../elektromontazhnye-raboty/">Электромонтаж</a></li>
           <li><a href="../santehnicheskie-raboty/">Сантехника</a></li>
@@ -434,7 +452,7 @@
 /* Город этого сайта: объект нужен base.js (заявки, сообщение об ошибке) и home.js (заголовок первого экрана) */
 window.AZ_CITY = {"key":"novosibirsk","name":"Новосибирск","phone":"8 (923) 141-01-54","phoneHref":"tel:+79231410154","heroLine2":"ремонт в Новосибирске"};
 </script>
-<script src="../base.js?v=ca3ea410df"></script>
+<script src="../base.js?v=3e30d21fbe"></script>
 <script src="../legal.js?v=75042ae72b"></script>
 </body>
 </html>

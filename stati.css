@@ -111,7 +111,7 @@ ol.sa-list li::before { content: counter(n); position: absolute; left: 0; top: 0
   .sa-cmp tbody th { width: 42%; }
 }
 
-/* ═══ Калькулятор технического проекта ═══ */
+/* ═══ Калькулятор проекта ═══ */
 .calc { margin: 8px 0 28px; padding: clamp(22px, 3vw, 32px); border-radius: 20px; background: #161310; color: #fff; max-width: none !important; }
 .calc-h { margin: 0 0 20px; font: 700 clamp(22px, 2vw, 28px)/1.12 var(--font-display); text-transform: uppercase; color: #fff; }
 .calc-row { display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: flex-end; }
